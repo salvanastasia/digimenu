@@ -24,6 +24,8 @@ UI = {
         "frozenProductNote": "* Product blast-frozen at origin",
         "treesSavedLabel": "Trees saved",
         "oxygenProducedLabel": "Kg. oxygen produced",
+        "veganTag": "Vegan",
+        "vegetarianTag": "Vegetarian",
     },
     "fr": {
         "allergenListTitle": "LISTE DES ALLERGÈNES",
@@ -39,6 +41,8 @@ UI = {
         "frozenProductNote": "* Produit abattu à l'origine",
         "treesSavedLabel": "Arbres sauvés",
         "oxygenProducedLabel": "Kg. oxygène produits",
+        "veganTag": "Végétalien",
+        "vegetarianTag": "Végétarien",
     },
     "de": {
         "allergenListTitle": "ALLERGENLISTE",
@@ -54,6 +58,8 @@ UI = {
         "frozenProductNote": "* Produkt am Ursprung schockgefrostet",
         "treesSavedLabel": "Gerettete Bäume",
         "oxygenProducedLabel": "Kg. produzierter Sauerstoff",
+        "veganTag": "Vegan",
+        "vegetarianTag": "Vegetarisch",
     },
     "es": {
         "allergenListTitle": "LISTA DE ALÉRGENOS",
@@ -69,6 +75,8 @@ UI = {
         "frozenProductNote": "* Producto abatido en origen",
         "treesSavedLabel": "Árboles salvados",
         "oxygenProducedLabel": "Kg. oxígeno producidos",
+        "veganTag": "Vegano",
+        "vegetarianTag": "Vegetariano",
     },
 }
 

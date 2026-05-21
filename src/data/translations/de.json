@@ -13,7 +13,9 @@
     "tableServiceFee": "Tischservice: 2,5 €",
     "frozenProductNote": "* Produkt am Ursprung schockgefrostet",
     "treesSavedLabel": "Gerettete Bäume",
-    "oxygenProducedLabel": "Kg. produzierter Sauerstoff"
+    "oxygenProducedLabel": "Kg. produzierter Sauerstoff",
+    "veganTag": "Vegan",
+    "vegetarianTag": "Vegetarisch"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",

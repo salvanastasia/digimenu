@@ -11,7 +11,7 @@ export type MenuItem = {
   price?: number;
   measureUnit?: string;
   allergens?: Allergen[];
-  tags?: string[];
+  tags?: ("vegan" | "vegetarian")[];
 };
 
 export type MenuCategory = {

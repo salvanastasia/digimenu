@@ -73,6 +73,8 @@ export function MenuApp() {
             onToggleFavorite={toggleFavorite}
             visibleItemIds={favoritesMode ? favoriteSet : null}
             allergensLabel={ui.allergensPresent}
+            veganTagLabel={ui.veganTag}
+            vegetarianTagLabel={ui.vegetarianTag}
             addFavoriteLabel={ui.addFavorite}
             removeFavoriteLabel={ui.removeFavorite}
           />

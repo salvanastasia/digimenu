@@ -11,6 +11,8 @@ type MenuCategoryAccordionProps = {
   onToggleFavorite: (id: string) => void;
   visibleItemIds?: Set<string> | null;
   allergensLabel: string;
+  veganTagLabel: string;
+  vegetarianTagLabel: string;
   addFavoriteLabel: string;
   removeFavoriteLabel: string;
 };
@@ -23,6 +25,8 @@ export function MenuCategoryAccordion({
   onToggleFavorite,
   visibleItemIds = null,
   allergensLabel,
+  veganTagLabel,
+  vegetarianTagLabel,
   addFavoriteLabel,
   removeFavoriteLabel,
 }: MenuCategoryAccordionProps) {
@@ -81,6 +85,8 @@ export function MenuCategoryAccordion({
               favorite={favoriteIds.has(item.id)}
               onToggleFavorite={onToggleFavorite}
               allergensLabel={allergensLabel}
+              veganTagLabel={veganTagLabel}
+              vegetarianTagLabel={vegetarianTagLabel}
               addFavoriteLabel={addFavoriteLabel}
               removeFavoriteLabel={removeFavoriteLabel}
             />

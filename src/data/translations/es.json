@@ -13,7 +13,9 @@
     "tableServiceFee": "Servicio en mesa: 2,5 €",
     "frozenProductNote": "* Producto abatido en origen",
     "treesSavedLabel": "Árboles salvados",
-    "oxygenProducedLabel": "Kg. oxígeno producidos"
+    "oxygenProducedLabel": "Kg. oxígeno producidos",
+    "veganTag": "Vegano",
+    "vegetarianTag": "Vegetariano"
   },
   "restaurant": {
     "subtitle": "Restaurante · Pizzería · B&B",

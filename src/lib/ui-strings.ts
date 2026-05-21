@@ -15,4 +15,6 @@ export const UI_STRINGS_IT: UiStrings = {
   frozenProductNote: "* Prodotto abbattuto all'origine",
   treesSavedLabel: "Alberi salvati",
   oxygenProducedLabel: "Kg. Ossigeno prodotti",
+  veganTag: "Vegano",
+  vegetarianTag: "Vegetariano",
 };

@@ -13,7 +13,9 @@
     "tableServiceFee": "Service à table : 2,5 €",
     "frozenProductNote": "* Produit abattu à l'origine",
     "treesSavedLabel": "Arbres sauvés",
-    "oxygenProducedLabel": "Kg. oxygène produits"
+    "oxygenProducedLabel": "Kg. oxygène produits",
+    "veganTag": "Végétalien",
+    "vegetarianTag": "Végétarien"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · Chambres d'hôtes",

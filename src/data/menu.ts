@@ -9,6 +9,7 @@ type RawMenuItem = {
   price?: number;
   measureUnit?: string;
   allergens?: number[];
+  tags?: ("vegan" | "vegetarian")[];
 };
 
 type RawMenuCategory = {
@@ -35,6 +36,7 @@ function mapItem(item: RawMenuItem): MenuItem {
     allergens: item.allergens?.length
       ? allergenById(item.allergens)
       : undefined,
+    tags: item.tags,
   };
 }
 

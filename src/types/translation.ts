@@ -14,6 +14,8 @@ export type UiStrings = {
   frozenProductNote: string;
   treesSavedLabel: string;
   oxygenProducedLabel: string;
+  veganTag: string;
+  vegetarianTag: string;
 };
 
 export type TranslationPayload = {

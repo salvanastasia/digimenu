@@ -13,7 +13,9 @@
     "tableServiceFee": "Table service: €2.5",
     "frozenProductNote": "* Product blast-frozen at origin",
     "treesSavedLabel": "Trees saved",
-    "oxygenProducedLabel": "Kg. oxygen produced"
+    "oxygenProducedLabel": "Kg. oxygen produced",
+    "veganTag": "Vegan",
+    "vegetarianTag": "Vegetarian"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",
