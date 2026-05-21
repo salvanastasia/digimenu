@@ -7,15 +7,13 @@ export const HEADER_BG = "#560200";
 export const BRAND_ACCENT = "#f8a5b8";
 
 type MenuHeaderProps = {
-  favoritesMode: boolean;
   favoritesCount: number;
-  onToggleFavoritesMode: () => void;
+  onOpenFavorites: () => void;
 };
 
 export function MenuHeader({
-  favoritesMode,
   favoritesCount,
-  onToggleFavoritesMode,
+  onOpenFavorites,
 }: MenuHeaderProps) {
   const { content } = useLanguage();
   const { ui, restaurant } = content;
@@ -37,27 +35,11 @@ export function MenuHeader({
         <div className="relative z-40 flex shrink-0 items-center gap-3 pt-1">
           <button
             type="button"
-            aria-label={
-              favoritesMode ? ui.showFullMenu : ui.showFavorites
-            }
-            aria-pressed={favoritesMode}
-            onClick={onToggleFavoritesMode}
-            className="relative flex h-11 w-11 items-center justify-center rounded-full border transition-colors"
-            style={
-              favoritesMode
-                ? {
-                    borderColor: BRAND_ACCENT,
-                    backgroundColor: BRAND_ACCENT,
-                    color: HEADER_BG,
-                  }
-                : {
-                    borderColor: "rgba(255,255,255,0.7)",
-                    backgroundColor: "transparent",
-                    color: "white",
-                  }
-            }
+            aria-label={ui.showFavorites}
+            onClick={onOpenFavorites}
+            className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/70 transition-colors"
           >
-            <HeartIcon filled={favoritesMode} />
+            <HeartIcon filled={false} />
             {favoritesCount > 0 ? (
               <span
                 className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[0.65rem] font-bold"

@@ -9,7 +9,6 @@ type MenuCategoryAccordionProps = {
   onToggle: (id: string) => void;
   favoriteIds: Set<string>;
   onToggleFavorite: (id: string) => void;
-  visibleItemIds?: Set<string> | null;
   allergensLabel: string;
   veganTagLabel: string;
   vegetarianTagLabel: string;
@@ -23,21 +22,12 @@ export function MenuCategoryAccordion({
   onToggle,
   favoriteIds,
   onToggleFavorite,
-  visibleItemIds = null,
   allergensLabel,
   veganTagLabel,
   vegetarianTagLabel,
   addFavoriteLabel,
   removeFavoriteLabel,
 }: MenuCategoryAccordionProps) {
-  const items = visibleItemIds
-    ? category.items.filter((item) => visibleItemIds.has(item.id))
-    : category.items;
-
-  if (visibleItemIds && items.length === 0) {
-    return null;
-  }
-
   const panelId = `panel-${category.id}`;
   const buttonId = `button-${category.id}`;
 
@@ -78,7 +68,7 @@ export function MenuCategoryAccordion({
         ) : null}
 
         <div className="border-t border-[#d8dadc] bg-white">
-          {items.map((item) => (
+          {category.items.map((item) => (
             <MenuItemRow
               key={item.id}
               item={item}

@@ -15,7 +15,11 @@
     "treesSavedLabel": "Arbres sauvés",
     "oxygenProducedLabel": "Kg. oxygène produits",
     "veganTag": "Végétalien",
-    "vegetarianTag": "Végétarien"
+    "vegetarianTag": "Végétarien",
+    "yourListTitle": "Votre liste",
+    "clearList": "Vider la liste",
+    "decreaseQuantity": "Diminuer la quantité",
+    "increaseQuantity": "Augmenter la quantité"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · Chambres d'hôtes",

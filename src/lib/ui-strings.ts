@@ -17,4 +17,8 @@ export const UI_STRINGS_IT: UiStrings = {
   oxygenProducedLabel: "Kg. Ossigeno prodotti",
   veganTag: "Vegano",
   vegetarianTag: "Vegetariano",
+  yourListTitle: "La tua lista",
+  clearList: "Svuota lista",
+  decreaseQuantity: "Diminuisci quantità",
+  increaseQuantity: "Aumenta quantità",
 };

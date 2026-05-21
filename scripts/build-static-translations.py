@@ -26,6 +26,10 @@ UI = {
         "oxygenProducedLabel": "Kg. oxygen produced",
         "veganTag": "Vegan",
         "vegetarianTag": "Vegetarian",
+        "yourListTitle": "Your list",
+        "clearList": "Clear list",
+        "decreaseQuantity": "Decrease quantity",
+        "increaseQuantity": "Increase quantity",
     },
     "fr": {
         "allergenListTitle": "LISTE DES ALLERGÈNES",
@@ -43,6 +47,10 @@ UI = {
         "oxygenProducedLabel": "Kg. oxygène produits",
         "veganTag": "Végétalien",
         "vegetarianTag": "Végétarien",
+        "yourListTitle": "Votre liste",
+        "clearList": "Vider la liste",
+        "decreaseQuantity": "Diminuer la quantité",
+        "increaseQuantity": "Augmenter la quantité",
     },
     "de": {
         "allergenListTitle": "ALLERGENLISTE",
@@ -60,6 +68,10 @@ UI = {
         "oxygenProducedLabel": "Kg. produzierter Sauerstoff",
         "veganTag": "Vegan",
         "vegetarianTag": "Vegetarisch",
+        "yourListTitle": "Deine Liste",
+        "clearList": "Liste leeren",
+        "decreaseQuantity": "Menge verringern",
+        "increaseQuantity": "Menge erhöhen",
     },
     "es": {
         "allergenListTitle": "LISTA DE ALÉRGENOS",
@@ -77,6 +89,10 @@ UI = {
         "oxygenProducedLabel": "Kg. oxígeno producidos",
         "veganTag": "Vegano",
         "vegetarianTag": "Vegetariano",
+        "yourListTitle": "Tu lista",
+        "clearList": "Vaciar lista",
+        "decreaseQuantity": "Disminuir cantidad",
+        "increaseQuantity": "Aumentar cantidad",
     },
 }
 

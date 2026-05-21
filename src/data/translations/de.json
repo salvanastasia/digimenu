@@ -15,7 +15,11 @@
     "treesSavedLabel": "Gerettete Bäume",
     "oxygenProducedLabel": "Kg. produzierter Sauerstoff",
     "veganTag": "Vegan",
-    "vegetarianTag": "Vegetarisch"
+    "vegetarianTag": "Vegetarisch",
+    "yourListTitle": "Deine Liste",
+    "clearList": "Liste leeren",
+    "decreaseQuantity": "Menge verringern",
+    "increaseQuantity": "Menge erhöhen"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",

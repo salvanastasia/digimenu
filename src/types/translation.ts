@@ -16,6 +16,10 @@ export type UiStrings = {
   oxygenProducedLabel: string;
   veganTag: string;
   vegetarianTag: string;
+  yourListTitle: string;
+  clearList: string;
+  decreaseQuantity: string;
+  increaseQuantity: string;
 };
 
 export type TranslationPayload = {
