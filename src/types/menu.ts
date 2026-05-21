@@ -29,4 +29,8 @@ export type RestaurantConfig = {
   showAllergens: boolean;
   address?: string;
   phone?: string;
+  impactStats?: {
+    treesSaved: number;
+    oxygenProducedKg: number;
+  };
 };

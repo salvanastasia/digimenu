@@ -10,6 +10,10 @@ export type UiStrings = {
   addFavorite: string;
   removeFavorite: string;
   selectLanguage: string;
+  tableServiceFee: string;
+  frozenProductNote: string;
+  treesSavedLabel: string;
+  oxygenProducedLabel: string;
 };
 
 export type TranslationPayload = {

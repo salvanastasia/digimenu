@@ -2,14 +2,18 @@
   "version": "10-162",
   "ui": {
     "allergenListTitle": "LISTA DE ALÉRGENOS",
-    "allergensPresent": "Alérgenos presentes:",
+    "allergensPresent": "Alérgenos:",
     "noFavorites": "Aún no hay favoritos. Toca el corazón junto a un plato para guardarlo aquí.",
     "showFavorites": "Mostrar solo favoritos",
     "showFullMenu": "Mostrar menú completo",
     "translationError": "Traducción no disponible para este idioma.",
     "addFavorite": "Añadir a favoritos",
     "removeFavorite": "Quitar de favoritos",
-    "selectLanguage": "Seleccionar idioma"
+    "selectLanguage": "Seleccionar idioma",
+    "tableServiceFee": "Servicio en mesa: 2,5 €",
+    "frozenProductNote": "* Producto abatido en origen",
+    "treesSavedLabel": "Árboles salvados",
+    "oxygenProducedLabel": "Kg. oxígeno producidos"
   },
   "restaurant": {
     "subtitle": "Restaurante · Pizzería · B&B",

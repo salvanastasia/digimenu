@@ -2,14 +2,18 @@
   "version": "10-162",
   "ui": {
     "allergenListTitle": "ALLERGEN LIST",
-    "allergensPresent": "Allergens present:",
+    "allergensPresent": "Allergens:",
     "noFavorites": "No favorites yet. Tap the heart next to a dish to save it here.",
     "showFavorites": "Show favorites only",
     "showFullMenu": "Show full menu",
     "translationError": "Translation not available for this language.",
     "addFavorite": "Add to favorites",
     "removeFavorite": "Remove from favorites",
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select language",
+    "tableServiceFee": "Table service: €2.5",
+    "frozenProductNote": "* Product blast-frozen at origin",
+    "treesSavedLabel": "Trees saved",
+    "oxygenProducedLabel": "Kg. oxygen produced"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",

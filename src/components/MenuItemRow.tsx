@@ -40,18 +40,18 @@ export function MenuItemRow({
   return (
     <article className="border-t border-[#e4e4e4] px-4 py-5 first:border-t-0">
       <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 flex-1 space-y-2">
+        <div className="min-w-0 flex-1">
           <p className="text-[1rem] font-bold leading-snug text-[#141415]">
             {item.name}
           </p>
           {item.description ? (
-            <p className="text-[0.9rem] leading-relaxed text-[#141415]">
+            <p className="mt-2 text-[0.9rem] leading-relaxed text-[#141415]">
               {item.description}
             </p>
           ) : null}
           {allergenIds ? (
-            <p className="text-[0.78rem] leading-relaxed text-[#909090]">
-              {allergensLabel} ({allergenIds})
+            <p className="mt-1.5 text-[0.72rem] leading-snug text-[#a3a3a3]">
+              {allergensLabel} {allergenIds}
             </p>
           ) : null}
         </div>

@@ -2,14 +2,18 @@
   "version": "10-162",
   "ui": {
     "allergenListTitle": "ALLERGENLISTE",
-    "allergensPresent": "Enthaltene Allergene:",
+    "allergensPresent": "Allergene:",
     "noFavorites": "Noch keine Favoriten. Tippen Sie auf das Herz neben einem Gericht, um es hier zu speichern.",
     "showFavorites": "Nur Favoriten anzeigen",
     "showFullMenu": "Gesamtes Menü anzeigen",
     "translationError": "Übersetzung für diese Sprache nicht verfügbar.",
     "addFavorite": "Zu Favoriten hinzufügen",
     "removeFavorite": "Aus Favoriten entfernen",
-    "selectLanguage": "Sprache wählen"
+    "selectLanguage": "Sprache wählen",
+    "tableServiceFee": "Tischservice: 2,5 €",
+    "frozenProductNote": "* Produkt am Ursprung schockgefrostet",
+    "treesSavedLabel": "Gerettete Bäume",
+    "oxygenProducedLabel": "Kg. produzierter Sauerstoff"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",

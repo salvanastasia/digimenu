@@ -2,14 +2,18 @@
   "version": "10-162",
   "ui": {
     "allergenListTitle": "LISTE DES ALLERGÈNES",
-    "allergensPresent": "Allergènes présents :",
+    "allergensPresent": "Allergènes :",
     "noFavorites": "Aucun favori pour le moment. Touchez le cœur à côté d'un plat pour l'enregistrer ici.",
     "showFavorites": "Afficher uniquement les favoris",
     "showFullMenu": "Afficher le menu complet",
     "translationError": "Traduction non disponible pour cette langue.",
     "addFavorite": "Ajouter aux favoris",
     "removeFavorite": "Retirer des favoris",
-    "selectLanguage": "Choisir la langue"
+    "selectLanguage": "Choisir la langue",
+    "tableServiceFee": "Service à table : 2,5 €",
+    "frozenProductNote": "* Produit abattu à l'origine",
+    "treesSavedLabel": "Arbres sauvés",
+    "oxygenProducedLabel": "Kg. oxygène produits"
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · Chambres d'hôtes",

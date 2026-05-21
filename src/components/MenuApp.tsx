@@ -82,7 +82,7 @@ export function MenuApp() {
           title={ui.allergenListTitle}
         />
       ) : null}
-      <MenuFooter restaurant={restaurant} />
+      <MenuFooter restaurant={restaurant} ui={ui} />
     </div>
   );
 }
