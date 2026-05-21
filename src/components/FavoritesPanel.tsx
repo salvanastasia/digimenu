@@ -1,9 +1,8 @@
 "use client";
 
-import { BRAND_ACCENT } from "@/components/MenuHeader";
 import { FavoritesList } from "@/components/FavoritesList";
-import type { MenuCategory } from "@/types/menu";
 import type { FavoriteEntry } from "@/hooks/useFavorites";
+import type { MenuCategory } from "@/types/menu";
 
 type FavoritesPanelProps = {
   open: boolean;
@@ -11,14 +10,11 @@ type FavoritesPanelProps = {
   closeLabel: string;
   emptyMessage: string;
   clearListLabel: string;
+  totalLabel: string;
   categories: MenuCategory[];
   favorites: FavoriteEntry[];
   onClose: () => void;
-  onQuantityChange: (id: string, quantity: number) => void;
   onClearList: () => void;
-  allergensLabel: string;
-  decreaseQuantityLabel: string;
-  increaseQuantityLabel: string;
 };
 
 export function FavoritesPanel({
@@ -27,58 +23,58 @@ export function FavoritesPanel({
   closeLabel,
   emptyMessage,
   clearListLabel,
+  totalLabel,
   categories,
   favorites,
   onClose,
-  onQuantityChange,
   onClearList,
-  allergensLabel,
-  decreaseQuantityLabel,
-  increaseQuantityLabel,
 }: FavoritesPanelProps) {
   if (!open) {
     return null;
   }
 
+  const hasItems = favorites.length > 0;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-8 pt-16">
       <button
         type="button"
         aria-label={closeLabel}
         onClick={onClose}
-        className="absolute inset-0 bg-[#141415]/25"
+        className="absolute inset-0 bg-[#141415]/35"
       />
 
-      <div className="relative z-10 flex max-h-[min(92vh,920px)] w-full max-w-[640px] flex-col overflow-hidden rounded-t-[22px] bg-white shadow-[0_-12px_40px_rgba(0,0,0,0.18)]">
-        <div
-          className="flex shrink-0 items-center justify-between gap-4 px-5 py-4"
-          style={{ backgroundColor: BRAND_ACCENT }}
+      <div className="relative z-10 flex w-full max-w-[640px] flex-col items-center gap-4">
+        <button
+          type="button"
+          aria-label={closeLabel}
+          onClick={onClose}
+          className="absolute -top-2 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-[#141415] text-[1.1rem] leading-none text-[#f8a5b8] shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
         >
-          <h2 className="text-[1.2rem] font-bold text-[#141415]">{title}</h2>
-          <button
-            type="button"
-            aria-label={closeLabel}
-            onClick={onClose}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#141415] text-[1.1rem] leading-none"
-            style={{ color: BRAND_ACCENT }}
-          >
-            ×
-          </button>
+          ×
+        </button>
+
+        <div className="max-h-[min(78vh,720px)] w-full overflow-y-auto overscroll-contain px-1 pb-2 pt-2">
+          <div className="flex justify-center">
+            <FavoritesList
+              emptyMessage={emptyMessage}
+              listTitle={title}
+              totalLabel={totalLabel}
+              categories={categories}
+              favorites={favorites}
+            />
+          </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <FavoritesList
-            emptyMessage={emptyMessage}
-            clearListLabel={clearListLabel}
-            categories={categories}
-            favorites={favorites}
-            onQuantityChange={onQuantityChange}
-            onClearList={onClearList}
-            allergensLabel={allergensLabel}
-            decreaseQuantityLabel={decreaseQuantityLabel}
-            increaseQuantityLabel={increaseQuantityLabel}
-          />
-        </div>
+        {hasItems ? (
+          <button
+            type="button"
+            onClick={onClearList}
+            className="rounded-full border border-[#560200] bg-white/95 px-5 py-2.5 text-[0.82rem] font-semibold text-[#560200] shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-colors hover:bg-[#560200]/5"
+          >
+            {clearListLabel}
+          </button>
+        ) : null}
       </div>
     </div>
   );

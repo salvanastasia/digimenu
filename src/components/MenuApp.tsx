@@ -16,7 +16,6 @@ export function MenuApp() {
     favorites,
     totalQuantity,
     toggleFavorite,
-    setQuantity,
     clearFavorites,
   } = useFavorites();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
@@ -103,11 +102,8 @@ export function MenuApp() {
         categories={categories}
         favorites={favorites}
         onClose={closeFavorites}
-        onQuantityChange={setQuantity}
         onClearList={clearFavorites}
-        allergensLabel={ui.allergensPresent}
-        decreaseQuantityLabel={ui.decreaseQuantity}
-        increaseQuantityLabel={ui.increaseQuantity}
+        totalLabel={ui.listTotal}
       />
     </div>
   );

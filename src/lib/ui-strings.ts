@@ -19,6 +19,7 @@ export const UI_STRINGS_IT: UiStrings = {
   vegetarianTag: "Vegetariano",
   yourListTitle: "La tua lista",
   clearList: "Svuota lista",
+  listTotal: "Totale",
   decreaseQuantity: "Diminuisci quantità",
   increaseQuantity: "Aumenta quantità",
 };
