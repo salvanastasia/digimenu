@@ -1,0 +1,922 @@
+{
+  "restaurant": {
+    "name": "aribrì",
+    "subtitle": "Ristorante · Pizzeria · B&B",
+    "showAllergens": true,
+    "address": "Via Taranto 38, San Pancrazio Salentino (BR)",
+    "phone": "+39 338 458 4834",
+    "notes": "<p>Negli alimenti serviti in questo esercizio e nei loro condimenti si riscontra la presenza di tracce di ingredienti che vengono classificati come \"allergeni\" e possono provocare allergie o intolleranze in alcune persone e possono costituire un pericolo per la salute. Si invitano, quindi, i consumatori, in particolare quelli che soffrono di allergie o intolleranze alimentari, ad effettuare scelte consapevoli per la loro sicurezza. Chiedete al nostro personale in sala per qualsiasi domanda o informazione in merito.</p>"
+  },
+  "categories": [
+    {
+      "id": "anti",
+      "name": "Antipasti",
+      "items": [
+        {
+          "id": "2048816",
+          "name": "Alici Marinate",
+          "price": 10.0
+        },
+        {
+          "id": "2048811",
+          "name": "Antipasto Misto Mare",
+          "price": 40.0
+        },
+        {
+          "id": "2088233",
+          "name": "Baccala Pastellato",
+          "price": 10.0
+        },
+        {
+          "id": "2048808",
+          "name": "Bruschette Pomodoro",
+          "price": 7.0
+        },
+        {
+          "id": "2048817",
+          "name": "Capocollo E Burrata",
+          "price": 13.0
+        },
+        {
+          "id": "2048813",
+          "name": "Cozze Gratinate",
+          "price": 10.0
+        },
+        {
+          "id": "2055715",
+          "name": "Crocchette Di Patate",
+          "price": 6.0
+        },
+        {
+          "id": "2048812",
+          "name": "Crudite Di Mare",
+          "price": 50.0
+        },
+        {
+          "id": "2055716",
+          "name": "Fiori Di Zucca In Pastella",
+          "price": 4.0
+        },
+        {
+          "id": "2048810",
+          "name": "Friselle Salentine",
+          "price": 6.0
+        },
+        {
+          "id": "2048809",
+          "name": "Fritto Misto Terra",
+          "price": 6.0
+        },
+        {
+          "id": "2048814",
+          "name": "Impepata Di Cozze",
+          "price": 12.0
+        },
+        {
+          "id": "2048815",
+          "name": "Insalata Di Mare",
+          "price": 10.0
+        },
+        {
+          "id": "2055717",
+          "name": "Pittule",
+          "price": 4.0
+        },
+        {
+          "id": "2055711",
+          "name": "Polpette",
+          "price": 7.0
+        },
+        {
+          "id": "2095577",
+          "name": "Polpette Al Sugo",
+          "price": 10.0
+        },
+        {
+          "id": "2048807",
+          "name": "Tagliere Formaggi",
+          "price": 14.0
+        },
+        {
+          "id": "2048806",
+          "name": "Tagliere Salumi",
+          "price": 15.0
+        }
+      ]
+    },
+    {
+      "id": "trad",
+      "name": "Angolo Tradizione",
+      "items": [
+        {
+          "id": "2048822",
+          "name": "Cavallo Alla Pignata",
+          "price": 15.0
+        },
+        {
+          "id": "2048820",
+          "name": "Ciciri E Tria",
+          "price": 14.0
+        },
+        {
+          "id": "2048818",
+          "name": "Fave E Cicorie",
+          "price": 15.0
+        },
+        {
+          "id": "2048819",
+          "name": "Orecchiette E Pizzarieddri",
+          "price": 16.0
+        },
+        {
+          "id": "2048821",
+          "name": "Parmigiana Di Melanzane",
+          "price": 13.0
+        },
+        {
+          "id": "2048824",
+          "name": "Polpo A Pignata",
+          "price": 15.0
+        },
+        {
+          "id": "2048823",
+          "name": "Turcinieddri",
+          "price": 12.0
+        }
+      ]
+    },
+    {
+      "id": "primi",
+      "name": "Primi",
+      "items": [
+        {
+          "id": "2048825",
+          "name": "Cavatelli Aribri",
+          "price": 13.0
+        },
+        {
+          "id": "2048827",
+          "name": "Gnocchi Ricotta E Pesto",
+          "price": 12.0
+        },
+        {
+          "id": "2048831",
+          "name": "Gnocchi Spada E Melanzane",
+          "price": 16.0
+        },
+        {
+          "id": "2048828",
+          "name": "Ravioli Alla Cernia",
+          "price": 16.0
+        },
+        {
+          "id": "2048830",
+          "name": "Scialatiello Alle Cozze",
+          "price": 15.0
+        },
+        {
+          "id": "2048832",
+          "name": "Spaghetti Alle Vongole",
+          "price": 15.0
+        },
+        {
+          "id": "2048826",
+          "name": "Troccoli Pomodori E Burrata",
+          "price": 14.0
+        },
+        {
+          "id": "2048829",
+          "name": "Troccoli Scampi E Gamberi",
+          "price": 18.0
+        }
+      ]
+    },
+    {
+      "id": "secon",
+      "name": "Secondi",
+      "items": [
+        {
+          "id": "2048840",
+          "name": "Calamaro Griglato",
+          "price": 17.0
+        },
+        {
+          "id": "2060821",
+          "name": "Carne A Pignatu",
+          "price": 15.0
+        },
+        {
+          "id": "2048836",
+          "name": "Costata Vitellino",
+          "price": 14.0
+        },
+        {
+          "id": "2048839",
+          "name": "Fritto Di Paranza",
+          "price": 18.0
+        },
+        {
+          "id": "2048841",
+          "name": "Frittura Calamari E Gamberi",
+          "price": 16.0
+        },
+        {
+          "id": "2048838",
+          "name": "Gamberoni Arrosto",
+          "price": 16.0
+        },
+        {
+          "id": "2048833",
+          "name": "Grigliata Mista Carne",
+          "price": 15.0
+        },
+        {
+          "id": "2060822",
+          "name": "Involtini Al Sugo",
+          "price": 16.0
+        },
+        {
+          "id": "2048842",
+          "name": "Pesce Fresco",
+          "price": 0.0
+        },
+        {
+          "id": "2048834",
+          "name": "Salsiccia Arrosto",
+          "price": 12.0
+        },
+        {
+          "id": "2048835",
+          "name": "Tagliata Di Entrecote",
+          "price": 15.0,
+          "description": "POMODORI FRESCHI, GRANA, RUCOLA"
+        },
+        {
+          "id": "2048837",
+          "name": "Tonno Scottato",
+          "price": 18.0,
+          "description": "SEMI DI SESAMO"
+        }
+      ]
+    },
+    {
+      "id": "cont",
+      "name": "Contorni",
+      "items": [
+        {
+          "id": "2048846",
+          "name": "Giardiniera",
+          "price": 5.0
+        },
+        {
+          "id": "2048844",
+          "name": "Insalata Mista",
+          "price": 5.0
+        },
+        {
+          "id": "2048843",
+          "name": "Insalata Verde",
+          "price": 4.0
+        },
+        {
+          "id": "2048848",
+          "name": "Patate Al Forno",
+          "price": 6.0
+        },
+        {
+          "id": "2048849",
+          "name": "Patate Fritte",
+          "price": 5.0
+        },
+        {
+          "id": "2048845",
+          "name": "Verdure Cotte Stagione",
+          "price": 7.0
+        },
+        {
+          "id": "2048847",
+          "name": "Verdure Grigliate",
+          "price": 7.0
+        }
+      ]
+    },
+    {
+      "id": "ins",
+      "name": "Insalatone",
+      "items": [
+        {
+          "id": "2068746",
+          "name": "Insalatona Con Bresaola",
+          "price": 10.0
+        },
+        {
+          "id": "2068748",
+          "name": "Insalatona Con Bresaola",
+          "price": 12.0
+        },
+        {
+          "id": "2068745",
+          "name": "Insalatona Con Noci",
+          "price": 7.0
+        }
+      ]
+    },
+    {
+      "id": "pizze",
+      "name": "Pizze",
+      "items": [
+        {
+          "id": "2048905",
+          "name": "4 Formaggi",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, SVIZZERO, GORGONZOLA, GRANA"
+        },
+        {
+          "id": "2048889",
+          "name": "4 Stagioni",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, FUNGHI FRESCHI, CARCIOFINI, PROSCIUTTO COTTO, OLIVE VERDI, SALAME PICCANTE"
+        },
+        {
+          "id": "2048909",
+          "name": "A Tutta Alici",
+          "price": 10.0,
+          "description": "POMODORO SAN MARZANO, STRACCIATELLA, ALICI CANTABRICO, SCORZA LIMONE"
+        },
+        {
+          "id": "2048873",
+          "name": "Aribri",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, SPECK, RUCOLA, PICCANTE"
+        },
+        {
+          "id": "2048915",
+          "name": "Biancaneve",
+          "price": 6.0,
+          "description": "MOZZARELLA, GRANA"
+        },
+        {
+          "id": "2048916",
+          "name": "Brie",
+          "price": 6.5,
+          "description": "MOZZARELLA, BRIE, RUCOLA"
+        },
+        {
+          "id": "2048882",
+          "name": "Bufala",
+          "price": 6.5,
+          "description": "POMODORO, BUFALA, BASILICO"
+        },
+        {
+          "id": "2048920",
+          "name": "Caprese",
+          "price": 6.5,
+          "description": "MOZZARELLA, POMODORI FRESCHI, RUCOLA, ORIGANO"
+        },
+        {
+          "id": "2048908",
+          "name": "Caprese 2.0",
+          "price": 9.0,
+          "description": "CREMA POMODORI SECCHI, POMODORINI GIALLI, BUFALA, ORIGANO, BASILICO"
+        },
+        {
+          "id": "2048921",
+          "name": "Caprese Bufalina",
+          "price": 8.0,
+          "description": "POMODORI FRESCHI, RUCOLA, BUFALA"
+        },
+        {
+          "id": "2048888",
+          "name": "Capricciosa",
+          "price": 6.0,
+          "description": "POMODORO, MOZZARELLA, FUNGHI FRESCHI, CARCIOFINI, PROSCIUTTO COTTO, OLIVE VERDI"
+        },
+        {
+          "id": "2048880",
+          "name": "Diavola",
+          "price": 6.0,
+          "description": "POMODORO, MOZZARELLA, SALAME PICCANTE"
+        },
+        {
+          "id": "2048907",
+          "name": "Domenica Salentina",
+          "price": 10.0,
+          "description": "POMODORO SAN MARZANO, FIOR DI LATTE, POLPETTINE FRITTE, CACIORICOTTA"
+        },
+        {
+          "id": "2048895",
+          "name": "Foresta Nera",
+          "price": 9.0,
+          "description": "POMODORO, MOZZARELLA, FUNGHI PORCINI, WURSTEL, SPECK"
+        },
+        {
+          "id": "2048892",
+          "name": "Frutti Di Mare",
+          "price": 10.0,
+          "description": "POMODORO, MOZZARELLA, COZZE, CALAMARI, GAMBERI, PREZZEMOLO"
+        },
+        {
+          "id": "2048896",
+          "name": "Fume",
+          "price": 7.0,
+          "description": "POMODORO, MOZZARELLA, SPECK, SCAMORZA  AFFUMICATA"
+        },
+        {
+          "id": "2048918",
+          "name": "Gorgonzola E Noci",
+          "price": 7.5,
+          "description": "MOZZARELLA, GORGONZOLA, NOCI"
+        },
+        {
+          "id": "2048871",
+          "name": "Margherita ",
+          "price": 5.0,
+          "description": "POMODORO, MOZZARELLA, OLIVE VERDI"
+        },
+        {
+          "id": "2048870",
+          "name": "Margherita Maxi",
+          "price": 13.0,
+          "description": "POMODORO, MOZZARELLA"
+        },
+        {
+          "id": "2048869",
+          "name": "Margherita Senza Glutine",
+          "price": 7.5,
+          "description": "POMODORO, MOZZARELLA"
+        },
+        {
+          "id": "2048881",
+          "name": "Marinara",
+          "price": 4.0,
+          "description": "POMODORO, OLIO ALL AGLIO, ORIGANO"
+        },
+        {
+          "id": "2048897",
+          "name": "Miss Italia",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, POMODORI FRESCHI, RUCOLA"
+        },
+        {
+          "id": "2048906",
+          "name": "Napoli",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, ACCIUGHE, ORIGANO"
+        },
+        {
+          "id": "2048893",
+          "name": "Orto Mare",
+          "price": 9.0,
+          "description": "POMODORO, MOZZARELLA, ZUCCHINE, GAMBERETTI"
+        },
+        {
+          "id": "2048919",
+          "name": "Pancettina",
+          "price": 8.0,
+          "description": "MOZZARELLA, PANCETTA, MELANZANE GRIGLIATE"
+        },
+        {
+          "id": "2048885",
+          "name": "Porcini",
+          "price": 7.0,
+          "description": "POMODORO, MOZZARELLA, FUNGHI PORCINI"
+        },
+        {
+          "id": "2048884",
+          "name": "Salsiccia",
+          "price": 7.0,
+          "description": "POMODORO, MOZZARELLA, SALSICCIA FRESCA"
+        },
+        {
+          "id": "2048891",
+          "name": "Salsiccia E Friarielli",
+          "price": 8.5,
+          "description": "POMODORO, MOZZARELLA, SALSICCIA FRESCA, FRIARIELLI"
+        },
+        {
+          "id": "2048912",
+          "name": "Sapore  Valle D Itria",
+          "price": 10.0,
+          "description": "FIOR DI LATTE, POMODORINI GIALLI, STRACCIATELLA, CAPOCOLLO"
+        },
+        {
+          "id": "2048922",
+          "name": "Semplice",
+          "price": 3.5,
+          "description": "ROSMARINO"
+        },
+        {
+          "id": "2048904",
+          "name": "Siciliana",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, ACCIUGHE, MELANZANE FRITTE, ORIGANO"
+        },
+        {
+          "id": "2048910",
+          "name": "Signora Mortadella",
+          "price": 10.0,
+          "description": "FIOR DI LATTE, CREMA DI PISTACCHIO, MORTADELLA, GRANELLA PISTACCHIO"
+        },
+        {
+          "id": "2048913",
+          "name": "Sottobosco",
+          "price": 10.0,
+          "description": "FIOR DI LATTE, SALSICCIA FRESCA, OLIO TARTUFATO, BURRATA"
+        },
+        {
+          "id": "2048890",
+          "name": "Stracchino E Radicchio",
+          "price": 8.0,
+          "description": "POMODORO, MOZZARELLA, STRACCHINO, RADICCHIO"
+        },
+        {
+          "id": "2048883",
+          "name": "Tonno E Cipolla",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, TONNO, CIPOLLA, ORIGANO"
+        },
+        {
+          "id": "2048894",
+          "name": "Valtellina",
+          "price": 8.0,
+          "description": "POMODORO, MOZZARELLA, BRESAOLA, RUCOLA, GRANA"
+        },
+        {
+          "id": "2048917",
+          "name": "Verdure Grigliate",
+          "price": 7.0,
+          "description": "MOZZARELLA, ZUCCHINE, MELANZANE, PEPERONI, FUNGHI FRESCHI"
+        },
+        {
+          "id": "2048887",
+          "name": "Wurstel E Patatine",
+          "price": 6.5,
+          "description": "POMODORO, MOZZARELLA, WURSTEL, PATATINE FRITTE"
+        }
+      ]
+    },
+    {
+      "id": "dolci",
+      "name": "Dolci",
+      "items": [
+        {
+          "id": "2048802",
+          "name": "Cheesecake",
+          "price": 5.0
+        },
+        {
+          "id": "2048804",
+          "name": "Frutta Di Stagione",
+          "price": 5.0
+        },
+        {
+          "id": "2048801",
+          "name": "Panna Tonka",
+          "price": 5.0
+        },
+        {
+          "id": "2048805",
+          "name": "Sorbetto Al Limone",
+          "price": 3.5
+        },
+        {
+          "id": "2048800",
+          "name": "Sporcamusi",
+          "price": 5.0
+        },
+        {
+          "id": "3246310",
+          "name": "Spumoncino Caramello Crema E Crumble",
+          "price": 6.5
+        },
+        {
+          "id": "2060815",
+          "name": "Spumoncino Fichi E Cupeta",
+          "price": 5.0
+        },
+        {
+          "id": "3246309",
+          "name": "Spumoncino Gran Pistacc, Crema",
+          "price": 6.5
+        },
+        {
+          "id": "2048803",
+          "name": "Spumoncino Nocciola E Cioccolato",
+          "price": 5.0
+        },
+        {
+          "id": "2060810",
+          "name": "Spumoncino Nocciola E Pistacchio",
+          "price": 5.0
+        },
+        {
+          "id": "3246307",
+          "name": "Spumoncino Pistacc, Nocc,Crocc",
+          "price": 5.0
+        },
+        {
+          "id": "2060816",
+          "name": "Spumoncino Rocher",
+          "price": 5.0
+        },
+        {
+          "id": "2060813",
+          "name": "Spumoncino Sapore Di Sicilia",
+          "price": 5.0
+        },
+        {
+          "id": "3246308",
+          "name": "Spumoncino Yogurt Greco Frutti Bosco",
+          "price": 6.5
+        }
+      ]
+    },
+    {
+      "id": "bev",
+      "name": "Bevande",
+      "items": [
+        {
+          "id": "2055925",
+          "name": "Acqua Frizzante 50 Cl",
+          "price": 1.0
+        },
+        {
+          "id": "2048925",
+          "name": "Acqua Frizzante 75 Cl",
+          "price": 2.0
+        },
+        {
+          "id": "2055926",
+          "name": "Acqua Naturale 50 Cl",
+          "price": 1.0
+        },
+        {
+          "id": "2048924",
+          "name": "Acqua Naturale 75 Cl",
+          "price": 2.0
+        },
+        {
+          "id": "2055931",
+          "name": "Calice Di Bianco",
+          "price": 3.0
+        },
+        {
+          "id": "2055932",
+          "name": "Calice Di Rosato",
+          "price": 2.5
+        },
+        {
+          "id": "2055930",
+          "name": "Calice Di Rosso",
+          "price": 3.0
+        },
+        {
+          "id": "2048937",
+          "name": "Caraffa Bionda 1 Lt",
+          "price": 10.0
+        },
+        {
+          "id": "2048938",
+          "name": "Caraffa Bionda 1.5 Lt",
+          "price": 13.0
+        },
+        {
+          "id": "2048940",
+          "name": "Caraffa Rossa 1 Lt",
+          "price": 12.0
+        },
+        {
+          "id": "2048939",
+          "name": "Caraffa Rossa 1.5 Lt",
+          "price": 14.0
+        },
+        {
+          "id": "2048929",
+          "name": "Coca Cola 1 Lt",
+          "price": 4.0
+        },
+        {
+          "id": "2048926",
+          "name": "Coca Cola 33 Cl",
+          "price": 2.5
+        },
+        {
+          "id": "2048927",
+          "name": "Coca Zero 33 Cl",
+          "price": 2.5
+        },
+        {
+          "id": "2048928",
+          "name": "Fanta 33 Cl",
+          "price": 2.5
+        },
+        {
+          "id": "2048934",
+          "name": "Menabrea  Rossa 33 Cl",
+          "price": 3.5
+        },
+        {
+          "id": "2048933",
+          "name": "Menabrea Bionda 33 Cl",
+          "price": 3.0
+        },
+        {
+          "id": "2048930",
+          "name": "Menabrea Bionda 66 Cl",
+          "price": 4.0
+        },
+        {
+          "id": "2048932",
+          "name": "Menabrea Top Restaurant 75 Cl",
+          "price": 10.0
+        },
+        {
+          "id": "2048935",
+          "name": "Spina Bionda 0.2 Cl ",
+          "price": 2.5
+        },
+        {
+          "id": "2048936",
+          "name": "Spina Bionda 0.4 Cl ",
+          "price": 4.0
+        },
+        {
+          "id": "2048941",
+          "name": "Spina Rossa 0.2 Cl",
+          "price": 3.0
+        },
+        {
+          "id": "2048942",
+          "name": "Spina Rossa 0.4 Cl",
+          "price": 4.5
+        },
+        {
+          "id": "2048945",
+          "name": "Vino Casa  Bianco 1 Lt",
+          "price": 8.0
+        },
+        {
+          "id": "2055927",
+          "name": "Vino Casa  Bianco 1/2 Lt",
+          "price": 4.0
+        },
+        {
+          "id": "2060797",
+          "name": "Vino Casa Bianco 1/4 Lt",
+          "price": 2.0
+        },
+        {
+          "id": "2048944",
+          "name": "Vino Casa Rosato 1 Lt",
+          "price": 6.0
+        },
+        {
+          "id": "2055928",
+          "name": "Vino Casa Rosato 1/2 Lt",
+          "price": 3.0
+        },
+        {
+          "id": "2060795",
+          "name": "Vino Casa Rosato 1/4 Lt",
+          "price": 2.0
+        },
+        {
+          "id": "2048943",
+          "name": "Vino Casa Rosso 1 Lt",
+          "price": 7.0
+        },
+        {
+          "id": "2055929",
+          "name": "Vino Casa Rosso 1/2 Lt",
+          "price": 4.0
+        },
+        {
+          "id": "2060796",
+          "name": "Vino Casa Rosso 1/4 Lt",
+          "price": 2.0
+        },
+        {
+          "id": "2048931",
+          "name": "Weithensthephaner Vitus 50 Cl",
+          "price": 6.0
+        }
+      ]
+    },
+    {
+      "id": "vini",
+      "name": "Vini",
+      "items": [
+        {
+          "id": "2055443",
+          "name": "Acante Fiano Salento",
+          "price": 18.0
+        },
+        {
+          "id": "2060856",
+          "name": "Aiace Rosso Riserva Castello Monaci",
+          "price": 25.0
+        },
+        {
+          "id": "2055437",
+          "name": "Artats Castello Monaci",
+          "price": 35.0
+        },
+        {
+          "id": "2055445",
+          "name": "Brut Prosecco",
+          "price": 15.0
+        },
+        {
+          "id": "2055444",
+          "name": "Brut Rose",
+          "price": 15.0
+        },
+        {
+          "id": "2068733",
+          "name": "Campo Appio Negroamaro",
+          "price": 14.0
+        },
+        {
+          "id": "2068734",
+          "name": "Campo Appio Primitivo",
+          "price": 15.0
+        },
+        {
+          "id": "2060852",
+          "name": "Chara Castello Monaci",
+          "price": 18.0
+        },
+        {
+          "id": "2055434",
+          "name": "Coribante Castello Monaci",
+          "price": 19.0
+        },
+        {
+          "id": "2055439",
+          "name": "Frontenere",
+          "price": 13.0
+        },
+        {
+          "id": "2055436",
+          "name": "Kreos Castello Monaci",
+          "price": 16.0
+        },
+        {
+          "id": "2055431",
+          "name": "Liante Castello Monaci",
+          "price": 16.0
+        },
+        {
+          "id": "2055433",
+          "name": "Maru Castello Monaci",
+          "price": 15.0
+        },
+        {
+          "id": "2055442",
+          "name": "Petra Luce Verdeca",
+          "price": 16.0
+        },
+        {
+          "id": "2055432",
+          "name": "Piluna Castello Monaci",
+          "price": 18.0
+        },
+        {
+          "id": "2055438",
+          "name": "Rosalbore",
+          "price": 14.0
+        },
+        {
+          "id": "2068732",
+          "name": "Salum Cantina S. Pancrazio",
+          "price": 18.0
+        },
+        {
+          "id": "2055435",
+          "name": "Selva Rossa Due Palme",
+          "price": 25.0
+        },
+        {
+          "id": "2055441",
+          "name": "Simera Chardonnay",
+          "price": 15.0
+        },
+        {
+          "id": "2055446",
+          "name": "Spumante Dolce",
+          "price": 12.0
+        },
+        {
+          "id": "2055440",
+          "name": "Tormaresca Calafuria",
+          "price": 22.0
+        },
+        {
+          "id": "2060855",
+          "name": "Tramari Rosato San Marzano",
+          "price": 22.0
+        }
+      ]
+    }
+  ]
+}

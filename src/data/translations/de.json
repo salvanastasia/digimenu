@@ -1,0 +1,636 @@
+{
+  "version": "10-162",
+  "ui": {
+    "allergenListTitle": "ALLERGENLISTE",
+    "allergensPresent": "Enthaltene Allergene:",
+    "noFavorites": "Noch keine Favoriten. Tippen Sie auf das Herz neben einem Gericht, um es hier zu speichern.",
+    "showFavorites": "Nur Favoriten anzeigen",
+    "showFullMenu": "Gesamtes Menü anzeigen",
+    "translationError": "Übersetzung für diese Sprache nicht verfügbar.",
+    "addFavorite": "Zu Favoriten hinzufügen",
+    "removeFavorite": "Aus Favoriten entfernen",
+    "selectLanguage": "Sprache wählen"
+  },
+  "restaurant": {
+    "subtitle": "Restaurant · Pizzeria · B&B",
+    "notes": "<p>In den in diesem Betrieb servierten Lebensmitteln und deren Würzungen können Spuren von als \"Allergene\" eingestuften Zutaten enthalten sein, die bei manchen Personen Allergien oder Unverträglichkeiten auslösen und eine Gesundheitsgefahr darstellen können. Verbraucher, insbesondere Personen mit Nahrungsmittelallergien oder -unverträglichkeiten, werden daher eingeladen, informierte Entscheidungen für ihre Sicherheit zu treffen. Wenden Sie sich an unser Servicepersonal für Fragen oder Informationen.</p>"
+  },
+  "categories": {
+    "anti": {
+      "name": "Vorspeisen"
+    },
+    "trad": {
+      "name": "Traditionsecke"
+    },
+    "primi": {
+      "name": "Erste Gänge"
+    },
+    "secon": {
+      "name": "Hauptgerichte"
+    },
+    "cont": {
+      "name": "Beilagen"
+    },
+    "ins": {
+      "name": "Salatschüsseln"
+    },
+    "pizze": {
+      "name": "Pizzen"
+    },
+    "dolci": {
+      "name": "Desserts"
+    },
+    "bev": {
+      "name": "Getränke"
+    },
+    "vini": {
+      "name": "Weine"
+    }
+  },
+  "items": {
+    "2048800": {
+      "name": "Sporcamusi"
+    },
+    "2048801": {
+      "name": "Tonka-Panna-Cotta"
+    },
+    "2048802": {
+      "name": "Cheesecake"
+    },
+    "2048803": {
+      "name": "Spumoncino Haselnuss und Schokolade"
+    },
+    "2048804": {
+      "name": "Saisonobst"
+    },
+    "2048805": {
+      "name": "Zitronensorbet"
+    },
+    "2048806": {
+      "name": "Wurstplatte"
+    },
+    "2048807": {
+      "name": "Käseplatte"
+    },
+    "2048808": {
+      "name": "Bruschetta mit Tomaten"
+    },
+    "2048809": {
+      "name": "Gemischte Land-Frittiertes"
+    },
+    "2048810": {
+      "name": "Salentinische Friselle"
+    },
+    "2048811": {
+      "name": "Gemischte Meeresvorspeise"
+    },
+    "2048812": {
+      "name": "Rohe Meeresfrüchte"
+    },
+    "2048813": {
+      "name": "Gratinierte Miesmuscheln"
+    },
+    "2048814": {
+      "name": "Miesmuscheln mit Pfeffer"
+    },
+    "2048815": {
+      "name": "Meeresfrüchtesalat"
+    },
+    "2048816": {
+      "name": "Marinierte Sardellen"
+    },
+    "2048817": {
+      "name": "Capocollo und Burrata"
+    },
+    "2048818": {
+      "name": "Saubohnen und Chicorée"
+    },
+    "2048819": {
+      "name": "Orecchiette und Pizzarieddri"
+    },
+    "2048820": {
+      "name": "Ciciri e Tria"
+    },
+    "2048821": {
+      "name": "Auberginen-Parmigiana"
+    },
+    "2048822": {
+      "name": "Pferdefleisch in Tontopf"
+    },
+    "2048823": {
+      "name": "Turcinieddri"
+    },
+    "2048824": {
+      "name": "Oktopus im Tontopf"
+    },
+    "2048825": {
+      "name": "Aribri-Cavatelli"
+    },
+    "2048826": {
+      "name": "Troccoli mit Tomaten und Burrata"
+    },
+    "2048827": {
+      "name": "Gnocchi mit Ricotta und Pesto"
+    },
+    "2048828": {
+      "name": "Ravioli mit Zackenbarsch"
+    },
+    "2048829": {
+      "name": "Troccoli mit Langusten und Garnelen"
+    },
+    "2048830": {
+      "name": "Scialatielli mit Miesmuscheln"
+    },
+    "2048831": {
+      "name": "Gnocchi mit Schwertfisch und Auberginen"
+    },
+    "2048832": {
+      "name": "Spaghetti mit Venusmuscheln"
+    },
+    "2048833": {
+      "name": "Gemischte Fleischgrillplatte"
+    },
+    "2048834": {
+      "name": "Gebratene Wurst"
+    },
+    "2048835": {
+      "name": "Entrecôte-Tagliata",
+      "description": "FRISCHE TOMATEN, GRANA, RUCOLA"
+    },
+    "2048836": {
+      "name": "Kalbskotelett"
+    },
+    "2048837": {
+      "name": "Thunfisch kurz angebraten",
+      "description": "SESAMSAMEN"
+    },
+    "2048838": {
+      "name": "Gebratene Riesengarnelen"
+    },
+    "2048839": {
+      "name": "Frittierte Fischmischung"
+    },
+    "2048840": {
+      "name": "Gegrillter Tintenfisch"
+    },
+    "2048841": {
+      "name": "Frittierte Tintenfische und Garnelen"
+    },
+    "2048842": {
+      "name": "Frischer Fisch des Tages"
+    },
+    "2048843": {
+      "name": "Grüner Salat"
+    },
+    "2048844": {
+      "name": "Gemischter Salat"
+    },
+    "2048845": {
+      "name": "Saisonales Gemüse"
+    },
+    "2048846": {
+      "name": "Giardiniera"
+    },
+    "2048847": {
+      "name": "Gegrilltes Gemüse"
+    },
+    "2048848": {
+      "name": "Ofenkartoffeln"
+    },
+    "2048849": {
+      "name": "Pommes frites"
+    },
+    "2048869": {
+      "name": "Margherita glutenfrei",
+      "description": "TOMATE, MOZZARELLA"
+    },
+    "2048870": {
+      "name": "Margherita Maxi",
+      "description": "TOMATE, MOZZARELLA"
+    },
+    "2048871": {
+      "name": "Margherita",
+      "description": "TOMATE, MOZZARELLA, GRÜNE OLIVEN"
+    },
+    "2048873": {
+      "name": "Aribri",
+      "description": "TOMATE, MOZZARELLA, SPECK, RUCOLA, SCHARF"
+    },
+    "2048880": {
+      "name": "Diavola",
+      "description": "TOMATE, MOZZARELLA, SCHARFE SALAMI"
+    },
+    "2048881": {
+      "name": "Marinara",
+      "description": "TOMATE, KNOBLAUCHÖL, OREGANO"
+    },
+    "2048882": {
+      "name": "Bufala",
+      "description": "TOMATE, BÜFFELMOZZARELLA, BASILIKUM"
+    },
+    "2048883": {
+      "name": "Thunfisch und Zwiebel",
+      "description": "TOMATE, MOZZARELLA, THUNFISCH, ZWIEBEL, OREGANO"
+    },
+    "2048884": {
+      "name": "Wurst",
+      "description": "TOMATE, MOZZARELLA, FRISCHE WURST"
+    },
+    "2048885": {
+      "name": "Steinpilze",
+      "description": "TOMATE, MOZZARELLA, STEINPILZE"
+    },
+    "2048887": {
+      "name": "Würstchen und Pommes",
+      "description": "TOMATE, MOZZARELLA, WÜRSTCHEN, POMMES FRITES"
+    },
+    "2048888": {
+      "name": "Capricciosa",
+      "description": "TOMATE, MOZZARELLA, FRISCHE CHAMPIGNONS, ARTISCHOCKENHERZEN, KOCHSCHINKEN, GRÜNE OLIVEN"
+    },
+    "2048889": {
+      "name": "Vier Jahreszeiten",
+      "description": "TOMATE, MOZZARELLA, FRISCHE CHAMPIGNONS, ARTISCHOCKENHERZEN, KOCHSCHINKEN, GRÜNE OLIVEN, SCHARFE SALAMI"
+    },
+    "2048890": {
+      "name": "Stracchino und Radicchio",
+      "description": "TOMATE, MOZZARELLA, STRACCHINO, RADICCHIO"
+    },
+    "2048891": {
+      "name": "Wurst und Friarielli",
+      "description": "TOMATE, MOZZARELLA, FRISCHE WURST, FRIARIELLI"
+    },
+    "2048892": {
+      "name": "Meeresfrüchte",
+      "description": "TOMATE, MOZZARELLA, MIESMUSCHELN, TINTENFISCH, GARNELEN, PETERSILIE"
+    },
+    "2048893": {
+      "name": "Garten und Meer",
+      "description": "TOMATE, MOZZARELLA, ZUCHINI, GARNELEN"
+    },
+    "2048894": {
+      "name": "Valtellina",
+      "description": "TOMATE, MOZZARELLA, BRESAOLA, RUCOLA, GRANA"
+    },
+    "2048895": {
+      "name": "Schwarzwald",
+      "description": "TOMATE, MOZZARELLA, STEINPILZE, WÜRSTCHEN, SPECK"
+    },
+    "2048896": {
+      "name": "Geräuchert",
+      "description": "TOMATE, MOZZARELLA, SPECK, GERÄUCHERTE SCAMORZA"
+    },
+    "2048897": {
+      "name": "Miss Italia",
+      "description": "TOMATE, MOZZARELLA, FRISCHE TOMATEN, RUCOLA"
+    },
+    "2048904": {
+      "name": "Sizilianisch",
+      "description": "TOMATE, MOZZARELLA, SARDELLEN, FRITTIERTE AUBERGINE, OREGANO"
+    },
+    "2048905": {
+      "name": "Vier Käse",
+      "description": "TOMATE, MOZZARELLA, SCHWEIZER, GORGONZOLA, GRANA"
+    },
+    "2048906": {
+      "name": "Neapel",
+      "description": "TOMATE, MOZZARELLA, SARDELLEN, OREGANO"
+    },
+    "2048907": {
+      "name": "Salentinischer Sonntag",
+      "description": "SAN-MARZANO-TOMATE, FIOR DI LATTE, FRITTIERTE FLEISCHBÄLLCHEN, CACIORICOTTA"
+    },
+    "2048908": {
+      "name": "Caprese 2.0",
+      "description": "CREME AUS GETROCKNETEN TOMATEN, GELBE CHERRY-TOMATEN, BÜFFELMOZZARELLA, OREGANO, BASILIKUM"
+    },
+    "2048909": {
+      "name": "Alles mit Sardellen",
+      "description": "SAN-MARZANO-TOMATE, STRACCIATELLA, KANTABRISCHE SARDELLEN, ZITRONENZESTE"
+    },
+    "2048910": {
+      "name": "Signora Mortadella",
+      "description": "FIOR DI LATTE, PISTAZIENCREME, MORTADELLA, GEHACKTE PISTAZIEN"
+    },
+    "2048912": {
+      "name": "Geschmack des Valle d'Itria",
+      "description": "FIOR DI LATTE, GELBE CHERRY-TOMATEN, STRACCIATELLA, CAPOCOLLO"
+    },
+    "2048913": {
+      "name": "Unterholz",
+      "description": "FIOR DI LATTE, FRISCHE WURST, TRÜFFELÖL, BURRATA"
+    },
+    "2048915": {
+      "name": "Schneewittchen",
+      "description": "MOZZARELLA, GRANA"
+    },
+    "2048916": {
+      "name": "Brie",
+      "description": "MOZZARELLA, BRIE, RUCOLA"
+    },
+    "2048917": {
+      "name": "Gegrilltes Gemüse",
+      "description": "MOZZARELLA, ZUCHINI, AUBERGINE, PAPRIKA, FRISCHE CHAMPIGNONS"
+    },
+    "2048918": {
+      "name": "Gorgonzola und Walnüsse",
+      "description": "MOZZARELLA, GORGONZOLA, WALNÜSSE"
+    },
+    "2048919": {
+      "name": "Pancetta",
+      "description": "MOZZARELLA, PANCETTA, GEGRILLTE AUBERGINE"
+    },
+    "2048920": {
+      "name": "Caprese",
+      "description": "MOZZARELLA, FRISCHE TOMATEN, RUCOLA, OREGANO"
+    },
+    "2048921": {
+      "name": "Büffel-Caprese",
+      "description": "FRISCHE TOMATEN, RUCOLA, BÜFFELMOZZARELLA"
+    },
+    "2048922": {
+      "name": "Einfach",
+      "description": "ROSMARIN"
+    },
+    "2048924": {
+      "name": "Stilles Wasser 75 cl"
+    },
+    "2048925": {
+      "name": "Sprudelwasser 75 cl"
+    },
+    "2048926": {
+      "name": "Coca-Cola 33 cl"
+    },
+    "2048927": {
+      "name": "Coca Zero 33 cl"
+    },
+    "2048928": {
+      "name": "Fanta 33 cl"
+    },
+    "2048929": {
+      "name": "Coca-Cola 1 L"
+    },
+    "2048930": {
+      "name": "Menabrea Blond 66 cl"
+    },
+    "2048931": {
+      "name": "Weihenstephaner Vitus 50 cl"
+    },
+    "2048932": {
+      "name": "Menabrea Top Restaurant 75 cl"
+    },
+    "2048933": {
+      "name": "Menabrea Blond 33 cl"
+    },
+    "2048934": {
+      "name": "Menabrea Rot 33 cl"
+    },
+    "2048935": {
+      "name": "Blond vom Fass 0,2 L"
+    },
+    "2048936": {
+      "name": "Blond vom Fass 0,4 L"
+    },
+    "2048937": {
+      "name": "Krug Blond 1 L"
+    },
+    "2048938": {
+      "name": "Krug Blond 1,5 L"
+    },
+    "2048939": {
+      "name": "Krug Rot 1,5 L"
+    },
+    "2048940": {
+      "name": "Krug Rot 1 L"
+    },
+    "2048941": {
+      "name": "Rot vom Fass 0,2 L"
+    },
+    "2048942": {
+      "name": "Rot vom Fass 0,4 L"
+    },
+    "2048943": {
+      "name": "Hausrotwein 1 L"
+    },
+    "2048944": {
+      "name": "Hausroséwein 1 L"
+    },
+    "2048945": {
+      "name": "Hausweißwein 1 L"
+    },
+    "2055431": {
+      "name": "Liante Castello Monaci"
+    },
+    "2055432": {
+      "name": "Piluna Castello Monaci"
+    },
+    "2055433": {
+      "name": "Maru Castello Monaci"
+    },
+    "2055434": {
+      "name": "Coribante Castello Monaci"
+    },
+    "2055435": {
+      "name": "Selva Rossa Due Palme"
+    },
+    "2055436": {
+      "name": "Kreos Castello Monaci"
+    },
+    "2055437": {
+      "name": "Artats Castello Monaci"
+    },
+    "2055438": {
+      "name": "Rosalbore"
+    },
+    "2055439": {
+      "name": "Frontenere"
+    },
+    "2055440": {
+      "name": "Tormaresca Calafuria"
+    },
+    "2055441": {
+      "name": "Simera Chardonnay"
+    },
+    "2055442": {
+      "name": "Petra Luce Verdeca"
+    },
+    "2055443": {
+      "name": "Acante Fiano Salento"
+    },
+    "2055444": {
+      "name": "Brut Rosé"
+    },
+    "2055445": {
+      "name": "Brut Prosecco"
+    },
+    "2055446": {
+      "name": "Süßer Sekt"
+    },
+    "2055711": {
+      "name": "Fleischbällchen"
+    },
+    "2055715": {
+      "name": "Kartoffelkroketten"
+    },
+    "2055716": {
+      "name": "Frittierte Zucchiniblüten"
+    },
+    "2055717": {
+      "name": "Pittule"
+    },
+    "2055925": {
+      "name": "Sprudelwasser 50 cl"
+    },
+    "2055926": {
+      "name": "Stilles Wasser 50 cl"
+    },
+    "2055927": {
+      "name": "Hausweißwein 1/2 L"
+    },
+    "2055928": {
+      "name": "Hausroséwein 1/2 L"
+    },
+    "2055929": {
+      "name": "Hausrotwein 1/2 L"
+    },
+    "2055930": {
+      "name": "Glas Rotwein"
+    },
+    "2055931": {
+      "name": "Glas Weißwein"
+    },
+    "2055932": {
+      "name": "Glas Roséwein"
+    },
+    "2060795": {
+      "name": "Hausroséwein 1/4 L"
+    },
+    "2060796": {
+      "name": "Hausrotwein 1/4 L"
+    },
+    "2060797": {
+      "name": "Hausweißwein 1/4 L"
+    },
+    "2060810": {
+      "name": "Spumoncino Haselnuss und Pistazie"
+    },
+    "2060813": {
+      "name": "Spumoncino Sizilien-Geschmack"
+    },
+    "2060815": {
+      "name": "Spumoncino Feigen und Cupeta"
+    },
+    "2060816": {
+      "name": "Spumoncino Rocher"
+    },
+    "2060821": {
+      "name": "Fleisch im Tontopf"
+    },
+    "2060822": {
+      "name": "Rouladen in Sauce"
+    },
+    "2060852": {
+      "name": "Chara Castello Monaci"
+    },
+    "2060855": {
+      "name": "Tramari Rosato San Marzano"
+    },
+    "2060856": {
+      "name": "Aiace Rosso Riserva Castello Monaci"
+    },
+    "2068732": {
+      "name": "Salum Cantina S. Pancrazio"
+    },
+    "2068733": {
+      "name": "Campo Appio Negroamaro"
+    },
+    "2068734": {
+      "name": "Campo Appio Primitivo"
+    },
+    "2068745": {
+      "name": "Salatschüssel mit Walnüssen"
+    },
+    "2068746": {
+      "name": "Salatschüssel mit Bresaola"
+    },
+    "2068748": {
+      "name": "Salatschüssel mit Bresaola"
+    },
+    "2088233": {
+      "name": "Pastellierter Kabeljau"
+    },
+    "2095577": {
+      "name": "Fleischbällchen in Sauce"
+    },
+    "3246307": {
+      "name": "Spumoncino Pistazie, Haselnuss, Crunch"
+    },
+    "3246308": {
+      "name": "Spumoncino griechischer Joghurt Beeren"
+    },
+    "3246309": {
+      "name": "Spumoncino Gran Pistazie und Creme"
+    },
+    "3246310": {
+      "name": "Spumoncino Karamell Creme und Crumble"
+    }
+  },
+  "allergens": {
+    "1": {
+      "name": "1-Glutenhaltiges Getreide",
+      "description": "Weizen, Dinkel, Khorasan-Weizen, Roggen, Gerste, Hafer"
+    },
+    "2": {
+      "name": "2-Krebstiere",
+      "description": "Garnelen, Langusten, Hummer, Krabben, Paguristen und ähnliche"
+    },
+    "3": {
+      "name": "3-Eier",
+      "description": "Mayonnaise, Omeletts, Emulgatoren, Eiernudeln, süße und herzhafte Kekse und Kuchen, Eis und Cremes usw."
+    },
+    "4": {
+      "name": "4-Fisch",
+      "description": "einschließlich Derivate, d.h. alle Lebensmittel, die Fisch enthalten, auch in geringen Mengen"
+    },
+    "5": {
+      "name": "5-Erdnüsse und Erdnussprodukte",
+      "description": "Erdnüsse und Erdnussprodukte"
+    },
+    "6": {
+      "name": "6-Sojabohnen und Sojaprodukte",
+      "description": "Sojabohnen und Sojaprodukte"
+    },
+    "7": {
+      "name": "7-Milch und Milchprodukte",
+      "description": "Joghurt, Kekse und Kuchen, Eis und verschiedene Cremes. Einschließlich Laktose"
+    },
+    "8": {
+      "name": "8-Schalenfrüchte",
+      "description": "Mandeln, Haselnüsse, Walnüsse, Cashewnüsse, Pekannüsse, Paranüsse und Queenslandnüsse, Pistazien"
+    },
+    "9": {
+      "name": "9-Sellerie und Derivative",
+      "description": "in Stücken vorhanden, aber auch in Zubereitungen für Suppen, Saucen und Gemüsekonzentrate"
+    },
+    "10": {
+      "name": "10-Senf und Senfprodukte",
+      "description": "Senf und Senfprodukte"
+    },
+    "11": {
+      "name": "11-Sesamsamen und Sesamprodukte",
+      "description": "Sesamsamen und Sesamprodukte"
+    },
+    "12": {
+      "name": "12-Schwefeldioxid und Sulfite",
+      "description": "Schwefeldioxid und Sulfite in Konzentrationen über 10 mg/kg oder 10 mg/Liter"
+    },
+    "13": {
+      "name": "13-Lupinen und Lupinenprodukte",
+      "description": "Lupinen und Lupinenprodukte"
+    },
+    "14": {
+      "name": "14-Weichtiere",
+      "description": "Canestrello, Messermuscheln, Jakobsmuscheln, Miesmuscheln, Venusmuscheln, Oktopus und ähnliche"
+    }
+  }
+}

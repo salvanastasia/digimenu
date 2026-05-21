@@ -1,0 +1,636 @@
+{
+  "version": "10-162",
+  "ui": {
+    "allergenListTitle": "ALLERGEN LIST",
+    "allergensPresent": "Allergens present:",
+    "noFavorites": "No favorites yet. Tap the heart next to a dish to save it here.",
+    "showFavorites": "Show favorites only",
+    "showFullMenu": "Show full menu",
+    "translationError": "Translation not available for this language.",
+    "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove from favorites",
+    "selectLanguage": "Select language"
+  },
+  "restaurant": {
+    "subtitle": "Restaurant · Pizzeria · B&B",
+    "notes": "<p>The foods served in this establishment and their seasonings may contain traces of ingredients classified as \"allergens\" that can cause allergies or intolerances in some people and may pose a health risk. Consumers, especially those with food allergies or intolerances, are therefore invited to make informed choices for their safety. Please ask our dining room staff for any questions or information.</p>"
+  },
+  "categories": {
+    "anti": {
+      "name": "Appetizers"
+    },
+    "trad": {
+      "name": "Tradition Corner"
+    },
+    "primi": {
+      "name": "First Courses"
+    },
+    "secon": {
+      "name": "Main Courses"
+    },
+    "cont": {
+      "name": "Side Dishes"
+    },
+    "ins": {
+      "name": "Salad Bowls"
+    },
+    "pizze": {
+      "name": "Pizzas"
+    },
+    "dolci": {
+      "name": "Desserts"
+    },
+    "bev": {
+      "name": "Drinks"
+    },
+    "vini": {
+      "name": "Wines"
+    }
+  },
+  "items": {
+    "2048800": {
+      "name": "Sporcamusi"
+    },
+    "2048801": {
+      "name": "Tonka Panna Cotta"
+    },
+    "2048802": {
+      "name": "Cheesecake"
+    },
+    "2048803": {
+      "name": "Hazelnut & Chocolate Semifreddo"
+    },
+    "2048804": {
+      "name": "Seasonal Fruit"
+    },
+    "2048805": {
+      "name": "Lemon Sorbet"
+    },
+    "2048806": {
+      "name": "Cured Meats Board"
+    },
+    "2048807": {
+      "name": "Cheese Board"
+    },
+    "2048808": {
+      "name": "Tomato Bruschetta"
+    },
+    "2048809": {
+      "name": "Mixed Land Fritters"
+    },
+    "2048810": {
+      "name": "Salentine Friselle"
+    },
+    "2048811": {
+      "name": "Mixed Seafood Antipasto"
+    },
+    "2048812": {
+      "name": "Raw Seafood"
+    },
+    "2048813": {
+      "name": "Gratinated Mussels"
+    },
+    "2048814": {
+      "name": "Peppered Mussels"
+    },
+    "2048815": {
+      "name": "Seafood Salad"
+    },
+    "2048816": {
+      "name": "Marinated Anchovies"
+    },
+    "2048817": {
+      "name": "Capocollo & Burrata"
+    },
+    "2048818": {
+      "name": "Fava Beans & Chicory"
+    },
+    "2048819": {
+      "name": "Orecchiette & Pizzarieddri"
+    },
+    "2048820": {
+      "name": "Ciciri e Tria"
+    },
+    "2048821": {
+      "name": "Eggplant Parmigiana"
+    },
+    "2048822": {
+      "name": "Horse Meat in Clay Pot"
+    },
+    "2048823": {
+      "name": "Turcinieddri"
+    },
+    "2048824": {
+      "name": "Octopus in Clay Pot"
+    },
+    "2048825": {
+      "name": "Aribri Cavatelli"
+    },
+    "2048826": {
+      "name": "Troccoli with Tomatoes & Burrata"
+    },
+    "2048827": {
+      "name": "Gnocchi with Ricotta & Pesto"
+    },
+    "2048828": {
+      "name": "Grouper Ravioli"
+    },
+    "2048829": {
+      "name": "Troccoli with Langoustines & Prawns"
+    },
+    "2048830": {
+      "name": "Scialatielli with Mussels"
+    },
+    "2048831": {
+      "name": "Gnocchi with Swordfish & Eggplant"
+    },
+    "2048832": {
+      "name": "Spaghetti with Clams"
+    },
+    "2048833": {
+      "name": "Mixed Grilled Meats"
+    },
+    "2048834": {
+      "name": "Roast Sausage"
+    },
+    "2048835": {
+      "name": "Entrecôte Tagliata",
+      "description": "FRESH TOMATOES, GRANA, ARUGULA"
+    },
+    "2048836": {
+      "name": "Veal Rib Steak"
+    },
+    "2048837": {
+      "name": "Seared Tuna",
+      "description": "SESAME SEEDS"
+    },
+    "2048838": {
+      "name": "Roast Prawns"
+    },
+    "2048839": {
+      "name": "Fried Mixed Fish"
+    },
+    "2048840": {
+      "name": "Grilled Squid"
+    },
+    "2048841": {
+      "name": "Fried Squid & Prawns"
+    },
+    "2048842": {
+      "name": "Fresh Fish of the Day"
+    },
+    "2048843": {
+      "name": "Green Salad"
+    },
+    "2048844": {
+      "name": "Mixed Salad"
+    },
+    "2048845": {
+      "name": "Seasonal Cooked Vegetables"
+    },
+    "2048846": {
+      "name": "Giardiniera"
+    },
+    "2048847": {
+      "name": "Grilled Vegetables"
+    },
+    "2048848": {
+      "name": "Roast Potatoes"
+    },
+    "2048849": {
+      "name": "French Fries"
+    },
+    "2048869": {
+      "name": "Gluten-Free Margherita",
+      "description": "TOMATO, MOZZARELLA"
+    },
+    "2048870": {
+      "name": "Maxi Margherita",
+      "description": "TOMATO, MOZZARELLA"
+    },
+    "2048871": {
+      "name": "Margherita",
+      "description": "TOMATO, MOZZARELLA, GREEN OLIVES"
+    },
+    "2048873": {
+      "name": "Aribri",
+      "description": "TOMATO, MOZZARELLA, SPECK, ARUGULA, SPICY"
+    },
+    "2048880": {
+      "name": "Diavola",
+      "description": "TOMATO, MOZZARELLA, SPICY SALAMI"
+    },
+    "2048881": {
+      "name": "Marinara",
+      "description": "TOMATO, GARLIC OIL, OREGANO"
+    },
+    "2048882": {
+      "name": "Bufala",
+      "description": "TOMATO, BUFFALO MOZZARELLA, BASIL"
+    },
+    "2048883": {
+      "name": "Tuna & Onion",
+      "description": "TOMATO, MOZZARELLA, TUNA, ONION, OREGANO"
+    },
+    "2048884": {
+      "name": "Sausage",
+      "description": "TOMATO, MOZZARELLA, FRESH SAUSAGE"
+    },
+    "2048885": {
+      "name": "Porcini Mushrooms",
+      "description": "TOMATO, MOZZARELLA, PORCINI MUSHROOMS"
+    },
+    "2048887": {
+      "name": "Frankfurters & Fries",
+      "description": "TOMATO, MOZZARELLA, FRANKFURTERS, FRENCH FRIES"
+    },
+    "2048888": {
+      "name": "Capricciosa",
+      "description": "TOMATO, MOZZARELLA, FRESH MUSHROOMS, ARTICHOKE HEARTS, COOKED HAM, GREEN OLIVES"
+    },
+    "2048889": {
+      "name": "Four Seasons",
+      "description": "TOMATO, MOZZARELLA, FRESH MUSHROOMS, ARTICHOKE HEARTS, COOKED HAM, GREEN OLIVES, SPICY SALAMI"
+    },
+    "2048890": {
+      "name": "Stracchino & Radicchio",
+      "description": "TOMATO, MOZZARELLA, STRACCHINO, RADICCHIO"
+    },
+    "2048891": {
+      "name": "Sausage & Friarielli",
+      "description": "TOMATO, MOZZARELLA, FRESH SAUSAGE, FRIARIELLI"
+    },
+    "2048892": {
+      "name": "Seafood",
+      "description": "TOMATO, MOZZARELLA, MUSSELS, SQUID, PRAWNS, PARSLEY"
+    },
+    "2048893": {
+      "name": "Garden & Sea",
+      "description": "TOMATO, MOZZARELLA, ZUCCHINI, SHRIMP"
+    },
+    "2048894": {
+      "name": "Valtellina",
+      "description": "TOMATO, MOZZARELLA, BRESAOLA, ARUGULA, GRANA"
+    },
+    "2048895": {
+      "name": "Black Forest",
+      "description": "TOMATO, MOZZARELLA, PORCINI MUSHROOMS, FRANKFURTERS, SPECK"
+    },
+    "2048896": {
+      "name": "Smoked",
+      "description": "TOMATO, MOZZARELLA, SPECK, SMOKED SCAMORZA"
+    },
+    "2048897": {
+      "name": "Miss Italia",
+      "description": "TOMATO, MOZZARELLA, FRESH TOMATOES, ARUGULA"
+    },
+    "2048904": {
+      "name": "Sicilian",
+      "description": "TOMATO, MOZZARELLA, ANCHOVIES, FRIED EGGPLANT, OREGANO"
+    },
+    "2048905": {
+      "name": "Four Cheeses",
+      "description": "TOMATO, MOZZARELLA, SWISS, GORGONZOLA, GRANA"
+    },
+    "2048906": {
+      "name": "Napoli",
+      "description": "TOMATO, MOZZARELLA, ANCHOVIES, OREGANO"
+    },
+    "2048907": {
+      "name": "Salentine Sunday",
+      "description": "SAN MARZANO TOMATO, FIOR DI LATTE, FRIED MEATBALLS, CACIORICOTTA"
+    },
+    "2048908": {
+      "name": "Caprese 2.0",
+      "description": "SUN-DRIED TOMATO CREAM, YELLOW CHERRY TOMATOES, BUFFALO MOZZARELLA, OREGANO, BASIL"
+    },
+    "2048909": {
+      "name": "All About Anchovies",
+      "description": "SAN MARZANO TOMATO, STRACCIATELLA, CANTABRIAN ANCHOVIES, LEMON ZEST"
+    },
+    "2048910": {
+      "name": "Signora Mortadella",
+      "description": "FIOR DI LATTE, PISTACHIO CREAM, MORTADELLA, CHOPPED PISTACHIOS"
+    },
+    "2048912": {
+      "name": "Taste of Valle d'Itria",
+      "description": "FIOR DI LATTE, YELLOW CHERRY TOMATOES, STRACCIATELLA, CAPOCOLLO"
+    },
+    "2048913": {
+      "name": "Underbrush",
+      "description": "FIOR DI LATTE, FRESH SAUSAGE, TRUFFLE OIL, BURRATA"
+    },
+    "2048915": {
+      "name": "Biancaneve",
+      "description": "MOZZARELLA, GRANA"
+    },
+    "2048916": {
+      "name": "Brie",
+      "description": "MOZZARELLA, BRIE, ARUGULA"
+    },
+    "2048917": {
+      "name": "Grilled Vegetables",
+      "description": "MOZZARELLA, ZUCCHINI, EGGPLANT, PEPPERS, FRESH MUSHROOMS"
+    },
+    "2048918": {
+      "name": "Gorgonzola & Walnuts",
+      "description": "MOZZARELLA, GORGONZOLA, WALNUTS"
+    },
+    "2048919": {
+      "name": "Pancetta",
+      "description": "MOZZARELLA, PANCETTA, GRILLED EGGPLANT"
+    },
+    "2048920": {
+      "name": "Caprese",
+      "description": "MOZZARELLA, FRESH TOMATOES, ARUGULA, OREGANO"
+    },
+    "2048921": {
+      "name": "Buffalo Caprese",
+      "description": "FRESH TOMATOES, ARUGULA, BUFFALO MOZZARELLA"
+    },
+    "2048922": {
+      "name": "Simple",
+      "description": "ROSEMARY"
+    },
+    "2048924": {
+      "name": "Still Water 75 cl"
+    },
+    "2048925": {
+      "name": "Sparkling Water 75 cl"
+    },
+    "2048926": {
+      "name": "Coca-Cola 33 cl"
+    },
+    "2048927": {
+      "name": "Coca Zero 33 cl"
+    },
+    "2048928": {
+      "name": "Fanta 33 cl"
+    },
+    "2048929": {
+      "name": "Coca-Cola 1 L"
+    },
+    "2048930": {
+      "name": "Menabrea Blonde 66 cl"
+    },
+    "2048931": {
+      "name": "Weihenstephaner Vitus 50 cl"
+    },
+    "2048932": {
+      "name": "Menabrea Top Restaurant 75 cl"
+    },
+    "2048933": {
+      "name": "Menabrea Blonde 33 cl"
+    },
+    "2048934": {
+      "name": "Menabrea Red 33 cl"
+    },
+    "2048935": {
+      "name": "Blonde Draft 0.2 L"
+    },
+    "2048936": {
+      "name": "Blonde Draft 0.4 L"
+    },
+    "2048937": {
+      "name": "Blonde Pitcher 1 L"
+    },
+    "2048938": {
+      "name": "Blonde Pitcher 1.5 L"
+    },
+    "2048939": {
+      "name": "Red Pitcher 1.5 L"
+    },
+    "2048940": {
+      "name": "Red Pitcher 1 L"
+    },
+    "2048941": {
+      "name": "Red Draft 0.2 L"
+    },
+    "2048942": {
+      "name": "Red Draft 0.4 L"
+    },
+    "2048943": {
+      "name": "House Red Wine 1 L"
+    },
+    "2048944": {
+      "name": "House Rosé Wine 1 L"
+    },
+    "2048945": {
+      "name": "House White Wine 1 L"
+    },
+    "2055431": {
+      "name": "Liante Castello Monaci"
+    },
+    "2055432": {
+      "name": "Piluna Castello Monaci"
+    },
+    "2055433": {
+      "name": "Maru Castello Monaci"
+    },
+    "2055434": {
+      "name": "Coribante Castello Monaci"
+    },
+    "2055435": {
+      "name": "Selva Rossa Due Palme"
+    },
+    "2055436": {
+      "name": "Kreos Castello Monaci"
+    },
+    "2055437": {
+      "name": "Artats Castello Monaci"
+    },
+    "2055438": {
+      "name": "Rosalbore"
+    },
+    "2055439": {
+      "name": "Frontenere"
+    },
+    "2055440": {
+      "name": "Tormaresca Calafuria"
+    },
+    "2055441": {
+      "name": "Simera Chardonnay"
+    },
+    "2055442": {
+      "name": "Petra Luce Verdeca"
+    },
+    "2055443": {
+      "name": "Acante Fiano Salento"
+    },
+    "2055444": {
+      "name": "Brut Rosé"
+    },
+    "2055445": {
+      "name": "Brut Prosecco"
+    },
+    "2055446": {
+      "name": "Sweet Sparkling Wine"
+    },
+    "2055711": {
+      "name": "Meatballs"
+    },
+    "2055715": {
+      "name": "Potato Croquettes"
+    },
+    "2055716": {
+      "name": "Fried Zucchini Flowers"
+    },
+    "2055717": {
+      "name": "Pittule"
+    },
+    "2055925": {
+      "name": "Sparkling Water 50 cl"
+    },
+    "2055926": {
+      "name": "Still Water 50 cl"
+    },
+    "2055927": {
+      "name": "House White Wine 1/2 L"
+    },
+    "2055928": {
+      "name": "House Rosé Wine 1/2 L"
+    },
+    "2055929": {
+      "name": "House Red Wine 1/2 L"
+    },
+    "2055930": {
+      "name": "Glass of Red Wine"
+    },
+    "2055931": {
+      "name": "Glass of White Wine"
+    },
+    "2055932": {
+      "name": "Glass of Rosé Wine"
+    },
+    "2060795": {
+      "name": "House Rosé Wine 1/4 L"
+    },
+    "2060796": {
+      "name": "House Red Wine 1/4 L"
+    },
+    "2060797": {
+      "name": "House White Wine 1/4 L"
+    },
+    "2060810": {
+      "name": "Hazelnut & Pistachio Semifreddo"
+    },
+    "2060813": {
+      "name": "Sicilian Flavour Semifreddo"
+    },
+    "2060815": {
+      "name": "Fig & Cupeta Semifreddo"
+    },
+    "2060816": {
+      "name": "Rocher Semifreddo"
+    },
+    "2060821": {
+      "name": "Meat in Clay Pot"
+    },
+    "2060822": {
+      "name": "Stuffed Rolls in Sauce"
+    },
+    "2060852": {
+      "name": "Chara Castello Monaci"
+    },
+    "2060855": {
+      "name": "Tramari Rosato San Marzano"
+    },
+    "2060856": {
+      "name": "Aiace Rosso Riserva Castello Monaci"
+    },
+    "2068732": {
+      "name": "Salum Cantina S. Pancrazio"
+    },
+    "2068733": {
+      "name": "Campo Appio Negroamaro"
+    },
+    "2068734": {
+      "name": "Campo Appio Primitivo"
+    },
+    "2068745": {
+      "name": "Salad Bowl with Walnuts"
+    },
+    "2068746": {
+      "name": "Salad Bowl with Bresaola"
+    },
+    "2068748": {
+      "name": "Salad Bowl with Bresaola"
+    },
+    "2088233": {
+      "name": "Battered Salt Cod"
+    },
+    "2095577": {
+      "name": "Meatballs in Sauce"
+    },
+    "3246307": {
+      "name": "Pistachio, Hazelnut & Crunch Semifreddo"
+    },
+    "3246308": {
+      "name": "Greek Yogurt & Berry Semifreddo"
+    },
+    "3246309": {
+      "name": "Pistachio Gran & Cream Semifreddo"
+    },
+    "3246310": {
+      "name": "Caramel Cream & Crumble Semifreddo"
+    }
+  },
+  "allergens": {
+    "1": {
+      "name": "1-Gluten-containing cereals",
+      "description": "wheat, spelt, khorasan wheat, rye, barley, oats"
+    },
+    "2": {
+      "name": "2-Crustaceans",
+      "description": "shrimp, langoustines, lobsters, crabs, hermit crabs and similar"
+    },
+    "3": {
+      "name": "3-Eggs",
+      "description": "mayonnaise, omelettes, emulsifiers, egg pasta, sweet and savoury biscuits and cakes, ice cream and creams, etc."
+    },
+    "4": {
+      "name": "4-Fish",
+      "description": "including derivatives, i.e. all food products containing fish, even in small percentages"
+    },
+    "5": {
+      "name": "5-Peanuts and peanut products",
+      "description": "peanuts and peanut products"
+    },
+    "6": {
+      "name": "6-Soybeans and soy products",
+      "description": "soybeans and soy products"
+    },
+    "7": {
+      "name": "7-Milk and milk products",
+      "description": "yogurt, biscuits and cakes, ice cream and various creams. Including lactose"
+    },
+    "8": {
+      "name": "8-Nuts",
+      "description": "almonds, hazelnuts, common walnuts, cashews, pecans, Brazil and Queensland nuts, pistachios"
+    },
+    "9": {
+      "name": "9-Celery and derivatives",
+      "description": "present in pieces but also in preparations for soups, sauces and vegetable concentrates"
+    },
+    "10": {
+      "name": "10-Mustard and mustard products",
+      "description": "mustard and mustard products"
+    },
+    "11": {
+      "name": "11-Sesame seeds and sesame products",
+      "description": "sesame seeds and sesame products"
+    },
+    "12": {
+      "name": "12-Sulphur dioxide and sulphites",
+      "description": "sulphur dioxide and sulphites in concentrations above 10 mg/kg or 10 mg/litre"
+    },
+    "13": {
+      "name": "13-Lupin and lupin products",
+      "description": "lupin and lupin products"
+    },
+    "14": {
+      "name": "14-Molluscs",
+      "description": "canestrello, razor clams, scallops, mussels, clams, octopus and similar"
+    }
+  }
+}

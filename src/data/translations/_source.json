@@ -1,0 +1,636 @@
+{
+  "version": "10-162",
+  "ui": {
+    "allergenListTitle": "LISTA ALLERGENI",
+    "allergensPresent": "Allergeni presenti:",
+    "noFavorites": "Nessun preferito ancora. Tocca il cuore accanto a una portata per salvarla qui.",
+    "showFavorites": "Mostra solo i preferiti",
+    "showFullMenu": "Mostra menu completo",
+    "translationError": "Traduzione non disponibile per questa lingua.",
+    "addFavorite": "Aggiungi ai preferiti",
+    "removeFavorite": "Rimuovi dai preferiti",
+    "selectLanguage": "Seleziona lingua"
+  },
+  "restaurant": {
+    "subtitle": "Ristorante · Pizzeria · B&B",
+    "notes": "<p>Negli alimenti serviti in questo esercizio e nei loro condimenti si riscontra la presenza di tracce di ingredienti che vengono classificati come \"allergeni\" e possono provocare allergie o intolleranze in alcune persone e possono costituire un pericolo per la salute. Si invitano, quindi, i consumatori, in particolare quelli che soffrono di allergie o intolleranze alimentari, ad effettuare scelte consapevoli per la loro sicurezza. Chiedete al nostro personale in sala per qualsiasi domanda o informazione in merito.</p>"
+  },
+  "categories": {
+    "anti": {
+      "name": "Antipasti"
+    },
+    "trad": {
+      "name": "Angolo Tradizione"
+    },
+    "primi": {
+      "name": "Primi"
+    },
+    "secon": {
+      "name": "Secondi"
+    },
+    "cont": {
+      "name": "Contorni"
+    },
+    "ins": {
+      "name": "Insalatone"
+    },
+    "pizze": {
+      "name": "Pizze"
+    },
+    "dolci": {
+      "name": "Dolci"
+    },
+    "bev": {
+      "name": "Bevande"
+    },
+    "vini": {
+      "name": "Vini"
+    }
+  },
+  "items": {
+    "2048800": {
+      "name": "Sporcamusi"
+    },
+    "2048801": {
+      "name": "Panna Tonka"
+    },
+    "2048802": {
+      "name": "Cheesecake"
+    },
+    "2048803": {
+      "name": "Spumoncino Nocciola E Cioccolato"
+    },
+    "2048804": {
+      "name": "Frutta Di Stagione"
+    },
+    "2048805": {
+      "name": "Sorbetto Al Limone"
+    },
+    "2048806": {
+      "name": "Tagliere Salumi"
+    },
+    "2048807": {
+      "name": "Tagliere Formaggi"
+    },
+    "2048808": {
+      "name": "Bruschette Pomodoro"
+    },
+    "2048809": {
+      "name": "Fritto Misto Terra"
+    },
+    "2048810": {
+      "name": "Friselle Salentine"
+    },
+    "2048811": {
+      "name": "Antipasto Misto Mare"
+    },
+    "2048812": {
+      "name": "Crudite Di Mare"
+    },
+    "2048813": {
+      "name": "Cozze Gratinate"
+    },
+    "2048814": {
+      "name": "Impepata Di Cozze"
+    },
+    "2048815": {
+      "name": "Insalata Di Mare"
+    },
+    "2048816": {
+      "name": "Alici Marinate"
+    },
+    "2048817": {
+      "name": "Capocollo E Burrata"
+    },
+    "2048818": {
+      "name": "Fave E Cicorie"
+    },
+    "2048819": {
+      "name": "Orecchiette E Pizzarieddri"
+    },
+    "2048820": {
+      "name": "Ciciri E Tria"
+    },
+    "2048821": {
+      "name": "Parmigiana Di Melanzane"
+    },
+    "2048822": {
+      "name": "Cavallo Alla Pignata"
+    },
+    "2048823": {
+      "name": "Turcinieddri"
+    },
+    "2048824": {
+      "name": "Polpo A Pignata"
+    },
+    "2048825": {
+      "name": "Cavatelli Aribri"
+    },
+    "2048826": {
+      "name": "Troccoli Pomodori E Burrata"
+    },
+    "2048827": {
+      "name": "Gnocchi Ricotta E Pesto"
+    },
+    "2048828": {
+      "name": "Ravioli Alla Cernia"
+    },
+    "2048829": {
+      "name": "Troccoli Scampi E Gamberi"
+    },
+    "2048830": {
+      "name": "Scialatiello Alle Cozze"
+    },
+    "2048831": {
+      "name": "Gnocchi Spada E Melanzane"
+    },
+    "2048832": {
+      "name": "Spaghetti Alle Vongole"
+    },
+    "2048833": {
+      "name": "Grigliata Mista Carne"
+    },
+    "2048834": {
+      "name": "Salsiccia Arrosto"
+    },
+    "2048835": {
+      "name": "Tagliata Di Entrecote",
+      "description": "POMODORI FRESCHI, GRANA, RUCOLA"
+    },
+    "2048836": {
+      "name": "Costata Vitellino"
+    },
+    "2048837": {
+      "name": "Tonno Scottato",
+      "description": "SEMI DI SESAMO"
+    },
+    "2048838": {
+      "name": "Gamberoni Arrosto"
+    },
+    "2048839": {
+      "name": "Fritto Di Paranza"
+    },
+    "2048840": {
+      "name": "Calamaro Griglato"
+    },
+    "2048841": {
+      "name": "Frittura Calamari E Gamberi"
+    },
+    "2048842": {
+      "name": "Pesce Fresco"
+    },
+    "2048843": {
+      "name": "Insalata Verde"
+    },
+    "2048844": {
+      "name": "Insalata Mista"
+    },
+    "2048845": {
+      "name": "Verdure Cotte Stagione"
+    },
+    "2048846": {
+      "name": "Giardiniera"
+    },
+    "2048847": {
+      "name": "Verdure Grigliate"
+    },
+    "2048848": {
+      "name": "Patate Al Forno"
+    },
+    "2048849": {
+      "name": "Patate Fritte"
+    },
+    "2048869": {
+      "name": "Margherita Senza Glutine",
+      "description": "POMODORO, MOZZARELLA"
+    },
+    "2048870": {
+      "name": "Margherita Maxi",
+      "description": "POMODORO, MOZZARELLA"
+    },
+    "2048871": {
+      "name": "Margherita ",
+      "description": "POMODORO, MOZZARELLA, OLIVE VERDI"
+    },
+    "2048873": {
+      "name": "Aribri",
+      "description": "POMODORO, MOZZARELLA, SPECK, RUCOLA, PICCANTE"
+    },
+    "2048880": {
+      "name": "Diavola",
+      "description": "POMODORO, MOZZARELLA, SALAME PICCANTE"
+    },
+    "2048881": {
+      "name": "Marinara",
+      "description": "POMODORO, OLIO ALL AGLIO, ORIGANO"
+    },
+    "2048882": {
+      "name": "Bufala",
+      "description": "POMODORO, BUFALA, BASILICO"
+    },
+    "2048883": {
+      "name": "Tonno E Cipolla",
+      "description": "POMODORO, MOZZARELLA, TONNO, CIPOLLA, ORIGANO"
+    },
+    "2048884": {
+      "name": "Salsiccia",
+      "description": "POMODORO, MOZZARELLA, SALSICCIA FRESCA"
+    },
+    "2048885": {
+      "name": "Porcini",
+      "description": "POMODORO, MOZZARELLA, FUNGHI PORCINI"
+    },
+    "2048887": {
+      "name": "Wurstel E Patatine",
+      "description": "POMODORO, MOZZARELLA, WURSTEL, PATATINE FRITTE"
+    },
+    "2048888": {
+      "name": "Capricciosa",
+      "description": "POMODORO, MOZZARELLA, FUNGHI FRESCHI, CARCIOFINI, PROSCIUTTO COTTO, OLIVE VERDI"
+    },
+    "2048889": {
+      "name": "4 Stagioni",
+      "description": "POMODORO, MOZZARELLA, FUNGHI FRESCHI, CARCIOFINI, PROSCIUTTO COTTO, OLIVE VERDI, SALAME PICCANTE"
+    },
+    "2048890": {
+      "name": "Stracchino E Radicchio",
+      "description": "POMODORO, MOZZARELLA, STRACCHINO, RADICCHIO"
+    },
+    "2048891": {
+      "name": "Salsiccia E Friarielli",
+      "description": "POMODORO, MOZZARELLA, SALSICCIA FRESCA, FRIARIELLI"
+    },
+    "2048892": {
+      "name": "Frutti Di Mare",
+      "description": "POMODORO, MOZZARELLA, COZZE, CALAMARI, GAMBERI, PREZZEMOLO"
+    },
+    "2048893": {
+      "name": "Orto Mare",
+      "description": "POMODORO, MOZZARELLA, ZUCCHINE, GAMBERETTI"
+    },
+    "2048894": {
+      "name": "Valtellina",
+      "description": "POMODORO, MOZZARELLA, BRESAOLA, RUCOLA, GRANA"
+    },
+    "2048895": {
+      "name": "Foresta Nera",
+      "description": "POMODORO, MOZZARELLA, FUNGHI PORCINI, WURSTEL, SPECK"
+    },
+    "2048896": {
+      "name": "Fume",
+      "description": "POMODORO, MOZZARELLA, SPECK, SCAMORZA  AFFUMICATA"
+    },
+    "2048897": {
+      "name": "Miss Italia",
+      "description": "POMODORO, MOZZARELLA, POMODORI FRESCHI, RUCOLA"
+    },
+    "2048904": {
+      "name": "Siciliana",
+      "description": "POMODORO, MOZZARELLA, ACCIUGHE, MELANZANE FRITTE, ORIGANO"
+    },
+    "2048905": {
+      "name": "4 Formaggi",
+      "description": "POMODORO, MOZZARELLA, SVIZZERO, GORGONZOLA, GRANA"
+    },
+    "2048906": {
+      "name": "Napoli",
+      "description": "POMODORO, MOZZARELLA, ACCIUGHE, ORIGANO"
+    },
+    "2048907": {
+      "name": "Domenica Salentina",
+      "description": "POMODORO SAN MARZANO, FIOR DI LATTE, POLPETTINE FRITTE, CACIORICOTTA"
+    },
+    "2048908": {
+      "name": "Caprese 2.0",
+      "description": "CREMA POMODORI SECCHI, POMODORINI GIALLI, BUFALA, ORIGANO, BASILICO"
+    },
+    "2048909": {
+      "name": "A Tutta Alici",
+      "description": "POMODORO SAN MARZANO, STRACCIATELLA, ALICI CANTABRICO, SCORZA LIMONE"
+    },
+    "2048910": {
+      "name": "Signora Mortadella",
+      "description": "FIOR DI LATTE, CREMA DI PISTACCHIO, MORTADELLA, GRANELLA PISTACCHIO"
+    },
+    "2048912": {
+      "name": "Sapore  Valle D Itria",
+      "description": "FIOR DI LATTE, POMODORINI GIALLI, STRACCIATELLA, CAPOCOLLO"
+    },
+    "2048913": {
+      "name": "Sottobosco",
+      "description": "FIOR DI LATTE, SALSICCIA FRESCA, OLIO TARTUFATO, BURRATA"
+    },
+    "2048915": {
+      "name": "Biancaneve",
+      "description": "MOZZARELLA, GRANA"
+    },
+    "2048916": {
+      "name": "Brie",
+      "description": "MOZZARELLA, BRIE, RUCOLA"
+    },
+    "2048917": {
+      "name": "Verdure Grigliate",
+      "description": "MOZZARELLA, ZUCCHINE, MELANZANE, PEPERONI, FUNGHI FRESCHI"
+    },
+    "2048918": {
+      "name": "Gorgonzola E Noci",
+      "description": "MOZZARELLA, GORGONZOLA, NOCI"
+    },
+    "2048919": {
+      "name": "Pancettina",
+      "description": "MOZZARELLA, PANCETTA, MELANZANE GRIGLIATE"
+    },
+    "2048920": {
+      "name": "Caprese",
+      "description": "MOZZARELLA, POMODORI FRESCHI, RUCOLA, ORIGANO"
+    },
+    "2048921": {
+      "name": "Caprese Bufalina",
+      "description": "POMODORI FRESCHI, RUCOLA, BUFALA"
+    },
+    "2048922": {
+      "name": "Semplice",
+      "description": "ROSMARINO"
+    },
+    "2048924": {
+      "name": "Acqua Naturale 75 Cl"
+    },
+    "2048925": {
+      "name": "Acqua Frizzante 75 Cl"
+    },
+    "2048926": {
+      "name": "Coca Cola 33 Cl"
+    },
+    "2048927": {
+      "name": "Coca Zero 33 Cl"
+    },
+    "2048928": {
+      "name": "Fanta 33 Cl"
+    },
+    "2048929": {
+      "name": "Coca Cola 1 Lt"
+    },
+    "2048930": {
+      "name": "Menabrea Bionda 66 Cl"
+    },
+    "2048931": {
+      "name": "Weithensthephaner Vitus 50 Cl"
+    },
+    "2048932": {
+      "name": "Menabrea Top Restaurant 75 Cl"
+    },
+    "2048933": {
+      "name": "Menabrea Bionda 33 Cl"
+    },
+    "2048934": {
+      "name": "Menabrea  Rossa 33 Cl"
+    },
+    "2048935": {
+      "name": "Spina Bionda 0.2 Cl "
+    },
+    "2048936": {
+      "name": "Spina Bionda 0.4 Cl "
+    },
+    "2048937": {
+      "name": "Caraffa Bionda 1 Lt"
+    },
+    "2048938": {
+      "name": "Caraffa Bionda 1.5 Lt"
+    },
+    "2048939": {
+      "name": "Caraffa Rossa 1.5 Lt"
+    },
+    "2048940": {
+      "name": "Caraffa Rossa 1 Lt"
+    },
+    "2048941": {
+      "name": "Spina Rossa 0.2 Cl"
+    },
+    "2048942": {
+      "name": "Spina Rossa 0.4 Cl"
+    },
+    "2048943": {
+      "name": "Vino Casa Rosso 1 Lt"
+    },
+    "2048944": {
+      "name": "Vino Casa Rosato 1 Lt"
+    },
+    "2048945": {
+      "name": "Vino Casa  Bianco 1 Lt"
+    },
+    "2055431": {
+      "name": "Liante Castello Monaci"
+    },
+    "2055432": {
+      "name": "Piluna Castello Monaci"
+    },
+    "2055433": {
+      "name": "Maru Castello Monaci"
+    },
+    "2055434": {
+      "name": "Coribante Castello Monaci"
+    },
+    "2055435": {
+      "name": "Selva Rossa Due Palme"
+    },
+    "2055436": {
+      "name": "Kreos Castello Monaci"
+    },
+    "2055437": {
+      "name": "Artats Castello Monaci"
+    },
+    "2055438": {
+      "name": "Rosalbore"
+    },
+    "2055439": {
+      "name": "Frontenere"
+    },
+    "2055440": {
+      "name": "Tormaresca Calafuria"
+    },
+    "2055441": {
+      "name": "Simera Chardonnay"
+    },
+    "2055442": {
+      "name": "Petra Luce Verdeca"
+    },
+    "2055443": {
+      "name": "Acante Fiano Salento"
+    },
+    "2055444": {
+      "name": "Brut Rose"
+    },
+    "2055445": {
+      "name": "Brut Prosecco"
+    },
+    "2055446": {
+      "name": "Spumante Dolce"
+    },
+    "2055711": {
+      "name": "Polpette"
+    },
+    "2055715": {
+      "name": "Crocchette Di Patate"
+    },
+    "2055716": {
+      "name": "Fiori Di Zucca In Pastella"
+    },
+    "2055717": {
+      "name": "Pittule"
+    },
+    "2055925": {
+      "name": "Acqua Frizzante 50 Cl"
+    },
+    "2055926": {
+      "name": "Acqua Naturale 50 Cl"
+    },
+    "2055927": {
+      "name": "Vino Casa  Bianco 1/2 Lt"
+    },
+    "2055928": {
+      "name": "Vino Casa Rosato 1/2 Lt"
+    },
+    "2055929": {
+      "name": "Vino Casa Rosso 1/2 Lt"
+    },
+    "2055930": {
+      "name": "Calice Di Rosso"
+    },
+    "2055931": {
+      "name": "Calice Di Bianco"
+    },
+    "2055932": {
+      "name": "Calice Di Rosato"
+    },
+    "2060795": {
+      "name": "Vino Casa Rosato 1/4 Lt"
+    },
+    "2060796": {
+      "name": "Vino Casa Rosso 1/4 Lt"
+    },
+    "2060797": {
+      "name": "Vino Casa Bianco 1/4 Lt"
+    },
+    "2060810": {
+      "name": "Spumoncino Nocciola E Pistacchio"
+    },
+    "2060813": {
+      "name": "Spumoncino Sapore Di Sicilia"
+    },
+    "2060815": {
+      "name": "Spumoncino Fichi E Cupeta"
+    },
+    "2060816": {
+      "name": "Spumoncino Rocher"
+    },
+    "2060821": {
+      "name": "Carne A Pignatu"
+    },
+    "2060822": {
+      "name": "Involtini Al Sugo"
+    },
+    "2060852": {
+      "name": "Chara Castello Monaci"
+    },
+    "2060855": {
+      "name": "Tramari Rosato San Marzano"
+    },
+    "2060856": {
+      "name": "Aiace Rosso Riserva Castello Monaci"
+    },
+    "2068732": {
+      "name": "Salum Cantina S. Pancrazio"
+    },
+    "2068733": {
+      "name": "Campo Appio Negroamaro"
+    },
+    "2068734": {
+      "name": "Campo Appio Primitivo"
+    },
+    "2068745": {
+      "name": "Insalatona Con Noci"
+    },
+    "2068746": {
+      "name": "Insalatona Con Bresaola"
+    },
+    "2068748": {
+      "name": "Insalatona Con Bresaola"
+    },
+    "2088233": {
+      "name": "Baccala Pastellato"
+    },
+    "2095577": {
+      "name": "Polpette Al Sugo"
+    },
+    "3246307": {
+      "name": "Spumoncino Pistacc, Nocc,Crocc"
+    },
+    "3246308": {
+      "name": "Spumoncino Yogurt Greco Frutti Bosco"
+    },
+    "3246309": {
+      "name": "Spumoncino Gran Pistacc, Crema"
+    },
+    "3246310": {
+      "name": "Spumoncino Caramello Crema E Crumble"
+    }
+  },
+  "allergens": {
+    "1": {
+      "name": "1-Cereali contenenti glutine",
+      "description": "grano, farro, grano khorasan, segale, orzo, avena"
+    },
+    "2": {
+      "name": "2-Crostacei",
+      "description": "gamberi, scampi, aragoste, granchi, paguri e simili"
+    },
+    "3": {
+      "name": "3-Uova",
+      "description": "maionese, frittata, emulsionanti, pasta all'uovo, biscotti e torte anche salate, gelati e creme ecc"
+    },
+    "4": {
+      "name": "4-Pesce",
+      "description": "inclusi i derivati, cioè tutti quei prodotti alimentari che si compongono di pesce, anche se in piccole percentuali"
+    },
+    "5": {
+      "name": "5-Arachidi e prodotti a base di arachidi",
+      "description": "arachidi e prodotti a base di arachidi"
+    },
+    "6": {
+      "name": "6-Semi di soia e prodotti a base di soia",
+      "description": "semi di soia e prodotti a base di soia"
+    },
+    "7": {
+      "name": "7-Latte e prodotti a base di latte",
+      "description": "yogurt, biscotti e torte, gelato e creme varie. Incluso lattosio"
+    },
+    "8": {
+      "name": "8-Frutta a guscio",
+      "description": "mandorle, nocciole, noci comuni, noci di acagiù, noci pecan e del Brasile e Queensland, pistacchi"
+    },
+    "9": {
+      "name": "9-Sedano e derivati",
+      "description": "presente in pezzi ma pure all'interno di preparati per zuppe, salse e concentrati vegetali"
+    },
+    "10": {
+      "name": "10-Senape e prodotti a base di senape",
+      "description": "senape e prodotti a base di senape"
+    },
+    "11": {
+      "name": "11-Semi di sesamo e prodotti a base di sesamo",
+      "description": "semi di sesamo e prodotti a base di sesamo"
+    },
+    "12": {
+      "name": "12-Anidride solforosa e solfiti",
+      "description": "anidride solforosa e solfiti in concentrazioni superiori a 10 mg/kg o 10 mg/litro"
+    },
+    "13": {
+      "name": "13-Lupini e prodotti a base di lupini",
+      "description": "lupini e prodotti a base di lupini"
+    },
+    "14": {
+      "name": "14-Molluschi",
+      "description": "canestrello, cannolicchio, capasanta, cozza, vongola, polpo e simili"
+    }
+  }
+}
