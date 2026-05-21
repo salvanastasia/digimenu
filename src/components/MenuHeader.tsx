@@ -25,21 +25,13 @@ export function MenuHeader({
       className="relative z-30 overflow-visible px-5 pb-8 pt-6 text-white"
       style={{ backgroundColor: HEADER_BG }}
     >
-      <div className="relative z-30 flex items-start justify-between gap-4">
-        <div className="min-w-0 space-y-3">
+      <div className="relative z-30 flex items-start justify-between gap-3">
+        <div className="min-w-0">
           <img
             src="/logo.png"
             alt="aribrì"
             className="block h-[72px] w-auto max-w-[min(100%,260px)] object-contain object-left"
           />
-          {restaurant.subtitle ? (
-            <p
-              className="text-[0.72rem] font-medium uppercase tracking-[0.35em]"
-              style={{ color: BRAND_ACCENT }}
-            >
-              {restaurant.subtitle}
-            </p>
-          ) : null}
         </div>
 
         <div className="relative z-40 flex shrink-0 items-center gap-3 pt-1">
@@ -79,6 +71,15 @@ export function MenuHeader({
           <LanguageSelector />
         </div>
       </div>
+
+      {restaurant.subtitle ? (
+        <p
+          className="mt-3 whitespace-nowrap text-[0.62rem] font-medium uppercase tracking-[0.12em] sm:text-[0.72rem] sm:tracking-[0.28em]"
+          style={{ color: BRAND_ACCENT }}
+        >
+          {restaurant.subtitle}
+        </p>
+      ) : null}
     </header>
   );
 }

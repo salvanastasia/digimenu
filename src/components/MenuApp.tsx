@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { AllergenList } from "@/components/AllergenList";
+import { FavoritesFab } from "@/components/FavoritesFab";
 import { MenuCategoryAccordion } from "@/components/MenuCategoryAccordion";
 import { MenuFooter } from "@/components/MenuFooter";
 import { MenuHeader } from "@/components/MenuHeader";
@@ -45,7 +46,9 @@ export function MenuApp() {
         onToggleFavoritesMode={() => setFavoritesMode((value) => !value)}
       />
 
-      <main className="relative z-0 space-y-3 px-3 pb-6 pt-3">
+      <main
+        className={`relative z-0 space-y-3 px-3 pt-3 ${favorites.length > 0 ? "pb-24" : "pb-6"}`}
+      >
         {translationError ? (
           <div className="rounded-[15px] bg-[#fff1f1] px-4 py-3 text-[0.88rem] text-[#8a1f1f]">
             {translationError}
@@ -83,6 +86,14 @@ export function MenuApp() {
         />
       ) : null}
       <MenuFooter restaurant={restaurant} ui={ui} />
+
+      <FavoritesFab
+        count={favorites.length}
+        active={favoritesMode}
+        showFavoritesLabel={ui.showFavorites}
+        showFullMenuLabel={ui.showFullMenu}
+        onClick={() => setFavoritesMode((value) => !value)}
+      />
     </div>
   );
 }
