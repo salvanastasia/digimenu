@@ -23,6 +23,7 @@ import { LANGUAGES } from "@/lib/languages";
 import type {
   ClientConfig,
   ClientDish,
+  FavoritesViewMode,
   HeaderBackgroundMode,
   HeaderColorKey,
 } from "@/types/client";
@@ -85,6 +86,15 @@ export function ClientEditor({
     onChange({
       ...client,
       header: { ...client.header, ...patch },
+    });
+  };
+
+  const updateCustomizations = (
+    patch: Partial<ClientConfig["customizations"]>,
+  ) => {
+    onChange({
+      ...client,
+      customizations: { ...client.customizations, ...patch },
     });
   };
 
@@ -440,6 +450,47 @@ export function ClientEditor({
             Compare nel footer del menu come &quot;Servizio al tavolo: X€&quot;.
           </span>
         </label>
+      </Section>
+
+      <Section title="Personalizzazioni">
+        <div>
+          <p className="mb-2 text-[0.78rem] font-semibold text-[#606060]">
+            Vista preferiti
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {(
+              [
+                { value: "panel", label: "Pannello" },
+                { value: "receipt", label: "Scontrino" },
+              ] as const
+            ).map((option) => {
+              const active =
+                client.customizations.favoritesView === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() =>
+                    updateCustomizations({
+                      favoritesView: option.value as FavoritesViewMode,
+                    })
+                  }
+                  className={`rounded-full border px-4 py-2 text-[0.82rem] font-semibold transition-colors ${
+                    active
+                      ? "border-[#560200] bg-[#560200]/8 text-[#560200]"
+                      : "border-[#d8dadc] bg-white text-[#606060] hover:bg-[#f5f5f5]"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-2 text-[0.72rem] leading-snug text-[#606060]">
+            Scegli se aprire la lista preferiti come pannello con quantità
+            modificabili o come scontrino riepilogativo.
+          </p>
+        </div>
       </Section>
 
       <Section title="Piatti">

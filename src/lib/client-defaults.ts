@@ -1,6 +1,7 @@
 import rawMenu from "@/data/menu.json";
 import type {
   ClientConfig,
+  ClientCustomizations,
   ClientDish,
   ClientHeader,
 } from "@/types/client";
@@ -16,6 +17,9 @@ export const SUBTITLE_MAX_LENGTH = 32;
 export const DEFAULT_ADDRESS = rawMenu.restaurant.address ?? "";
 export const DEFAULT_PHONE = rawMenu.restaurant.phone ?? "";
 export const DEFAULT_TABLE_SERVICE_FEE = 2.5;
+export const DEFAULT_CUSTOMIZATIONS: ClientCustomizations = {
+  favoritesView: "panel",
+};
 
 export function formatTableServiceFee(fee: number | null): string | undefined {
   if (fee == null) return undefined;
@@ -75,6 +79,7 @@ export function createEmptyClient(name = "Nuovo cliente"): ClientConfig {
       fontFamily: DEFAULT_FONT,
     },
     header: createHeaderFromBrand(DEFAULT_PRIMARY, DEFAULT_SECONDARY),
+    customizations: { ...DEFAULT_CUSTOMIZATIONS },
     categories: [{ id: categoryId, name: "Menu" }],
     dishes: [
       {
@@ -130,6 +135,7 @@ export function createAribriSeedClient(): ClientConfig {
       fontFamily: DEFAULT_FONT,
     },
     header: createHeaderFromBrand(primaryColor, secondaryColor),
+    customizations: { ...DEFAULT_CUSTOMIZATIONS },
     categories,
     dishes,
     createdAt: now,

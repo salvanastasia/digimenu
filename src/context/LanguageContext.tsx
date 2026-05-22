@@ -74,6 +74,7 @@ export function LanguageProvider({
                 ui: {
                   ...translated.ui,
                   tableServiceFee: italianContent.ui.tableServiceFee,
+                  listTotal: italianContent.ui.listTotal,
                 },
                 categories: italianContent.categories,
                 restaurant: {

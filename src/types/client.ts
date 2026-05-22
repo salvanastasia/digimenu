@@ -40,6 +40,12 @@ export type ClientDish = {
   allergenIds: number[];
 };
 
+export type FavoritesViewMode = "panel" | "receipt";
+
+export type ClientCustomizations = {
+  favoritesView: FavoritesViewMode;
+};
+
 export type ClientConfig = {
   id: string;
   name: string;
@@ -51,6 +57,7 @@ export type ClientConfig = {
   hidden: boolean;
   brand: ClientBrand;
   header: ClientHeader;
+  customizations: ClientCustomizations;
   categories: ClientCategory[];
   dishes: ClientDish[];
   createdAt: string;

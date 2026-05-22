@@ -18,6 +18,7 @@ export type UiStrings = {
   vegetarianTag: string;
   yourListTitle: string;
   clearList: string;
+  listTotal: string;
   decreaseQuantity: string;
   increaseQuantity: string;
 };

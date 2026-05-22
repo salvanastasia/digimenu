@@ -4,14 +4,19 @@ import { useMemo, useState } from "react";
 import { AllergenList } from "@/components/AllergenList";
 import { FavoritesFab } from "@/components/FavoritesFab";
 import { FavoritesPanel } from "@/components/FavoritesPanel";
+import { FavoritesReceiptPanel } from "@/components/FavoritesReceiptPanel";
 import { MenuCategoryAccordion } from "@/components/MenuCategoryAccordion";
 import { MenuFooter } from "@/components/MenuFooter";
 import { MenuHeader } from "@/components/MenuHeader";
+import { useClientMenu } from "@/context/ClientMenuContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useFavorites } from "@/hooks/useFavorites";
 
 export function MenuApp() {
   const { content, translationError } = useLanguage();
+  const clientMenu = useClientMenu();
+  const favoritesView =
+    clientMenu?.client.customizations.favoritesView ?? "panel";
   const {
     favorites,
     totalQuantity,
@@ -94,21 +99,36 @@ export function MenuApp() {
         />
       ) : null}
 
-      <FavoritesPanel
-        open={favoritesOpen}
-        title={ui.yourListTitle}
-        closeLabel={ui.showFullMenu}
-        emptyMessage={ui.noFavorites}
-        clearListLabel={ui.clearList}
-        categories={categories}
-        favorites={favorites}
-        onClose={closeFavorites}
-        onQuantityChange={setQuantity}
-        onClearList={clearFavorites}
-        allergensLabel={ui.allergensPresent}
-        decreaseQuantityLabel={ui.decreaseQuantity}
-        increaseQuantityLabel={ui.increaseQuantity}
-      />
+      {favoritesView === "receipt" ? (
+        <FavoritesReceiptPanel
+          open={favoritesOpen}
+          title={ui.yourListTitle}
+          closeLabel={ui.showFullMenu}
+          emptyMessage={ui.noFavorites}
+          clearListLabel={ui.clearList}
+          totalLabel={ui.listTotal}
+          categories={categories}
+          favorites={favorites}
+          onClose={closeFavorites}
+          onClearList={clearFavorites}
+        />
+      ) : (
+        <FavoritesPanel
+          open={favoritesOpen}
+          title={ui.yourListTitle}
+          closeLabel={ui.showFullMenu}
+          emptyMessage={ui.noFavorites}
+          clearListLabel={ui.clearList}
+          categories={categories}
+          favorites={favorites}
+          onClose={closeFavorites}
+          onQuantityChange={setQuantity}
+          onClearList={clearFavorites}
+          allergensLabel={ui.allergensPresent}
+          decreaseQuantityLabel={ui.decreaseQuantity}
+          increaseQuantityLabel={ui.increaseQuantity}
+        />
+      )}
     </div>
   );
 }

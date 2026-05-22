@@ -2,6 +2,7 @@ import {
   createAribriSeedClient,
   createEmptyClient,
   DEFAULT_ADDRESS,
+  DEFAULT_CUSTOMIZATIONS,
   DEFAULT_PHONE,
   DEFAULT_SUBTITLE,
   DEFAULT_TABLE_SERVICE_FEE,
@@ -90,6 +91,11 @@ function migrateClient(client: ClientConfig): ClientConfig {
     phone: migrated.phone ?? DEFAULT_PHONE,
     tableServiceFee:
       migrated.tableServiceFee ?? DEFAULT_TABLE_SERVICE_FEE,
+    customizations: {
+      favoritesView:
+        migrated.customizations?.favoritesView ??
+        DEFAULT_CUSTOMIZATIONS.favoritesView,
+    },
     header: {
       ...migrated.header,
       backgroundMode: migrated.header.backgroundMode ?? "color",
