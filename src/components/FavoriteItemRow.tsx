@@ -52,7 +52,7 @@ export function FavoriteItemRow({
   const hasDescription = Boolean(description);
 
   return (
-    <article className="border-t border-[#e4e4e4] py-5 first:border-t-0">
+    <article className="border-t border-[#141415]/10 px-3 py-5 first:border-t-0">
       <div className="flex items-start justify-between gap-4">
         <button
           type="button"

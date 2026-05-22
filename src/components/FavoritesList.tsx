@@ -3,6 +3,7 @@
 import type { MenuCategory } from "@/types/menu";
 import type { FavoriteEntry } from "@/hooks/useFavorites";
 import { FavoriteItemRow } from "@/components/FavoriteItemRow";
+import { useClientMenu } from "@/context/ClientMenuContext";
 
 type FavoritesListProps = {
   emptyMessage: string;
@@ -37,6 +38,10 @@ export function FavoritesList({
   showPrices = true,
   totalLabel,
 }: FavoritesListProps) {
+  const clientMenu = useClientMenu();
+  const primaryColor = clientMenu?.client.brand.primaryColor ?? "#560200";
+  const categoryBackground = `color-mix(in srgb, ${primaryColor} 8%, transparent)`;
+
   const favoriteMap = new Map(favorites.map((entry) => [entry.id, entry.quantity]));
 
   const sections = categories
@@ -65,14 +70,18 @@ export function FavoritesList({
           {emptyMessage}
         </p>
       ) : (
-        <div className="space-y-1">
+        <div className="space-y-2">
           {sections.map(({ category, items }) => (
-            <section key={category.id}>
-              <h3 className="text-[0.95rem] font-bold uppercase tracking-[0.12em] text-[#141415]">
+            <section
+              key={category.id}
+              className="overflow-hidden rounded-[15px]"
+              style={{ backgroundColor: categoryBackground }}
+            >
+              <h3 className="px-3 pt-3 text-[0.95rem] font-bold uppercase tracking-[0.12em] text-[#141415]">
                 {category.name}
               </h3>
-              <div className="mt-3 border-t border-[#141415]" />
-              <div className="overflow-hidden rounded-[15px] bg-white">
+              <div className="mx-3 mt-3 border-t border-[#141415] opacity-20" />
+              <div className="overflow-hidden">
                 {items.map((item) => (
                   <FavoriteItemRow
                     key={item.id}
