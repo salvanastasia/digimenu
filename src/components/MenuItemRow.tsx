@@ -101,12 +101,7 @@ export function MenuItemRow({
           ) : null}
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
-          {price ? (
-            <p className="whitespace-nowrap text-[0.95rem] font-bold text-[#141415]">
-              {price}
-            </p>
-          ) : null}
+        <div className="flex shrink-0 flex-col items-end self-stretch">
           <button
             type="button"
             aria-label={
@@ -129,6 +124,11 @@ export function MenuItemRow({
           >
             <HeartIcon filled={favorite} />
           </button>
+          {price ? (
+            <p className="mt-auto whitespace-nowrap pt-3 text-[0.95rem] font-bold tabular-nums text-[#141415]">
+              {price}
+            </p>
+          ) : null}
         </div>
       </div>
     </article>
