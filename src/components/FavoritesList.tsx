@@ -65,10 +65,10 @@ export function FavoritesList({
           {emptyMessage}
         </p>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-1">
           {sections.map(({ category, items }) => (
             <section key={category.id}>
-              <h3 className="px-2 text-[0.95rem] font-bold uppercase tracking-[0.12em] text-[#141415]">
+              <h3 className="text-[0.95rem] font-bold uppercase tracking-[0.12em] text-[#141415]">
                 {category.name}
               </h3>
               <div className="mt-3 border-t border-[#141415]" />
@@ -93,7 +93,7 @@ export function FavoritesList({
           ))}
 
           {showPrices && total > 0 && totalLabel ? (
-            <div className="flex items-baseline justify-between gap-4 border-t border-[#141415] px-2 pt-4">
+            <div className="flex items-baseline justify-between gap-4 border-t border-[#141415] pt-4">
               <span className="text-[0.95rem] font-bold uppercase tracking-[0.08em] text-[#141415]">
                 {totalLabel}
               </span>
