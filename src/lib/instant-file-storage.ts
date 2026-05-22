@@ -1,5 +1,6 @@
 import { tx } from "@instantdb/react";
 import { db, isInstantConfigured } from "@/lib/db";
+import { isBrowserOffline, isInstantOfflineError } from "@/lib/instant-query";
 import type { ClientConfig } from "@/types/client";
 
 export const CLIENT_ASSET_PATH_PREFIX = "clients";
@@ -107,20 +108,30 @@ export function mergeConfigWithStoredAssets(
   };
 }
 
+async function queryClientFiles(pathLike: string) {
+  if (!isInstantConfigured || isBrowserOffline()) return null;
+
+  try {
+    return await db.queryOnce({
+      $files: {
+        $: {
+          where: {
+            path: { $like: pathLike },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    if (isInstantOfflineError(error)) return null;
+    throw error;
+  }
+}
+
 export async function fetchClientAssetUrls(
   clientId: string,
 ): Promise<StoredClientAssets> {
-  if (!isInstantConfigured) return {};
-
-  const snapshot = await db.queryOnce({
-    $files: {
-      $: {
-        where: {
-          path: { $like: clientAssetsPathLike(clientId) },
-        },
-      },
-    },
-  });
+  const snapshot = await queryClientFiles(clientAssetsPathLike(clientId));
+  if (!snapshot) return {};
 
   return storedAssetsFromFileRows(
     snapshot.data.$files as InstantFileRow[] | undefined,
@@ -134,20 +145,13 @@ export async function deleteClientAssets(
   if (!isInstantConfigured) return;
 
   const prefix = clientAssetPathPrefix(clientId, kind);
-  const snapshot = await db.queryOnce({
-    $files: {
-      $: {
-        where: {
-          path: { $like: `${prefix}%` },
-        },
-      },
-    },
-  });
-
-  const files = snapshot.data.$files ?? [];
+  const snapshot = await queryClientFiles(`${prefix}%`);
+  const files = snapshot?.data.$files ?? [];
   if (files.length === 0) return;
 
-  await db.transact(files.map((file) => tx.$files[file.id].delete()));
+  await db.transact(
+    files.map((file: { id: string }) => tx.$files[file.id].delete()),
+  );
 }
 
 export async function uploadClientAsset(
@@ -176,7 +180,18 @@ export async function uploadClientAsset(
         },
       },
     },
+  }).catch((error: unknown) => {
+    if (isInstantOfflineError(error)) return null;
+    throw error;
   });
+
+  if (!snapshot) {
+    throw new Error(
+      isBrowserOffline()
+        ? "Connessione assente: impossibile recuperare l'URL del file caricato."
+        : "Upload completato ma URL non disponibile.",
+    );
+  }
 
   const fileRecord = snapshot.data.$files?.[0];
   if (!fileRecord?.url) {
