@@ -10,6 +10,7 @@ import {
 } from "@/lib/client-defaults";
 import { createPrefixedId } from "@/lib/create-id";
 import { ensureUniqueSlug, slugify } from "@/lib/client-slug";
+import { migrateClientTranslations } from "@/lib/client-translation-payload";
 import type { ClientConfig, ClientStoreEntry, ClientVersion } from "@/types/client";
 
 export const CLIENTS_STORAGE_KEY = "digimenu-clients-v2";
@@ -81,7 +82,7 @@ function migrateLegacyHeader(client: ClientConfig): ClientConfig {
 function migrateClientRecord(client: ClientConfig): ClientConfig {
   const migrated = migrateLegacyHeader(client);
 
-  return {
+  return migrateClientTranslations({
     ...migrated,
     translations: migrated.translations,
     hidden: migrated.hidden ?? false,
@@ -104,7 +105,7 @@ function migrateClientRecord(client: ClientConfig): ClientConfig {
       backgroundImageUrl: migrated.header.backgroundImageUrl ?? "",
       colorOverrides: migrated.header.colorOverrides ?? {},
     },
-  };
+  });
 }
 
 function migrateSlugs(entries: ClientStoreEntry[]): ClientStoreEntry[] {

@@ -46,8 +46,21 @@ export type ClientCustomizations = {
   favoritesView: FavoritesViewMode;
 };
 
+/** Impronte del testo italiano all'ultima traduzione automatica per campo. */
+export type TranslationSourceFingerprints = {
+  categories: Record<string, string>;
+  items: Record<string, string>;
+  subtitle?: string;
+};
+
+/**
+ * Traduzioni variabili per una lingua (categorie, piatti, slogan).
+ * `version` coincide con il menu IT solo quando nessun campo è obsoleto.
+ * `sourceFingerprints` invalida un campo se il testo IT è cambiato dopo Traduci.
+ */
 export type ClientLocaleTranslation = {
   version: string;
+  sourceFingerprints: TranslationSourceFingerprints;
   categories: Record<string, { name: string }>;
   items: Record<
     string,

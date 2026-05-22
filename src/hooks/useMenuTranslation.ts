@@ -2,11 +2,11 @@
 
 import { useCallback, useState } from "react";
 import {
+  buildIncrementalTranslationSource,
   buildTranslationChunks,
-  buildVariableTranslationSource,
-  computeClientTranslationVersion,
-  isVariableSourceEmpty,
-  mergeVariableTranslationParts,
+  getOutdatedKeys,
+  getTotalOutdatedFieldCount,
+  mergeIncrementalTranslation,
 } from "@/lib/client-translation-payload";
 import { LOCALE_NAMES } from "@/lib/languages";
 import type { ClientConfig } from "@/types/client";
@@ -44,32 +44,36 @@ export function useMenuTranslation() {
         return;
       }
 
-      const source = buildVariableTranslationSource(client);
-      if (isVariableSourceEmpty(source)) {
-        setError("Aggiungi almeno una categoria o un piatto con nome.");
+      const jobs = targets
+        .map((locale) => ({
+          locale,
+          keys: getOutdatedKeys(client, locale),
+        }))
+        .filter((job) => job.keys.length > 0);
+
+      if (jobs.length === 0) {
+        setError("Nessuna traduzione da aggiornare.");
         setStatus("error");
         return;
       }
 
-      const chunks = buildTranslationChunks(source);
-      if (chunks.length === 0) {
-        setError("Nessun contenuto da tradurre.");
-        setStatus("error");
-        return;
-      }
-
-      const version = computeClientTranslationVersion(client);
-      const totalSteps = targets.length * chunks.length;
+      const totalSteps = jobs.reduce(
+        (sum, job) =>
+          sum + buildTranslationChunks(buildIncrementalTranslationSource(client, job.keys)).length,
+        0,
+      );
       let step = 0;
 
       setStatus("running");
       setError(null);
       setProgress(null);
 
-      const nextTranslations = { ...client.translations };
+      let nextClient: ClientConfig = { ...client, translations: { ...client.translations } };
 
       try {
-        for (const locale of targets) {
+        for (const { locale, keys } of jobs) {
+          const source = buildIncrementalTranslationSource(client, keys);
+          const chunks = buildTranslationChunks(source);
           const parts: Array<Record<string, unknown>> = [];
 
           for (const chunk of chunks) {
@@ -105,16 +109,25 @@ export function useMenuTranslation() {
             }
           }
 
-          nextTranslations[locale] = mergeVariableTranslationParts(
-            version,
+          const existing = nextClient.translations?.[locale];
+          const merged = mergeIncrementalTranslation(
+            nextClient,
+            locale,
+            existing,
             parts,
+            keys,
           );
+
+          nextClient = {
+            ...nextClient,
+            translations: {
+              ...nextClient.translations,
+              [locale]: merged,
+            },
+          };
         }
 
-        onSuccess({
-          ...client,
-          translations: nextTranslations,
-        });
+        onSuccess(nextClient);
         setStatus("success");
         setProgress(null);
       } catch (translateError) {
@@ -145,5 +158,6 @@ export function useMenuTranslation() {
     isTranslating: status === "running",
     isTranslationSuccess: status === "success",
     resetFeedback,
+    getOutdatedCount: getTotalOutdatedFieldCount,
   };
 }

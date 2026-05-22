@@ -9,6 +9,7 @@ type EditingLocaleFlagPickerProps = {
   value: Locale;
   onChange: (locale: Locale) => void;
   locales: Locale[];
+  staleLocales?: Exclude<Locale, "it">[];
   ariaLabel?: string;
 };
 
@@ -16,6 +17,7 @@ export function EditingLocaleFlagPicker({
   value,
   onChange,
   locales,
+  staleLocales = [],
   ariaLabel = "Lingua di modifica",
 }: EditingLocaleFlagPickerProps) {
   const [open, setOpen] = useState(false);
@@ -43,6 +45,9 @@ export function EditingLocaleFlagPicker({
     return null;
   }
 
+  const valueIsStale =
+    value !== "it" && staleLocales.includes(value as Exclude<Locale, "it">);
+
   return (
     <div ref={rootRef} className="relative shrink-0">
       <button
@@ -53,13 +58,18 @@ export function EditingLocaleFlagPicker({
         aria-controls={listId}
         title={`${ariaLabel}: ${current.label}`}
         onClick={() => setOpen((prev) => !prev)}
-        className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border transition-colors ${
-          value !== "it"
-            ? "border-[#560200] ring-2 ring-[#560200]/20"
-            : "border-[#d8dadc] hover:border-[#560200]/40"
+        className={`relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border transition-colors ${
+          valueIsStale
+            ? "border-amber-600 ring-2 ring-amber-500/25"
+            : value !== "it"
+              ? "border-[#560200] ring-2 ring-[#560200]/20"
+              : "border-[#d8dadc] hover:border-[#560200]/40"
         }`}
       >
         <FlagIcon flag={current.flag} />
+        {valueIsStale ? (
+          <span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-amber-500 ring-2 ring-white" />
+        ) : null}
       </button>
 
       {open ? (
@@ -71,6 +81,9 @@ export function EditingLocaleFlagPicker({
         >
           {options.map((language) => {
             const selected = language.locale === value;
+            const localeStale =
+              language.locale !== "it" &&
+              staleLocales.includes(language.locale as Exclude<Locale, "it">);
             return (
               <button
                 key={language.locale}
@@ -89,10 +102,18 @@ export function EditingLocaleFlagPicker({
                     : "text-[#141415] hover:bg-[#f5f5f5]"
                 }`}
               >
-                <span className="flex h-7 w-7 shrink-0 overflow-hidden rounded-full border border-black/10">
+                <span className="relative flex h-7 w-7 shrink-0 overflow-hidden rounded-full border border-black/10">
                   <FlagIcon flag={language.flag} />
+                  {localeStale ? (
+                    <span className="absolute -right-0.5 -top-0.5 size-2 rounded-full bg-amber-500 ring-1 ring-white" />
+                  ) : null}
                 </span>
-                <span>{language.label}</span>
+                <span className="flex-1">{language.label}</span>
+                {localeStale ? (
+                  <span className="text-[0.72rem] font-medium text-amber-700">
+                    da tradurre
+                  </span>
+                ) : null}
               </button>
             );
           })}

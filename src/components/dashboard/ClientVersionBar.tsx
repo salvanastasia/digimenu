@@ -13,6 +13,7 @@ type ClientVersionBarProps = {
   onSave: () => void;
   menuSlug: string;
   menuHidden?: boolean;
+  translationStaleFields?: number;
 };
 
 export function ClientVersionBar({
@@ -28,6 +29,7 @@ export function ClientVersionBar({
   onSave,
   menuSlug,
   menuHidden = false,
+  translationStaleFields = 0,
 }: ClientVersionBarProps) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-[#e4e4e4] bg-white px-4 py-3">
@@ -71,6 +73,12 @@ export function ClientVersionBar({
         ) : saveStatus === "saved" ? (
           <span className="text-[0.78rem] font-medium text-[#1f6b3a]">
             ✅ Modifiche salvate
+          </span>
+        ) : null}
+        {!isDirty && translationStaleFields > 0 ? (
+          <span className="text-[0.78rem] font-medium text-amber-800">
+            Traduzioni da aggiornare ({translationStaleFields}{" "}
+            {translationStaleFields === 1 ? "campo" : "campi"})
           </span>
         ) : null}
         {saveError ? (

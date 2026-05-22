@@ -33,9 +33,8 @@ import {
   setSubtitle,
 } from "@/lib/client-translation-edit";
 import {
-  buildVariableTranslationSource,
-  getStaleTranslationLocales,
-  isVariableSourceEmpty,
+  formatStaleFieldsLabel,
+  getStaleTranslationSummary,
 } from "@/lib/client-translation-payload";
 import { LANGUAGES } from "@/lib/languages";
 import { EditingLocaleFlagPicker } from "@/components/dashboard/EditingLocaleFlagPicker";
@@ -138,15 +137,22 @@ export function ClientEditor({
     [translationTargets],
   );
 
-  const staleLocales = useMemo(
-    () => getStaleTranslationLocales(client),
+  const staleSummary = useMemo(
+    () => getStaleTranslationSummary(client),
     [client],
   );
+
+  const staleFieldLocales = useMemo(
+    () => staleSummary.locales.map((entry) => entry.locale),
+    [staleSummary],
+  );
+
+  const outdatedFieldCount = staleSummary.totalFields;
 
   const canTranslate =
     Boolean(adminEmail) &&
     translationTargets.length > 0 &&
-    !isVariableSourceEmpty(buildVariableTranslationSource(client));
+    outdatedFieldCount > 0;
 
   useEffect(() => {
     if (
@@ -348,6 +354,7 @@ export function ClientEditor({
         onSave={onSave}
         menuSlug={client.slug}
         menuHidden={client.hidden}
+        translationStaleFields={outdatedFieldCount}
       />
 
       <div className="rounded-[18px] border border-[#e4e4e4] bg-white p-5">
@@ -401,6 +408,7 @@ export function ClientEditor({
             value={editingLocale}
             onChange={setEditingLocale}
             locales={editingLocales}
+            staleLocales={staleFieldLocales}
           />
         }
       >
@@ -542,7 +550,11 @@ export function ClientEditor({
               }}
               className="rounded-full bg-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isTranslating ? "Traduzione…" : "Traduci"}
+              {isTranslating
+                ? "Traduzione…"
+                : outdatedFieldCount > 0
+                  ? `Traduci (${outdatedFieldCount} ${outdatedFieldCount === 1 ? "campo" : "campi"})`
+                  : "Traduci"}
             </button>
             {isTranslationSuccess && !isTranslating ? (
               <span className="text-[0.78rem] font-medium text-[#1f6b3a]">
@@ -561,18 +573,20 @@ export function ClientEditor({
               {translationError}
             </p>
           ) : null}
-          {staleLocales.length > 0 ? (
-            <p className="mt-2 text-[0.72rem] leading-snug text-[#606060]">
-              Traduzioni da aggiornare:{" "}
-              {staleLocales
-                .map(
-                  (locale) =>
-                    LANGUAGES.find((lang) => lang.locale === locale)?.label ??
-                    locale,
-                )
-                .join(", ")}
-              . Premi Traduci dopo modifiche in italiano.
-            </p>
+          {staleSummary.locales.length > 0 ? (
+            <div className="mt-2 space-y-1 text-[0.72rem] leading-snug text-[#606060]">
+              {staleSummary.locales.map((entry) => (
+                <p key={entry.locale}>
+                  <span className="font-semibold text-amber-800">
+                    {LANGUAGES.find((lang) => lang.locale === entry.locale)
+                      ?.label ?? entry.locale}
+                    :
+                  </span>{" "}
+                  {formatStaleFieldsLabel(entry)}
+                </p>
+              ))}
+              <p>Premi Traduci per aggiornare solo i campi modificati in italiano.</p>
+            </div>
           ) : null}
         </div>
       </Section>
@@ -663,6 +677,7 @@ export function ClientEditor({
             value={editingLocale}
             onChange={setEditingLocale}
             locales={editingLocales}
+            staleLocales={staleFieldLocales}
           />
         }
       >

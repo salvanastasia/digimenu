@@ -2,6 +2,7 @@ import { id, lookup, tx } from "@instantdb/react";
 import { createAribriSeedClient } from "@/lib/client-defaults";
 import { getDefaultSeedEntries } from "@/lib/client-seeds";
 import { db } from "@/lib/db";
+import { migrateClientTranslations } from "@/lib/client-translation-payload";
 import {
   cloneClient,
   createVersion,
@@ -23,7 +24,7 @@ export type InstantClientMenuRow = {
 };
 
 export function rowToEntry(row: InstantClientMenuRow): ClientStoreEntry {
-  const config = migrateClientRecord(row.config);
+  const config = migrateClientTranslations(migrateClientRecord(row.config));
   const versions =
     Array.isArray(row.versions) && row.versions.length > 0
       ? row.versions.map((version) => ({
