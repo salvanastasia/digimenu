@@ -4,7 +4,11 @@ import { DashboardAccessCheck } from "@/components/dashboard/DashboardAccessChec
 import { DashboardAuth } from "@/components/dashboard/DashboardAuth";
 import { db, isInstantConfigured } from "@/lib/db";
 
-export function DashboardGate() {
+export function DashboardGate({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   if (!isInstantConfigured) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#f7f7f7] px-6 text-center">
@@ -25,7 +29,7 @@ export function DashboardGate() {
         <DashboardAuth />
       </db.SignedOut>
       <db.SignedIn>
-        <DashboardAccessCheck />
+        <DashboardAccessCheck>{children}</DashboardAccessCheck>
       </db.SignedIn>
     </>
   );

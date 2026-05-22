@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { DashboardAdminsPanel } from "@/components/dashboard/DashboardAdminsPanel";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ClientCard } from "@/components/dashboard/ClientCard";
 import { ClientEditor } from "@/components/dashboard/ClientEditor";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { useClients } from "@/hooks/useClients";
-import { useDashboardAdmin } from "@/hooks/useDashboardAdmin";
-import { db } from "@/lib/db";
 import { usePendingClientAssets } from "@/hooks/usePendingClientAssets";
 import type { ClientAssetKind } from "@/lib/instant-file-storage";
 import type { ClientConfig } from "@/types/client";
@@ -23,7 +21,8 @@ export function DashboardApp() {
     saveClient,
     cloneClient,
   } = useClients({ canWrite: true });
-  const { email: adminEmail } = useDashboardAdmin();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draft, setDraft] = useState<ClientConfig | null>(null);
   const [versionIndex, setVersionIndex] = useState(0);
@@ -34,6 +33,33 @@ export function DashboardApp() {
   const pendingAssets = usePendingClientAssets();
 
   const entry = selectedId ? getEntry(selectedId) : null;
+
+  const newClientFromQueryHandled = useRef(false);
+
+  const openNewClient = useCallback(() => {
+    const client = addClient();
+    pendingAssets.reset();
+    setSaveStatus("idle");
+    setSaveError(null);
+    const clientCopy = cloneClient(client);
+    setSelectedId(client.id);
+    setDraft(clientCopy);
+    setSavedBaseline(clientCopy);
+    setVersionIndex(0);
+  }, [addClient, cloneClient, pendingAssets]);
+
+  useEffect(() => {
+    if (
+      !ready ||
+      searchParams.get("newClient") !== "1" ||
+      newClientFromQueryHandled.current
+    ) {
+      return;
+    }
+    newClientFromQueryHandled.current = true;
+    openNewClient();
+    router.replace("/dashboard");
+  }, [ready, searchParams, router, openNewClient]);
 
   const closeClient = () => {
     pendingAssets.reset();
@@ -167,64 +193,12 @@ export function DashboardApp() {
     );
   }
 
-  const menuHref = draft?.slug ? `/${draft.slug}` : "/aribri";
-
   return (
-    <div className="min-h-screen bg-[#f7f7f7]">
-      <header className="border-b border-[#e4e4e4] bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <div>
-            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-[#560200]">
-              DigiMenu
-            </p>
-            <h1 className="text-[1.35rem] font-bold text-[#141415]">
-              {draft?.name ?? "Dashboard clienti"}
-              {draft?.hidden ? (
-                <span className="ml-2 align-middle text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[#8a1f1f]">
-                  Nascosto
-                </span>
-              ) : null}
-            </h1>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => void db.auth.signOut()}
-              className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.84rem] font-semibold text-[#606060] transition-colors hover:bg-[#f5f5f5]"
-            >
-              Esci
-            </button>
-            <Link
-              href={menuHref}
-              className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.84rem] font-semibold text-[#141415] transition-colors hover:bg-[#f5f5f5]"
-            >
-              Vai al menu
-            </Link>
-            {!draft ? (
-              <button
-                type="button"
-                onClick={() => {
-                  const client = addClient();
-                  pendingAssets.reset();
-                  setSaveStatus("idle");
-                  setSaveError(null);
-                  const clientCopy = cloneClient(client);
-                  setSelectedId(client.id);
-                  setDraft(clientCopy);
-                  setSavedBaseline(clientCopy);
-                  setVersionIndex(0);
-                }}
-                className="rounded-full bg-[#560200] px-4 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200]"
-              >
-                + Nuovo cliente
-              </button>
-            ) : null}
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+    <DashboardShell
+      title={draft?.name ?? "Dashboard clienti"}
+      hidden={draft?.hidden}
+      onNewClient={openNewClient}
+    >
         {draft && entry ? (
             <ClientEditor
               client={draft}
@@ -256,8 +230,6 @@ export function DashboardApp() {
             />
         ) : (
           <>
-            <DashboardAdminsPanel currentEmail={adminEmail} />
-
             <p className="mb-5 text-[0.92rem] text-[#606060]">
               Seleziona un cliente per modificare brand, header, lingue e piatti.
               Usa Salva per creare un backup versionato.
@@ -285,7 +257,6 @@ export function DashboardApp() {
             </div>
           </>
         )}
-      </main>
-    </div>
+    </DashboardShell>
   );
 }

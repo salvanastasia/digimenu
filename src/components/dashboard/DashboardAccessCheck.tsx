@@ -1,10 +1,13 @@
 "use client";
 
-import { DashboardApp } from "@/components/dashboard/DashboardApp";
 import { useDashboardAdmin } from "@/hooks/useDashboardAdmin";
 import { db } from "@/lib/db";
 
-export function DashboardAccessCheck() {
+export function DashboardAccessCheck({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   const { user, email, status, linkError, queryError } = useDashboardAdmin();
 
   if (status === "loading" || status === "linking") {
@@ -60,5 +63,5 @@ export function DashboardAccessCheck() {
     );
   }
 
-  return <DashboardApp />;
+  return children;
 }

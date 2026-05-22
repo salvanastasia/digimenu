@@ -245,12 +245,12 @@ export function ClientEditor({
         <button
           type="button"
           onClick={onBack}
-          className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.88rem] font-semibold text-[#141415] transition-colors hover:bg-[#f5f5f5]"
+          className="inline-flex items-center py-2 text-[0.88rem] font-semibold leading-none text-[#560200] transition-colors hover:text-[#6d0200]"
         >
-          ← Clienti
+          ← Dashboard
         </button>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => update({ hidden: !client.hidden })}
@@ -675,9 +675,9 @@ export function ClientEditor({
                                 return (
                                   <label
                                     key={allergen.id}
-                                    className={`flex cursor-pointer items-start gap-2 rounded-[10px] border px-3 py-2 text-[0.78rem] leading-snug transition-colors ${
+                                    className={`flex cursor-pointer items-start gap-2.5 rounded-[10px] border px-3 py-2 text-[0.78rem] leading-snug transition-colors ${
                                       checked
-                                        ? "border-[#560200] bg-[#560200]/8 text-[#141415]"
+                                        ? "border-[#560200] bg-[#560200]/10 text-[#141415]"
                                         : "border-[#e4e4e4] bg-white text-[#606060]"
                                     }`}
                                   >
@@ -692,7 +692,7 @@ export function ClientEditor({
                                           : [...dish.allergenIds, allergen.id];
                                         updateDish(dish.id, { allergenIds });
                                       }}
-                                      className="mt-0.5"
+                                      className="allergen-checkbox mt-0.5 size-4 shrink-0 cursor-pointer rounded border-[#c9a8a8] accent-[#560200] text-[#560200] focus:ring-2 focus:ring-[#560200]/35 focus:ring-offset-0"
                                     />
                                     <span>{allergen.name}</span>
                                   </label>
