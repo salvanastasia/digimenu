@@ -6,6 +6,8 @@ import {
   BrandLinkedColorField,
   LogoUploadField,
 } from "@/components/dashboard/BrandLinkedColorField";
+import { AiDescriptionButton } from "@/components/dashboard/AiDescriptionButton";
+import { AiSparklesIcon } from "@/components/dashboard/AiSparklesIcon";
 import { ConfirmDialog } from "@/components/dashboard/ConfirmDialog";
 import { ClientVersionBar } from "@/components/dashboard/ClientVersionBar";
 import {
@@ -118,6 +120,14 @@ export function ClientEditor({
 }: ClientEditorProps) {
   const [confirm, setConfirm] = useState<ConfirmState | null>(null);
   const [editingLocale, setEditingLocale] = useState<Locale>("it");
+  const [generatingDescriptionFor, setGeneratingDescriptionFor] = useState<
+    string | null
+  >(null);
+  const [generatingAllDescriptions, setGeneratingAllDescriptions] =
+    useState(false);
+  const [descriptionAiError, setDescriptionAiError] = useState<string | null>(
+    null,
+  );
   const {
     translate,
     isTranslating,
@@ -296,6 +306,112 @@ export function ClientEditor({
 
   const removeAllDishes = () => {
     update({ dishes: [] });
+  };
+
+  const fetchDishDescription = async (
+    dishName: string,
+    categoryName: string,
+  ) => {
+    const response = await fetch("/api/generate-dish-description", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: adminEmail,
+        dishName: dishName.trim(),
+        categoryName,
+        restaurantName: client.name,
+      }),
+    });
+
+    const payload = (await response.json()) as {
+      description?: string;
+      error?: string;
+    };
+
+    if (!response.ok || !payload.description) {
+      throw new Error(payload.error ?? "Generazione descrizione non riuscita.");
+    }
+
+    return payload.description;
+  };
+
+  const generateDishDescription = async (
+    dishId: string,
+    dishName: string,
+    categoryName: string,
+  ) => {
+    if (!adminEmail || !dishName.trim()) return;
+
+    setGeneratingDescriptionFor(dishId);
+    setDescriptionAiError(null);
+
+    try {
+      const description = await fetchDishDescription(dishName, categoryName);
+      onChange(
+        setDishField(client, "it", dishId, "description", description),
+      );
+    } catch (error) {
+      setDescriptionAiError(
+        error instanceof Error
+          ? error.message
+          : "Generazione descrizione non riuscita.",
+      );
+    } finally {
+      setGeneratingDescriptionFor(null);
+    }
+  };
+
+  const generateAllDescriptions = async () => {
+    if (!adminEmail || editingLocale !== "it") return;
+
+    const categoryNames = new Map(
+      client.categories.map((category) => [category.id, category.name]),
+    );
+
+    const targets = client.dishes.filter((dish) => {
+      const name = getDishField(client, "it", dish.id, "name").trim();
+      const description = getDishField(
+        client,
+        "it",
+        dish.id,
+        "description",
+      ).trim();
+      return name.length > 0 && description.length === 0;
+    });
+
+    if (targets.length === 0) {
+      setDescriptionAiError("Nessun piatto con nome e senza descrizione.");
+      return;
+    }
+
+    setGeneratingAllDescriptions(true);
+    setDescriptionAiError(null);
+
+    let nextClient = client;
+
+    try {
+      for (const dish of targets) {
+        const dishName = getDishField(nextClient, "it", dish.id, "name");
+        const categoryName = categoryNames.get(dish.categoryId) ?? "";
+        const description = await fetchDishDescription(dishName, categoryName);
+        nextClient = setDishField(
+          nextClient,
+          "it",
+          dish.id,
+          "description",
+          description,
+        );
+        onChange(nextClient);
+      }
+    } catch (error) {
+      setDescriptionAiError(
+        error instanceof Error
+          ? error.message
+          : "Generazione descrizioni non riuscita.",
+      );
+    } finally {
+      setGeneratingAllDescriptions(false);
+    }
   };
 
   const headerColorFields: Array<{
@@ -802,24 +918,54 @@ export function ClientEditor({
             + Categoria
           </button>
           {client.dishes.length > 0 ? (
-            <button
-              type="button"
-              disabled={editingLocale !== "it"}
-              onClick={() =>
-                setConfirm({
-                  title: "Elimina tutti i piatti",
-                  message: `Verranno rimossi tutti i ${client.dishes.length} piatti di "${client.name}". Le categorie resteranno invariate.`,
-                  confirmLabel: "Elimina tutti i piatti",
-                  confirmationPhrase: client.name,
-                  onConfirm: removeAllDishes,
-                })
-              }
-              className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1] disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Elimina tutti i piatti
-            </button>
+            <>
+              <button
+                type="button"
+                disabled={
+                  editingLocale !== "it" ||
+                  !adminEmail ||
+                  generatingAllDescriptions ||
+                  generatingDescriptionFor !== null
+                }
+                onClick={() => void generateAllDescriptions()}
+                className="inline-flex items-center gap-2 rounded-full border border-[#5b6cff]/35 bg-[#eef0ff] px-4 py-2 text-[0.82rem] font-semibold text-[#5b6cff] transition-colors hover:border-[#5b6cff]/50 hover:bg-[#e3e7ff] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {generatingAllDescriptions ? (
+                  <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#5b6cff]/25 border-t-[#5b6cff]" />
+                ) : (
+                  <AiSparklesIcon className="h-4 w-4" />
+                )}
+                Genera Descrizioni
+              </button>
+              <button
+                type="button"
+                disabled={
+                  editingLocale !== "it" ||
+                  generatingAllDescriptions ||
+                  generatingDescriptionFor !== null
+                }
+                onClick={() =>
+                  setConfirm({
+                    title: "Elimina tutti i piatti",
+                    message: `Verranno rimossi tutti i ${client.dishes.length} piatti di "${client.name}". Le categorie resteranno invariate.`,
+                    confirmLabel: "Elimina tutti i piatti",
+                    confirmationPhrase: client.name,
+                    onConfirm: removeAllDishes,
+                  })
+                }
+                className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Elimina tutti i piatti
+              </button>
+            </>
           ) : null}
         </div>
+
+        {descriptionAiError ? (
+          <p className="rounded-[12px] bg-[#fff1f1] px-4 py-3 text-[0.84rem] text-[#8a1f1f]">
+            {descriptionAiError}
+          </p>
+        ) : null}
 
         <div className="space-y-6">
           {client.categories.map((category, categoryIndex) => {
@@ -969,10 +1115,40 @@ export function ClientEditor({
                                 "—"}
                             </p>
                           ) : null}
-                          <label className="flex flex-col gap-1.5">
-                            <span className="text-[0.78rem] font-semibold text-[#606060]">
-                              Descrizione
-                            </span>
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-[0.78rem] font-semibold text-[#606060]">
+                                Descrizione
+                              </span>
+                              {editingLocale === "it" ? (
+                                <AiDescriptionButton
+                                  label="Genera descrizione con AI"
+                                  loading={generatingDescriptionFor === dish.id}
+                                  disabled={
+                                    !adminEmail ||
+                                    generatingAllDescriptions ||
+                                    !getDishField(
+                                      client,
+                                      "it",
+                                      dish.id,
+                                      "name",
+                                    ).trim()
+                                  }
+                                  onClick={() =>
+                                    void generateDishDescription(
+                                      dish.id,
+                                      getDishField(
+                                        client,
+                                        "it",
+                                        dish.id,
+                                        "name",
+                                      ),
+                                      category.name,
+                                    )
+                                  }
+                                />
+                              ) : null}
+                            </div>
                             <textarea
                               value={getDishField(
                                 client,
@@ -999,7 +1175,7 @@ export function ClientEditor({
                               rows={2}
                               className="rounded-[10px] border border-[#d8dadc] bg-white px-3 py-2 text-[0.92rem] text-[#141415] outline-none focus:border-[#560200]"
                             />
-                          </label>
+                          </div>
                           {editingLocale !== "it" &&
                           !getDishField(
                             client,
