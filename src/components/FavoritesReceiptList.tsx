@@ -59,8 +59,11 @@ export function FavoritesReceiptList({
   const effectiveHeader = clientMenu
     ? getEffectiveHeader(clientMenu.client)
     : null;
-  const logoUrl = effectiveHeader?.logoUrl ?? "/logo.svg";
+  const logoUrl = effectiveHeader?.logoUrl?.trim() ?? "";
   const logoColor = effectiveHeader?.logoColor ?? "#F2E8D8";
+  const hasLogo = logoUrl.length > 0;
+  const showPrices =
+    clientMenu?.client.customizations.showFavoritesPrices ?? true;
 
   const favoriteMap = new Map(
     favorites.map((entry) => [entry.id, entry.quantity]),
@@ -106,18 +109,23 @@ export function FavoritesReceiptList({
   return (
     <article className="relative w-full max-w-[300px] bg-[#fffdf8] px-5 py-6 font-mono text-[0.72rem] leading-relaxed text-[#1a1a1a] shadow-[0_10px_36px_rgba(0,0,0,0.16)]">
       <div className="text-center">
-        <ClientLogo
-          client={clientMenu?.client}
-          logoUrl={logoUrl}
-          logoColor={logoColor}
-          alt=""
-          className="mx-auto h-7 w-auto max-w-[160px] object-contain object-center"
-        />
-        <p className="mt-3 text-[0.82rem] font-bold uppercase tracking-[0.18em]">
-          {restaurant.name}
-        </p>
+        {hasLogo ? (
+          <ClientLogo
+            client={clientMenu?.client}
+            logoUrl={logoUrl}
+            logoColor={logoColor}
+            alt={restaurant.name}
+            className="mx-auto h-7 w-auto max-w-[160px] object-contain object-center"
+          />
+        ) : (
+          <p className="text-[0.82rem] font-bold uppercase tracking-[0.18em]">
+            {restaurant.name}
+          </p>
+        )}
         {restaurant.subtitle ? (
-          <p className="mt-1 text-[0.62rem] uppercase tracking-[0.08em] text-[#666]">
+          <p
+            className={`text-[0.62rem] uppercase tracking-[0.08em] text-[#666] ${hasLogo ? "mt-2" : "mt-1"}`}
+          >
             {restaurant.subtitle}
           </p>
         ) : null}
@@ -146,6 +154,7 @@ export function FavoritesReceiptList({
                   key={item.id}
                   item={item}
                   quantity={favoriteMap.get(item.id) ?? 1}
+                  showPrice={showPrices}
                 />
               ))}
             </div>
@@ -153,7 +162,7 @@ export function FavoritesReceiptList({
         ))}
       </div>
 
-      {total > 0 ? (
+      {showPrices && total > 0 ? (
         <>
           <ReceiptRule />
           <div className="flex items-baseline justify-between gap-3 text-[0.78rem] font-bold uppercase tracking-[0.08em]">

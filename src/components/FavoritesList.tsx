@@ -6,26 +6,36 @@ import { FavoriteItemRow } from "@/components/FavoriteItemRow";
 
 type FavoritesListProps = {
   emptyMessage: string;
-  clearListLabel: string;
   categories: MenuCategory[];
   favorites: FavoriteEntry[];
   onQuantityChange: (id: string, quantity: number) => void;
-  onClearList: () => void;
   allergensLabel: string;
   decreaseQuantityLabel: string;
   increaseQuantityLabel: string;
+  showQuantity?: boolean;
+  showPrices?: boolean;
+  totalLabel?: string;
 };
+
+function formatTotal(amount: number) {
+  return new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
+  }).format(amount);
+}
 
 export function FavoritesList({
   emptyMessage,
-  clearListLabel,
   categories,
   favorites,
   onQuantityChange,
-  onClearList,
   allergensLabel,
   decreaseQuantityLabel,
   increaseQuantityLabel,
+  showQuantity = true,
+  showPrices = true,
+  totalLabel,
 }: FavoritesListProps) {
   const favoriteMap = new Map(favorites.map((entry) => [entry.id, entry.quantity]));
 
@@ -36,8 +46,20 @@ export function FavoritesList({
     }))
     .filter((section) => section.items.length > 0);
 
+  const total = showPrices
+    ? sections.reduce((sum, { items }) => {
+        return (
+          sum +
+          items.reduce((sectionSum, item) => {
+            const quantity = favoriteMap.get(item.id) ?? 1;
+            return sectionSum + (item.price ?? 0) * quantity;
+          }, 0)
+        );
+      }, 0)
+    : 0;
+
   return (
-    <div className="px-3 pb-8 pt-4">
+    <div className="px-3 pb-4 pt-4">
       {sections.length === 0 ? (
         <p className="rounded-[15px] bg-[#eef0f1] px-5 py-8 text-center text-[0.95rem] text-[#606060]">
           {emptyMessage}
@@ -62,19 +84,24 @@ export function FavoritesList({
                     allergensLabel={allergensLabel}
                     decreaseQuantityLabel={decreaseQuantityLabel}
                     increaseQuantityLabel={increaseQuantityLabel}
+                    showQuantity={showQuantity}
+                    showPrice={showPrices}
                   />
                 ))}
               </div>
             </section>
           ))}
 
-          <button
-            type="button"
-            onClick={onClearList}
-            className="mx-auto block w-full max-w-[280px] rounded-full border border-[#560200] px-5 py-3 text-[0.92rem] font-semibold text-[#560200] transition-colors hover:bg-[#560200]/5"
-          >
-            {clearListLabel}
-          </button>
+          {showPrices && total > 0 && totalLabel ? (
+            <div className="flex items-baseline justify-between gap-4 border-t border-[#141415] px-2 pt-4">
+              <span className="text-[0.95rem] font-bold uppercase tracking-[0.08em] text-[#141415]">
+                {totalLabel}
+              </span>
+              <span className="text-[0.95rem] font-bold tabular-nums text-[#141415]">
+                {formatTotal(total)}
+              </span>
+            </div>
+          ) : null}
         </div>
       )}
     </div>

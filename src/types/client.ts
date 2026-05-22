@@ -44,6 +44,10 @@ export type FavoritesViewMode = "panel" | "receipt";
 
 export type ClientCustomizations = {
   favoritesView: FavoritesViewMode;
+  /** Selettore quantità nel pannello preferiti. */
+  showFavoritesQuantity: boolean;
+  /** Prezzi nel pannello e nello scontrino preferiti. */
+  showFavoritesPrices: boolean;
 };
 
 /** Impronte del testo italiano all'ultima traduzione automatica per campo. */

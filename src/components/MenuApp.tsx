@@ -127,6 +127,7 @@ export function MenuApp() {
           closeLabel={ui.showFullMenu}
           emptyMessage={ui.noFavorites}
           clearListLabel={ui.clearList}
+          totalLabel={ui.listTotal}
           categories={categories}
           favorites={favorites}
           onClose={closeFavorites}

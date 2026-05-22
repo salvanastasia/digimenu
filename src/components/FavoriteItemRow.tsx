@@ -9,6 +9,8 @@ type FavoriteItemRowProps = {
   allergensLabel: string;
   decreaseQuantityLabel: string;
   increaseQuantityLabel: string;
+  showQuantity?: boolean;
+  showPrice?: boolean;
 };
 
 function formatPrice(item: MenuItem) {
@@ -34,8 +36,10 @@ export function FavoriteItemRow({
   allergensLabel,
   decreaseQuantityLabel,
   increaseQuantityLabel,
+  showQuantity = true,
+  showPrice = true,
 }: FavoriteItemRowProps) {
-  const price = formatPrice(item);
+  const price = showPrice ? formatPrice(item) : null;
   const allergenIds =
     item.allergens?.map((allergen) => allergen.id).join(", ") ?? null;
   const description = item.description
@@ -61,19 +65,23 @@ export function FavoriteItemRow({
           ) : null}
         </div>
 
-        <div className="flex shrink-0 flex-col items-end gap-2">
-          <QuantitySelector
-            value={quantity}
-            onChange={onQuantityChange}
-            decreaseLabel={`${decreaseQuantityLabel}: ${item.name}`}
-            increaseLabel={`${increaseQuantityLabel}: ${item.name}`}
-          />
-          {price ? (
-            <p className="whitespace-nowrap text-[0.95rem] font-bold text-[#141415]">
-              {price}
-            </p>
-          ) : null}
-        </div>
+        {showQuantity || price ? (
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            {showQuantity ? (
+              <QuantitySelector
+                value={quantity}
+                onChange={onQuantityChange}
+                decreaseLabel={`${decreaseQuantityLabel}: ${item.name}`}
+                increaseLabel={`${increaseQuantityLabel}: ${item.name}`}
+              />
+            ) : null}
+            {price ? (
+              <p className="whitespace-nowrap text-[0.95rem] font-bold text-[#141415]">
+                {price}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </article>
   );

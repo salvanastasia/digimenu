@@ -20,6 +20,8 @@ export const DEFAULT_PHONE = rawMenu.restaurant.phone ?? "";
 export const DEFAULT_TABLE_SERVICE_FEE = 2.5;
 export const DEFAULT_CUSTOMIZATIONS: ClientCustomizations = {
   favoritesView: "panel",
+  showFavoritesQuantity: true,
+  showFavoritesPrices: true,
 };
 
 export function formatTableServiceFee(fee: number | null): string | undefined {

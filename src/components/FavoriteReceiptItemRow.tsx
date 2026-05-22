@@ -3,6 +3,7 @@ import type { MenuItem } from "@/types/menu";
 type FavoriteReceiptItemRowProps = {
   item: MenuItem;
   quantity: number;
+  showPrice?: boolean;
 };
 
 function formatLineTotal(item: MenuItem, quantity: number) {
@@ -19,8 +20,9 @@ function formatLineTotal(item: MenuItem, quantity: number) {
 export function FavoriteReceiptItemRow({
   item,
   quantity,
+  showPrice = true,
 }: FavoriteReceiptItemRowProps) {
-  const lineTotal = formatLineTotal(item, quantity);
+  const lineTotal = showPrice ? formatLineTotal(item, quantity) : null;
 
   return (
     <div className="flex items-start justify-between gap-3 py-0.5 leading-snug">
