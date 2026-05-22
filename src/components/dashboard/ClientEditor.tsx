@@ -7,6 +7,7 @@ import {
   LogoUploadField,
 } from "@/components/dashboard/BrandLinkedColorField";
 import { ConfirmDialog } from "@/components/dashboard/ConfirmDialog";
+import { ClientVersionBar } from "@/components/dashboard/ClientVersionBar";
 import {
   ColorField,
   Section,
@@ -42,6 +43,16 @@ type ClientEditorProps = {
   onAssetFileSelect: (kind: ClientAssetKind, file: File) => void;
   onAssetRemove: (kind: ClientAssetKind) => void;
   onAssetUrlChange: (kind: ClientAssetKind, url: string) => void;
+  versionIndex: number;
+  versionCount: number;
+  versionSavedAt?: string;
+  onPreviousVersion: () => void;
+  onNextVersion: () => void;
+  isDirty: boolean;
+  saveStatus: "idle" | "saved";
+  saveError: string | null;
+  isSaving: boolean;
+  onSave: () => void;
 };
 
 type ConfirmState = {
@@ -70,6 +81,16 @@ export function ClientEditor({
   onAssetFileSelect,
   onAssetRemove,
   onAssetUrlChange,
+  versionIndex,
+  versionCount,
+  versionSavedAt,
+  onPreviousVersion,
+  onNextVersion,
+  isDirty,
+  saveStatus,
+  saveError,
+  isSaving,
+  onSave,
 }: ClientEditorProps) {
   const [confirm, setConfirm] = useState<ConfirmState | null>(null);
   const effectiveHeader = getEffectiveHeader(client);
@@ -259,6 +280,19 @@ export function ClientEditor({
           ) : null}
         </div>
       </div>
+
+      <ClientVersionBar
+        versionIndex={versionIndex}
+        versionCount={versionCount}
+        versionSavedAt={versionSavedAt}
+        onPrevious={onPreviousVersion}
+        onNext={onNextVersion}
+        isDirty={isDirty}
+        saveStatus={saveStatus}
+        saveError={saveError}
+        isSaving={isSaving}
+        onSave={onSave}
+      />
 
       <div className="rounded-[18px] border border-[#e4e4e4] bg-white p-5">
         <TextField

@@ -232,66 +232,6 @@ export function DashboardApp() {
 
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         {draft && entry ? (
-          <>
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-[#e4e4e4] bg-white px-4 py-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  disabled={versionIndex <= 0}
-                  onClick={() => goToVersion(versionIndex - 1)}
-                  className="rounded-full border border-[#d8dadc] px-3 py-1.5 text-[0.82rem] font-semibold text-[#141415] disabled:opacity-40"
-                >
-                  ← Versione
-                </button>
-                <span className="text-[0.82rem] text-[#606060]">
-                  {entry.versions.length > 0
-                    ? `Versione ${versionIndex + 1} / ${entry.versions.length}`
-                    : "Nessuna versione"}
-                  {entry.versions[versionIndex]
-                    ? ` · ${new Intl.DateTimeFormat("it-IT", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }).format(new Date(entry.versions[versionIndex].savedAt))}`
-                    : null}
-                </span>
-                <button
-                  type="button"
-                  disabled={versionIndex >= entry.versions.length - 1}
-                  onClick={() => goToVersion(versionIndex + 1)}
-                  className="rounded-full border border-[#d8dadc] px-3 py-1.5 text-[0.82rem] font-semibold text-[#141415] disabled:opacity-40"
-                >
-                  Versione →
-                </button>
-              </div>
-
-              <div className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-2">
-                {isDirty ? (
-                  <span className="text-[0.78rem] font-medium text-[#8a1f1f]">
-                    Modifiche non salvate
-                  </span>
-                ) : saveStatus === "saved" ? (
-                  <span className="text-[0.78rem] font-medium text-[#1f6b3a]">
-                    ✅ Modifiche salvate
-                  </span>
-                ) : null}
-                {saveError ? (
-                  <span className="text-[0.78rem] font-medium text-[#8a1f1f]">
-                    {saveError}
-                  </span>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => void handleSave()}
-                  disabled={isSaving || !isDirty}
-                  className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isSaving ? "Salvataggio..." : "Salva"}
-                </button>
-              </div>
-            </div>
-
             <ClientEditor
               client={draft}
               otherSlugs={clients
@@ -309,8 +249,17 @@ export function DashboardApp() {
               onAssetFileSelect={handleAssetFileSelect}
               onAssetRemove={handleAssetRemove}
               onAssetUrlChange={handleAssetUrlChange}
+              versionIndex={versionIndex}
+              versionCount={entry.versions.length}
+              versionSavedAt={entry.versions[versionIndex]?.savedAt}
+              onPreviousVersion={() => goToVersion(versionIndex - 1)}
+              onNextVersion={() => goToVersion(versionIndex + 1)}
+              isDirty={isDirty}
+              saveStatus={saveStatus}
+              saveError={saveError}
+              isSaving={isSaving}
+              onSave={() => void handleSave()}
             />
-          </>
         ) : (
           <>
             <p className="mb-5 text-[0.92rem] text-[#606060]">
