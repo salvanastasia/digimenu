@@ -1,25 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { FlagIcon } from "@/components/FlagIcon";
 import { LANGUAGES } from "@/lib/languages";
-import { useLanguage } from "@/context/LanguageContext";
 import type { Locale } from "@/types/translation";
 
-export function LanguageSelector() {
-  const { locale, setLocale, content, enabledLocales } = useLanguage();
+type EditingLocaleFlagPickerProps = {
+  value: Locale;
+  onChange: (locale: Locale) => void;
+  locales: Locale[];
+  ariaLabel?: string;
+};
+
+export function EditingLocaleFlagPicker({
+  value,
+  onChange,
+  locales,
+  ariaLabel = "Lingua di modifica",
+}: EditingLocaleFlagPickerProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const availableLanguages = LANGUAGES.filter((language) =>
-    enabledLocales.includes(language.locale),
-  );
-  const current =
-    availableLanguages.find((language) => language.locale === locale) ??
-    availableLanguages[0];
+  const listId = useId();
 
-  if (!current) {
-    return null;
-  }
+  const options = LANGUAGES.filter((language) => locales.includes(language.locale));
+  const current =
+    options.find((language) => language.locale === value) ?? options[0];
 
   useEffect(() => {
     if (!open) return;
@@ -34,41 +39,50 @@ export function LanguageSelector() {
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [open]);
 
-  const handleSelect = (nextLocale: Locale) => {
-    setOpen(false);
-    if (nextLocale !== locale) {
-      setLocale(nextLocale);
-    }
-  };
+  if (!current) {
+    return null;
+  }
 
   return (
-    <div ref={rootRef} className="relative z-50">
+    <div ref={rootRef} className="relative shrink-0">
       <button
         type="button"
-        aria-label={content.ui.selectLanguage}
+        aria-label={ariaLabel}
         aria-haspopup="listbox"
         aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-        className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/70"
+        aria-controls={listId}
+        title={`${ariaLabel}: ${current.label}`}
+        onClick={() => setOpen((prev) => !prev)}
+        className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border transition-colors ${
+          value !== "it"
+            ? "border-[#560200] ring-2 ring-[#560200]/20"
+            : "border-[#d8dadc] hover:border-[#560200]/40"
+        }`}
       >
         <FlagIcon flag={current.flag} />
       </button>
 
       {open ? (
         <div
+          id={listId}
           role="listbox"
-          aria-label={content.ui.selectLanguage}
-          className="absolute right-0 top-[calc(100%+8px)] z-50 min-w-[180px] overflow-hidden rounded-[14px] border border-[#ececec] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.18)]"
+          aria-label={ariaLabel}
+          className="absolute right-0 top-[calc(100%+8px)] z-50 min-w-[200px] overflow-hidden rounded-[14px] border border-[#ececec] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.18)]"
         >
-          {availableLanguages.map((language) => {
-            const selected = language.locale === locale;
+          {options.map((language) => {
+            const selected = language.locale === value;
             return (
               <button
                 key={language.locale}
                 type="button"
                 role="option"
                 aria-selected={selected}
-                onClick={() => handleSelect(language.locale)}
+                onClick={() => {
+                  setOpen(false);
+                  if (language.locale !== value) {
+                    onChange(language.locale);
+                  }
+                }}
                 className={`flex w-full items-center gap-3 px-4 py-3 text-left text-[0.92rem] transition-colors ${
                   selected
                     ? "bg-[#560200]/8 font-semibold text-[#560200]"

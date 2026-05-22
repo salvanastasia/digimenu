@@ -38,6 +38,7 @@ import {
   isVariableSourceEmpty,
 } from "@/lib/client-translation-payload";
 import { LANGUAGES } from "@/lib/languages";
+import { EditingLocaleFlagPicker } from "@/components/dashboard/EditingLocaleFlagPicker";
 import { TranslationProgressBar } from "@/components/dashboard/TranslationProgressBar";
 import { useMenuTranslation } from "@/hooks/useMenuTranslation";
 import type { ClientAssetKind } from "@/lib/instant-file-storage";
@@ -117,9 +118,10 @@ export function ClientEditor({
   const {
     translate,
     isTranslating,
+    isTranslationSuccess,
     error: translationError,
     progress,
-    resetError,
+    resetFeedback,
   } = useMenuTranslation();
   const effectiveHeader = getEffectiveHeader(client);
 
@@ -131,14 +133,8 @@ export function ClientEditor({
     [client.header.languages],
   );
 
-  const editingLocaleOptions = useMemo(
-    () => [
-      { value: "it", label: "Italiano (sorgente)" },
-      ...translationTargets.map((locale) => ({
-        value: locale,
-        label: LANGUAGES.find((lang) => lang.locale === locale)?.label ?? locale,
-      })),
-    ],
+  const editingLocales = useMemo<Locale[]>(
+    () => ["it", ...translationTargets],
     [translationTargets],
   );
 
@@ -160,10 +156,6 @@ export function ClientEditor({
       setEditingLocale("it");
     }
   }, [editingLocale, translationTargets]);
-
-  const editingLanguageLabel =
-    LANGUAGES.find((lang) => lang.locale === editingLocale)?.label ??
-    editingLocale;
 
   const update = (patch: Partial<ClientConfig>) => {
     onChange({ ...client, ...patch });
@@ -400,7 +392,16 @@ export function ClientEditor({
         />
       </Section>
 
-      <Section title="Header">
+      <Section
+        title="Header"
+        headerRight={
+          <EditingLocaleFlagPicker
+            value={editingLocale}
+            onChange={setEditingLocale}
+            locales={editingLocales}
+          />
+        }
+      >
         <TextField
           label="Slogan"
           value={getSubtitle(client, editingLocale)}
@@ -530,7 +531,7 @@ export function ClientEditor({
               type="button"
               disabled={!canTranslate || isTranslating}
               onClick={() => {
-                resetError();
+                resetFeedback();
                 void translate({
                   client,
                   email: adminEmail,
@@ -541,6 +542,11 @@ export function ClientEditor({
             >
               {isTranslating ? "Traduzione…" : "Traduci"}
             </button>
+            {isTranslationSuccess && !isTranslating ? (
+              <span className="text-[0.78rem] font-medium text-[#1f6b3a]">
+                ✅ Traduzioni aggiornate
+              </span>
+            ) : null}
             {!adminEmail ? (
               <span className="text-[0.72rem] text-[#606060]">
                 Accedi per tradurre il menu.
@@ -648,23 +654,16 @@ export function ClientEditor({
         </div>
       </Section>
 
-      <Section title="Piatti">
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="min-w-[220px] flex-1">
-            <SelectField
-              label="Lingua di modifica"
-              value={editingLocale}
-              onChange={(value) => setEditingLocale(value as Locale)}
-              options={editingLocaleOptions}
-            />
-          </div>
-          {editingLocale !== "it" ? (
-            <p className="pb-2 text-[0.78rem] font-semibold text-[#560200]">
-              Modifica traduzione — {editingLanguageLabel}
-            </p>
-          ) : null}
-        </div>
-
+      <Section
+        title="Piatti"
+        headerRight={
+          <EditingLocaleFlagPicker
+            value={editingLocale}
+            onChange={setEditingLocale}
+            locales={editingLocales}
+          />
+        }
+      >
         <div className="flex flex-wrap gap-2">
           <button
             type="button"

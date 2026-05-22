@@ -103,14 +103,19 @@ export function SelectField({
 
 function Section({
   title,
+  headerRight,
   children,
 }: {
   title: string;
+  headerRight?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <section className="rounded-[18px] border border-[#e4e4e4] bg-white p-5">
-      <h2 className="mb-4 text-[1rem] font-bold text-[#141415]">{title}</h2>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 className="text-[1rem] font-bold text-[#141415]">{title}</h2>
+        {headerRight}
+      </div>
       <div className="space-y-4">{children}</div>
     </section>
   );

@@ -26,7 +26,9 @@ type TranslateOptions = {
 };
 
 export function useMenuTranslation() {
-  const [status, setStatus] = useState<"idle" | "running" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "running" | "error" | "success"
+  >("idle");
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<TranslationProgress | null>(null);
 
@@ -62,6 +64,7 @@ export function useMenuTranslation() {
 
       setStatus("running");
       setError(null);
+      setProgress(null);
 
       const nextTranslations = { ...client.translations };
 
@@ -112,7 +115,7 @@ export function useMenuTranslation() {
           ...client,
           translations: nextTranslations,
         });
-        setStatus("idle");
+        setStatus("success");
         setProgress(null);
       } catch (translateError) {
         setStatus("error");
@@ -127,10 +130,12 @@ export function useMenuTranslation() {
     [],
   );
 
-  const resetError = useCallback(() => {
+  const resetFeedback = useCallback(() => {
     setError(null);
-    setStatus("idle");
-  }, []);
+    if (status !== "running") {
+      setStatus("idle");
+    }
+  }, [status]);
 
   return {
     translate,
@@ -138,6 +143,7 @@ export function useMenuTranslation() {
     error,
     progress,
     isTranslating: status === "running",
-    resetError,
+    isTranslationSuccess: status === "success",
+    resetFeedback,
   };
 }
