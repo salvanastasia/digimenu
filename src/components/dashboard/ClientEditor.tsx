@@ -81,6 +81,7 @@ type ConfirmState = {
   title: string;
   message: string;
   confirmLabel: string;
+  confirmationPhrase?: string;
   onConfirm: () => void;
 };
 
@@ -278,6 +279,25 @@ export function ClientEditor({
     });
   };
 
+  const moveCategory = (categoryId: string, direction: -1 | 1) => {
+    const index = client.categories.findIndex(
+      (category) => category.id === categoryId,
+    );
+    if (index === -1) return;
+
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= client.categories.length) return;
+
+    const categories = [...client.categories];
+    const [moved] = categories.splice(index, 1);
+    categories.splice(targetIndex, 0, moved);
+    update({ categories });
+  };
+
+  const removeAllDishes = () => {
+    update({ dishes: [] });
+  };
+
   const headerColorFields: Array<{
     key: HeaderColorKey;
     label: string;
@@ -296,6 +316,7 @@ export function ClientEditor({
         title={confirm?.title ?? ""}
         message={confirm?.message ?? ""}
         confirmLabel={confirm?.confirmLabel}
+        confirmationPhrase={confirm?.confirmationPhrase}
         destructive
         onCancel={() => setConfirm(null)}
         onConfirm={() => {
@@ -333,6 +354,7 @@ export function ClientEditor({
                   title: "Elimina cliente",
                   message: `Eliminare "${client.name}"? L'operazione non può essere annullata.`,
                   confirmLabel: "Elimina",
+                  confirmationPhrase: client.name,
                   onConfirm: onDelete,
                 })
               }
@@ -779,10 +801,28 @@ export function ClientEditor({
           >
             + Categoria
           </button>
+          {client.dishes.length > 0 ? (
+            <button
+              type="button"
+              disabled={editingLocale !== "it"}
+              onClick={() =>
+                setConfirm({
+                  title: "Elimina tutti i piatti",
+                  message: `Verranno rimossi tutti i ${client.dishes.length} piatti di "${client.name}". Le categorie resteranno invariate.`,
+                  confirmLabel: "Elimina tutti i piatti",
+                  confirmationPhrase: client.name,
+                  onConfirm: removeAllDishes,
+                })
+              }
+              className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Elimina tutti i piatti
+            </button>
+          ) : null}
         </div>
 
         <div className="space-y-6">
-          {client.categories.map((category) => {
+          {client.categories.map((category, categoryIndex) => {
             const categoryDishes = client.dishes.filter(
               (dish) => dish.categoryId === category.id,
             );
@@ -793,7 +833,32 @@ export function ClientEditor({
                 className="rounded-[14px] border border-[#ececec] bg-[#fafafa] p-4"
               >
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <div className="min-w-[180px] flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {editingLocale === "it" ? (
+                      <div className="flex shrink-0 flex-col gap-1">
+                        <button
+                          type="button"
+                          aria-label={`Sposta "${category.name}" prima`}
+                          disabled={categoryIndex === 0}
+                          onClick={() => moveCategory(category.id, -1)}
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#d8dadc] bg-white text-[0.95rem] leading-none text-[#141415] transition-colors hover:bg-[#f5f5f5] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          ↑
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={`Sposta "${category.name}" dopo`}
+                          disabled={
+                            categoryIndex === client.categories.length - 1
+                          }
+                          onClick={() => moveCategory(category.id, 1)}
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#d8dadc] bg-white text-[0.95rem] leading-none text-[#141415] transition-colors hover:bg-[#f5f5f5] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          ↓
+                        </button>
+                      </div>
+                    ) : null}
+                    <div className="min-w-[180px] flex-1">
                     <input
                       type="text"
                       value={getCategoryName(client, editingLocale, category.id)}
@@ -816,6 +881,7 @@ export function ClientEditor({
                         IT: {getCategoryNamePlaceholder(client, category.id)}
                       </p>
                     ) : null}
+                    </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {canRemoveCategory ? (
