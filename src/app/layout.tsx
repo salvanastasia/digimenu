@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
+import { GOOGLE_FONTS_STYLESHEET } from "@/lib/google-fonts-url";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -30,6 +31,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" className={`${manrope.variable} h-full`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link href={GOOGLE_FONTS_STYLESHEET} rel="stylesheet" />
+      </head>
       <body className="min-h-full bg-[#f7f7f7] font-sans antialiased">
         {children}
       </body>

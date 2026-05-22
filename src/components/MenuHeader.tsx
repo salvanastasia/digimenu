@@ -1,5 +1,6 @@
 "use client";
 
+import { ClientLogo } from "@/components/ClientLogo";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { HeartIcon } from "@/components/HeartIcon";
 import { useClientMenu } from "@/context/ClientMenuContext";
@@ -34,6 +35,7 @@ export function MenuHeader({
     clientMenu?.client.brand.secondaryColor ?? BRAND_ACCENT;
   const badgeTextColor = effectiveHeader?.fabIconColor ?? HEADER_BG;
   const logoUrl = effectiveHeader?.logoUrl ?? "/logo.svg";
+  const logoColor = effectiveHeader?.logoColor ?? BRAND_ACCENT;
   const logoAlt = clientMenu?.client.name ?? "aribrì";
   const showBackgroundOverlay = effectiveHeader
     ? hasHeaderBackgroundImage(effectiveHeader)
@@ -52,10 +54,11 @@ export function MenuHeader({
       ) : null}
       <div className="relative z-30 flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <img
-            src={logoUrl}
+          <ClientLogo
+            client={clientMenu?.client}
+            logoUrl={logoUrl}
+            logoColor={logoColor}
             alt={logoAlt}
-            className="block h-9 w-auto max-w-[min(100%,190px)] object-contain object-left"
           />
         </div>
 

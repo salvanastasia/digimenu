@@ -9,6 +9,15 @@ type BrandLinkedColorFieldProps = {
   isCustom: boolean;
   onApplyCustom: (value: string) => void;
   onReset: () => void;
+  /** Se impostato, sostituisce il badge Custom / brandLabel (es. "SVG originale"). */
+  statusLabel?: string;
+  /** Link-style reset accanto al titolo (es. colore logo → SVG originale). */
+  labelReset?: {
+    label: string;
+    onClick: () => void;
+    visible?: boolean;
+  };
+  hint?: string;
 };
 
 export function BrandLinkedColorField({
@@ -18,6 +27,9 @@ export function BrandLinkedColorField({
   isCustom,
   onApplyCustom,
   onReset,
+  statusLabel,
+  labelReset,
+  hint,
 }: BrandLinkedColorFieldProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
@@ -39,7 +51,18 @@ export function BrandLinkedColorField({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-[0.78rem] font-semibold text-[#606060]">{label}</span>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[0.78rem] font-semibold text-[#606060]">{label}</span>
+        {labelReset && (labelReset.visible ?? true) ? (
+          <button
+            type="button"
+            onClick={labelReset.onClick}
+            className="text-[0.78rem] font-semibold text-[#560200] underline-offset-2 transition-colors hover:text-[#6d0200] hover:underline"
+          >
+            {labelReset.label}
+          </button>
+        ) : null}
+      </div>
       <div className="flex flex-wrap items-center gap-2 rounded-[10px] border border-[#d8dadc] bg-white px-3 py-2">
         <span
           className="h-8 w-8 shrink-0 rounded-[8px] border border-black/10"
@@ -54,7 +77,7 @@ export function BrandLinkedColorField({
           className="min-w-[88px] flex-1 bg-transparent text-[0.84rem] uppercase tracking-wide text-[#141415] outline-none"
         />
         <span className="rounded-full bg-[#f5f5f5] px-2 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[#606060]">
-          {isCustom ? "Custom" : brandLabel}
+          {statusLabel ?? (isCustom ? "Custom" : brandLabel)}
         </span>
         {!editing ? (
           <button
@@ -89,6 +112,9 @@ export function BrandLinkedColorField({
           </>
         )}
       </div>
+      {hint ? (
+        <p className="text-[0.72rem] leading-snug text-[#606060]">{hint}</p>
+      ) : null}
     </div>
   );
 }

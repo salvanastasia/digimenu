@@ -15,9 +15,12 @@ import {
   TextField,
 } from "@/components/dashboard/DashboardFields";
 import { FONT_OPTIONS, SUBTITLE_MAX_LENGTH } from "@/lib/client-defaults";
+import { ClientLogo } from "@/components/ClientLogo";
 import {
   getBrandLabelForHeaderColor,
   getEffectiveHeader,
+  getLogoColorMode,
+  getLogoColorStatusLabel,
 } from "@/lib/client-header";
 import { createPrefixedId } from "@/lib/create-id";
 import { ensureUniqueSlug, slugify } from "@/lib/client-slug";
@@ -279,12 +282,12 @@ export function ClientEditor({
     key: HeaderColorKey;
     label: string;
   }> = [
-    { key: "logoColor", label: "Colore logo (SVG)" },
     { key: "fabBackground", label: "FAB background" },
     { key: "fabIconColor", label: "FAB icon color" },
   ];
 
   const backgroundMode = client.header.backgroundMode ?? "color";
+  const logoColorMode = getLogoColorMode(client);
 
   return (
     <div className="space-y-6">
@@ -498,6 +501,40 @@ export function ClientEditor({
               onReset={() => resetHeaderOverride("backgroundColor")}
             />
           ) : null}
+          <div className="flex flex-col gap-3 sm:col-span-2">
+            <BrandLinkedColorField
+              label="Colore logo (SVG)"
+              brandLabel={getBrandLabelForHeaderColor("logoColor")}
+              value={effectiveHeader.logoColor}
+              isCustom={logoColorMode === "custom"}
+              statusLabel={getLogoColorStatusLabel(logoColorMode)}
+              onApplyCustom={(value) => setHeaderOverride("logoColor", value)}
+              onReset={() =>
+                setHeaderOverride("logoColor", client.brand.secondaryColor)
+              }
+              labelReset={{
+                label: "Reset",
+                onClick: () => resetHeaderOverride("logoColor"),
+                visible: logoColorMode !== "original",
+              }}
+              hint={
+                logoColorMode === "original"
+                  ? "Nessun colore impostato — il logo usa i colori originali del file SVG."
+                  : undefined
+              }
+            />
+            <div
+              className="flex items-center rounded-[10px] border border-[#d8dadc] px-4 py-3"
+              style={{ backgroundColor: effectiveHeader.backgroundColor }}
+            >
+              <ClientLogo
+                client={client}
+                logoUrl={effectiveHeader.logoUrl}
+                logoColor={effectiveHeader.logoColor}
+                alt={`Anteprima logo ${client.name}`}
+              />
+            </div>
+          </div>
           {headerColorFields.map(({ key, label }) => (
             <BrandLinkedColorField
               key={key}

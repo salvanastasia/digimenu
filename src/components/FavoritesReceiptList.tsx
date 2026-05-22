@@ -1,6 +1,7 @@
 "use client";
 
 import { FavoriteReceiptItemRow } from "@/components/FavoriteReceiptItemRow";
+import { ClientLogo } from "@/components/ClientLogo";
 import { useClientMenu } from "@/context/ClientMenuContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { getEffectiveHeader } from "@/lib/client-header";
@@ -55,9 +56,11 @@ export function FavoritesReceiptList({
   const { content, locale } = useLanguage();
   const { restaurant } = content;
   const clientMenu = useClientMenu();
-  const logoUrl = clientMenu
-    ? getEffectiveHeader(clientMenu.client).logoUrl
-    : "/logo.svg";
+  const effectiveHeader = clientMenu
+    ? getEffectiveHeader(clientMenu.client)
+    : null;
+  const logoUrl = effectiveHeader?.logoUrl ?? "/logo.svg";
+  const logoColor = effectiveHeader?.logoColor ?? "#F2E8D8";
 
   const favoriteMap = new Map(
     favorites.map((entry) => [entry.id, entry.quantity]),
@@ -103,12 +106,12 @@ export function FavoritesReceiptList({
   return (
     <article className="relative w-full max-w-[300px] bg-[#fffdf8] px-5 py-6 font-mono text-[0.72rem] leading-relaxed text-[#1a1a1a] shadow-[0_10px_36px_rgba(0,0,0,0.16)]">
       <div className="text-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={logoUrl}
+        <ClientLogo
+          client={clientMenu?.client}
+          logoUrl={logoUrl}
+          logoColor={logoColor}
           alt=""
-          aria-hidden="true"
-          className="mx-auto h-7 w-auto max-w-[160px] object-contain"
+          className="mx-auto h-7 w-auto max-w-[160px] object-contain object-center"
         />
         <p className="mt-3 text-[0.82rem] font-bold uppercase tracking-[0.18em]">
           {restaurant.name}

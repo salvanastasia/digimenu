@@ -88,3 +88,43 @@ export function isHeaderColorOverridden(
 ): boolean {
   return client.header.colorOverrides[key] !== undefined;
 }
+
+export type LogoColorMode = "original" | "secondary" | "custom";
+
+function normalizeHexColor(color: string): string {
+  return color.trim().toLowerCase().replace(/^#/, "");
+}
+
+export function getLogoColorMode(client: ClientConfig): LogoColorMode {
+  const override = client.header.colorOverrides.logoColor;
+  if (!override?.trim()) return "original";
+
+  if (
+    normalizeHexColor(override) ===
+    normalizeHexColor(client.brand.secondaryColor)
+  ) {
+    return "secondary";
+  }
+
+  return "custom";
+}
+
+export function getLogoColorStatusLabel(mode: LogoColorMode): string {
+  switch (mode) {
+    case "original":
+      return "SVG originale";
+    case "secondary":
+      return "Secondario";
+    case "custom":
+      return "Custom";
+  }
+}
+
+/** Nessun colore impostato: colori nativi del file SVG caricato. */
+export function usesOriginalLogoColors(client: ClientConfig): boolean {
+  return getLogoColorMode(client) === "original";
+}
+
+export function usesTintedLogoColor(client: ClientConfig): boolean {
+  return getLogoColorMode(client) !== "original";
+}
