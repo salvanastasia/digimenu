@@ -83,6 +83,7 @@ function migrateClientRecord(client: ClientConfig): ClientConfig {
 
   return {
     ...migrated,
+    translations: migrated.translations,
     hidden: migrated.hidden ?? false,
     subtitle: (migrated.subtitle ?? DEFAULT_SUBTITLE).slice(
       0,

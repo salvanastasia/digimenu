@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ALLERGENS } from "@/data/allergens";
 import {
   BrandLinkedColorField,
@@ -21,7 +21,25 @@ import {
 } from "@/lib/client-header";
 import { createPrefixedId } from "@/lib/create-id";
 import { ensureUniqueSlug, slugify } from "@/lib/client-slug";
+import {
+  getCategoryName,
+  getCategoryNamePlaceholder,
+  getDishField,
+  getDishFieldPlaceholder,
+  getSubtitle,
+  getSubtitlePlaceholder,
+  setCategoryName,
+  setDishField,
+  setSubtitle,
+} from "@/lib/client-translation-edit";
+import {
+  buildVariableTranslationSource,
+  getStaleTranslationLocales,
+  isVariableSourceEmpty,
+} from "@/lib/client-translation-payload";
 import { LANGUAGES } from "@/lib/languages";
+import { TranslationProgressBar } from "@/components/dashboard/TranslationProgressBar";
+import { useMenuTranslation } from "@/hooks/useMenuTranslation";
 import type { ClientAssetKind } from "@/lib/instant-file-storage";
 import type {
   ClientConfig,
@@ -34,6 +52,7 @@ import type { Locale } from "@/types/translation";
 
 type ClientEditorProps = {
   client: ClientConfig;
+  adminEmail?: string;
   otherSlugs: string[];
   onChange: (client: ClientConfig) => void;
   onBack: () => void;
@@ -72,6 +91,7 @@ function createCategoryId() {
 
 export function ClientEditor({
   client,
+  adminEmail = "",
   otherSlugs,
   onChange,
   onBack,
@@ -93,7 +113,57 @@ export function ClientEditor({
   onSave,
 }: ClientEditorProps) {
   const [confirm, setConfirm] = useState<ConfirmState | null>(null);
+  const [editingLocale, setEditingLocale] = useState<Locale>("it");
+  const {
+    translate,
+    isTranslating,
+    error: translationError,
+    progress,
+    resetError,
+  } = useMenuTranslation();
   const effectiveHeader = getEffectiveHeader(client);
+
+  const translationTargets = useMemo(
+    () =>
+      client.header.languages.filter(
+        (locale): locale is Exclude<Locale, "it"> => locale !== "it",
+      ),
+    [client.header.languages],
+  );
+
+  const editingLocaleOptions = useMemo(
+    () => [
+      { value: "it", label: "Italiano (sorgente)" },
+      ...translationTargets.map((locale) => ({
+        value: locale,
+        label: LANGUAGES.find((lang) => lang.locale === locale)?.label ?? locale,
+      })),
+    ],
+    [translationTargets],
+  );
+
+  const staleLocales = useMemo(
+    () => getStaleTranslationLocales(client),
+    [client],
+  );
+
+  const canTranslate =
+    Boolean(adminEmail) &&
+    translationTargets.length > 0 &&
+    !isVariableSourceEmpty(buildVariableTranslationSource(client));
+
+  useEffect(() => {
+    if (
+      editingLocale !== "it" &&
+      !translationTargets.includes(editingLocale as Exclude<Locale, "it">)
+    ) {
+      setEditingLocale("it");
+    }
+  }, [editingLocale, translationTargets]);
+
+  const editingLanguageLabel =
+    LANGUAGES.find((lang) => lang.locale === editingLocale)?.label ??
+    editingLocale;
 
   const update = (patch: Partial<ClientConfig>) => {
     onChange({ ...client, ...patch });
@@ -204,14 +274,6 @@ export function ClientEditor({
         (category) => category.id !== categoryId,
       ),
       dishes: client.dishes.filter((dish) => dish.categoryId !== categoryId),
-    });
-  };
-
-  const updateCategoryName = (categoryId: string, name: string) => {
-    update({
-      categories: client.categories.map((category) =>
-        category.id === categoryId ? { ...category, name } : category,
-      ),
     });
   };
 
@@ -341,13 +403,19 @@ export function ClientEditor({
       <Section title="Header">
         <TextField
           label="Slogan"
-          value={client.subtitle}
-          onChange={(subtitle) =>
-            update({ subtitle: subtitle.slice(0, SUBTITLE_MAX_LENGTH) })
+          value={getSubtitle(client, editingLocale)}
+          onChange={(subtitle) => onChange(setSubtitle(client, editingLocale, subtitle))}
+          placeholder={
+            editingLocale === "it"
+              ? "Ristorante · Pizzeria · B&B"
+              : getSubtitlePlaceholder(client)
           }
-          placeholder="Ristorante · Pizzeria · B&B"
           maxLength={SUBTITLE_MAX_LENGTH}
-          hint={`Massimo ${SUBTITLE_MAX_LENGTH} caratteri per restare su una riga su mobile.`}
+          hint={
+            editingLocale === "it"
+              ? `Massimo ${SUBTITLE_MAX_LENGTH} caratteri per restare su una riga su mobile.`
+              : `Italiano: ${getSubtitlePlaceholder(client) || "—"}`
+          }
         />
 
         <LogoUploadField
@@ -457,6 +525,47 @@ export function ClientEditor({
               );
             })}
           </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              disabled={!canTranslate || isTranslating}
+              onClick={() => {
+                resetError();
+                void translate({
+                  client,
+                  email: adminEmail,
+                  onSuccess: onChange,
+                });
+              }}
+              className="rounded-full bg-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isTranslating ? "Traduzione…" : "Traduci"}
+            </button>
+            {!adminEmail ? (
+              <span className="text-[0.72rem] text-[#606060]">
+                Accedi per tradurre il menu.
+              </span>
+            ) : null}
+          </div>
+          {progress ? <TranslationProgressBar progress={progress} /> : null}
+          {translationError ? (
+            <p className="mt-2 text-[0.72rem] font-medium text-[#8a1f1f]">
+              {translationError}
+            </p>
+          ) : null}
+          {staleLocales.length > 0 ? (
+            <p className="mt-2 text-[0.72rem] leading-snug text-[#606060]">
+              Traduzioni da aggiornare:{" "}
+              {staleLocales
+                .map(
+                  (locale) =>
+                    LANGUAGES.find((lang) => lang.locale === locale)?.label ??
+                    locale,
+                )
+                .join(", ")}
+              . Premi Traduci dopo modifiche in italiano.
+            </p>
+          ) : null}
         </div>
       </Section>
 
@@ -540,11 +649,28 @@ export function ClientEditor({
       </Section>
 
       <Section title="Piatti">
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="min-w-[220px] flex-1">
+            <SelectField
+              label="Lingua di modifica"
+              value={editingLocale}
+              onChange={(value) => setEditingLocale(value as Locale)}
+              options={editingLocaleOptions}
+            />
+          </div>
+          {editingLocale !== "it" ? (
+            <p className="pb-2 text-[0.78rem] font-semibold text-[#560200]">
+              Modifica traduzione — {editingLanguageLabel}
+            </p>
+          ) : null}
+        </div>
+
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={addCategory}
-            className="rounded-full border border-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-[#560200] transition-colors hover:bg-[#560200]/5"
+            disabled={editingLocale !== "it"}
+            className="rounded-full border border-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-[#560200] transition-colors hover:bg-[#560200]/5 disabled:cursor-not-allowed disabled:opacity-50"
           >
             + Categoria
           </button>
@@ -562,14 +688,30 @@ export function ClientEditor({
                 className="rounded-[14px] border border-[#ececec] bg-[#fafafa] p-4"
               >
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <input
-                    type="text"
-                    value={category.name}
-                    onChange={(event) =>
-                      updateCategoryName(category.id, event.target.value)
-                    }
-                    className="min-w-[180px] flex-1 rounded-[10px] border border-[#d8dadc] bg-white px-3 py-2 text-[0.95rem] font-bold text-[#141415] outline-none focus:border-[#560200]"
-                  />
+                  <div className="min-w-[180px] flex-1">
+                    <input
+                      type="text"
+                      value={getCategoryName(client, editingLocale, category.id)}
+                      onChange={(event) =>
+                        onChange(
+                          setCategoryName(
+                            client,
+                            editingLocale,
+                            category.id,
+                            event.target.value,
+                          ),
+                        )
+                      }
+                      placeholder={getCategoryNamePlaceholder(client, category.id)}
+                      className="w-full rounded-[10px] border border-[#d8dadc] bg-white px-3 py-2 text-[0.95rem] font-bold text-[#141415] outline-none focus:border-[#560200]"
+                    />
+                    {editingLocale !== "it" &&
+                    !getCategoryName(client, editingLocale, category.id) ? (
+                      <p className="mt-1 text-[0.72rem] text-[#606060]">
+                        IT: {getCategoryNamePlaceholder(client, category.id)}
+                      </p>
+                    ) : null}
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {canRemoveCategory ? (
                       <button
@@ -590,7 +732,8 @@ export function ClientEditor({
                     <button
                       type="button"
                       onClick={() => addDish(category.id)}
-                      className="rounded-full bg-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-white transition-colors hover:bg-[#6d0200]"
+                      disabled={editingLocale !== "it"}
+                      className="rounded-full bg-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       + Piatto
                     </button>
@@ -624,24 +767,89 @@ export function ClientEditor({
                         <div className="grid gap-3">
                           <TextField
                             label="Nome"
-                            value={dish.name}
-                            onChange={(name) => updateDish(dish.id, { name })}
+                            value={getDishField(
+                              client,
+                              editingLocale,
+                              dish.id,
+                              "name",
+                            )}
+                            onChange={(name) =>
+                              onChange(
+                                setDishField(
+                                  client,
+                                  editingLocale,
+                                  dish.id,
+                                  "name",
+                                  name,
+                                ),
+                              )
+                            }
+                            placeholder={getDishFieldPlaceholder(
+                              client,
+                              dish.id,
+                              "name",
+                            )}
                           />
+                          {editingLocale !== "it" &&
+                          !getDishField(client, editingLocale, dish.id, "name") ? (
+                            <p className="-mt-2 text-[0.72rem] text-[#606060]">
+                              IT:{" "}
+                              {getDishFieldPlaceholder(client, dish.id, "name") ||
+                                "—"}
+                            </p>
+                          ) : null}
                           <label className="flex flex-col gap-1.5">
                             <span className="text-[0.78rem] font-semibold text-[#606060]">
                               Descrizione
                             </span>
                             <textarea
-                              value={dish.description}
+                              value={getDishField(
+                                client,
+                                editingLocale,
+                                dish.id,
+                                "description",
+                              )}
                               onChange={(event) =>
-                                updateDish(dish.id, {
-                                  description: event.target.value,
-                                })
+                                onChange(
+                                  setDishField(
+                                    client,
+                                    editingLocale,
+                                    dish.id,
+                                    "description",
+                                    event.target.value,
+                                  ),
+                                )
                               }
+                              placeholder={getDishFieldPlaceholder(
+                                client,
+                                dish.id,
+                                "description",
+                              )}
                               rows={2}
                               className="rounded-[10px] border border-[#d8dadc] bg-white px-3 py-2 text-[0.92rem] text-[#141415] outline-none focus:border-[#560200]"
                             />
                           </label>
+                          {editingLocale !== "it" &&
+                          !getDishField(
+                            client,
+                            editingLocale,
+                            dish.id,
+                            "description",
+                          ) &&
+                          getDishFieldPlaceholder(
+                            client,
+                            dish.id,
+                            "description",
+                          ) ? (
+                            <p className="-mt-2 text-[0.72rem] text-[#606060]">
+                              IT:{" "}
+                              {getDishFieldPlaceholder(
+                                client,
+                                dish.id,
+                                "description",
+                              )}
+                            </p>
+                          ) : null}
                           <label className="flex flex-col gap-1.5">
                             <span className="text-[0.78rem] font-semibold text-[#606060]">
                               Prezzo (€)

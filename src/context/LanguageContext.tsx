@@ -11,12 +11,13 @@ import {
 } from "react";
 import {
   applyTranslation,
+  applyTranslationToBase,
   getItalianContent,
   type TranslatedContent,
 } from "@/lib/apply-translation";
 import { getLanguage } from "@/lib/languages";
 import { getStaticTranslation } from "@/data/translations";
-import type { Locale } from "@/types/translation";
+import type { Locale, TranslationBundle } from "@/types/translation";
 
 const ALL_LOCALES: Locale[] = ["it", "en", "fr", "de", "es"];
 
@@ -34,12 +35,14 @@ type LanguageProviderProps = {
   children: ReactNode;
   baseContent?: TranslatedContent;
   enabledLocales?: Locale[];
+  getClientBundle?: (locale: Exclude<Locale, "it">) => TranslationBundle | null;
 };
 
 export function LanguageProvider({
   children,
   baseContent,
   enabledLocales = ALL_LOCALES,
+  getClientBundle,
 }: LanguageProviderProps) {
   const italianContent = baseContent ?? getItalianContent();
   const [locale, setLocaleState] = useState<Locale>(
@@ -63,37 +66,35 @@ export function LanguageProvider({
       }
 
       try {
-        const bundle = getStaticTranslation(nextLocale);
-        const translated = applyTranslation(bundle);
+        const clientBundle = getClientBundle?.(nextLocale);
 
+        if (clientBundle) {
+          const translated = applyTranslationToBase(
+            italianContent,
+            clientBundle,
+          );
+          setLocaleState(nextLocale);
+          setContent(translated);
+          return;
+        }
+
+        if (baseContent) {
+          setTranslationError(italianContent.ui.translationError);
+          setLocaleState("it");
+          setContent(italianContent);
+          return;
+        }
+
+        const bundle = getStaticTranslation(nextLocale);
         setLocaleState(nextLocale);
-        setContent(
-          baseContent
-            ? {
-                ...translated,
-                ui: {
-                  ...translated.ui,
-                  tableServiceFee: italianContent.ui.tableServiceFee,
-                  listTotal: italianContent.ui.listTotal,
-                },
-                categories: italianContent.categories,
-                restaurant: {
-                  ...translated.restaurant,
-                  name: italianContent.restaurant.name,
-                  subtitle: italianContent.restaurant.subtitle,
-                  address: italianContent.restaurant.address,
-                  phone: italianContent.restaurant.phone,
-                },
-              }
-            : translated,
-        );
+        setContent(applyTranslation(bundle));
       } catch {
         setTranslationError(italianContent.ui.translationError);
         setLocaleState("it");
         setContent(italianContent);
       }
     },
-    [baseContent, enabledLocales, italianContent],
+    [baseContent, enabledLocales, getClientBundle, italianContent],
   );
 
   useEffect(() => {

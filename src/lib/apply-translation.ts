@@ -21,16 +21,19 @@ export function getItalianContent(): TranslatedContent {
   };
 }
 
-export function applyTranslation(bundle: TranslationBundle): TranslatedContent {
-  const ui = { ...UI_STRINGS_IT, ...bundle.ui };
+function applyBundleToBase(
+  base: TranslatedContent,
+  bundle: TranslationBundle,
+): TranslatedContent {
+  const ui = { ...base.ui, ...bundle.ui };
 
   const translatedRestaurant: RestaurantConfig = {
-    ...restaurant,
-    subtitle: bundle.restaurant.subtitle ?? restaurant.subtitle,
-    notes: bundle.restaurant.notes ?? restaurant.notes,
+    ...base.restaurant,
+    subtitle: bundle.restaurant.subtitle ?? base.restaurant.subtitle,
+    notes: bundle.restaurant.notes ?? base.restaurant.notes,
   };
 
-  const translatedCategories = menuCategories.map((category) => {
+  const translatedCategories = base.categories.map((category) => {
     const categoryTranslation = bundle.categories[category.id];
     return {
       ...category,
@@ -56,7 +59,7 @@ export function applyTranslation(bundle: TranslationBundle): TranslatedContent {
     };
   });
 
-  const translatedAllergens = ALLERGENS.map((allergen) => {
+  const translatedAllergens = base.allergens.map((allergen) => {
     const allergenTranslation = bundle.allergens[String(allergen.id)];
     if (!allergenTranslation) return allergen;
     return {
@@ -72,4 +75,15 @@ export function applyTranslation(bundle: TranslationBundle): TranslatedContent {
     categories: translatedCategories,
     allergens: translatedAllergens,
   };
+}
+
+export function applyTranslationToBase(
+  base: TranslatedContent,
+  bundle: TranslationBundle,
+): TranslatedContent {
+  return applyBundleToBase(base, bundle);
+}
+
+export function applyTranslation(bundle: TranslationBundle): TranslatedContent {
+  return applyBundleToBase(getItalianContent(), bundle);
 }

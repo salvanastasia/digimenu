@@ -6,6 +6,7 @@ import { ClientCard } from "@/components/dashboard/ClientCard";
 import { ClientEditor } from "@/components/dashboard/ClientEditor";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { useClients } from "@/hooks/useClients";
+import { useDashboardAdmin } from "@/hooks/useDashboardAdmin";
 import { usePendingClientAssets } from "@/hooks/usePendingClientAssets";
 import {
   fetchClientAssetUrls,
@@ -15,6 +16,7 @@ import {
 import type { ClientConfig } from "@/types/client";
 
 export function DashboardApp() {
+  const { email: adminEmail } = useDashboardAdmin();
   const {
     clients,
     ready,
@@ -222,6 +224,7 @@ export function DashboardApp() {
         {draft && entry ? (
             <ClientEditor
               client={draft}
+              adminEmail={adminEmail}
               otherSlugs={clients
                 .filter((client) => client.id !== draft.id)
                 .map((client) => client.slug)}

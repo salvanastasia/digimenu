@@ -46,6 +46,16 @@ export type ClientCustomizations = {
   favoritesView: FavoritesViewMode;
 };
 
+export type ClientLocaleTranslation = {
+  version: string;
+  categories: Record<string, { name: string }>;
+  items: Record<
+    string,
+    { name: string; description?: string }
+  >;
+  restaurant?: { subtitle?: string };
+};
+
 export type ClientConfig = {
   id: string;
   name: string;
@@ -60,6 +70,9 @@ export type ClientConfig = {
   customizations: ClientCustomizations;
   categories: ClientCategory[];
   dishes: ClientDish[];
+  translations?: Partial<
+    Record<Exclude<Locale, "it">, ClientLocaleTranslation>
+  >;
   createdAt: string;
   updatedAt: string;
 };

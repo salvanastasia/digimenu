@@ -12,6 +12,7 @@
     "seed:instant": "tsx scripts/seed-instant-clients.ts"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@instantdb/admin": "^1.0.39",
     "@instantdb/react": "^1.0.39",
     "next": "16.2.6",
@@ -25,8 +26,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "tsx": "^4.20.6",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }

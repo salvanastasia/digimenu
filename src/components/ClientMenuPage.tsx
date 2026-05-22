@@ -11,6 +11,8 @@ import {
   type InstantClientMenuRow,
 } from "@/lib/instant-client-sync";
 import { clientToMenuContent } from "@/lib/client-to-menu";
+import { buildClientTranslationBundle } from "@/lib/static-fixed-translations";
+import type { Locale, TranslationBundle } from "@/types/translation";
 import {
   CLIENT_ASSET_PATH_PREFIX,
   clientAssetsPathLike,
@@ -140,11 +142,15 @@ export function ClientMenuPage({ slug }: ClientMenuPageProps) {
 
   const baseContent = clientToMenuContent(client);
 
+  const getClientBundle = (locale: Exclude<Locale, "it">): TranslationBundle | null =>
+    buildClientTranslationBundle(client, locale);
+
   return (
     <ClientMenuProvider client={client}>
       <LanguageProvider
         baseContent={baseContent}
         enabledLocales={client.header.languages}
+        getClientBundle={getClientBundle}
       >
         <div
           className="client-menu"
