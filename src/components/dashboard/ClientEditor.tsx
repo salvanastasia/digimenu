@@ -39,6 +39,7 @@ import {
 } from "@/lib/client-translation-edit";
 import {
   formatStaleFieldsLabel,
+  getOutdatedKeys,
   getStaleTranslationSummary,
 } from "@/lib/client-translation-payload";
 import { LANGUAGES } from "@/lib/languages";
@@ -125,9 +126,14 @@ export function ClientEditor({
   >(null);
   const [generatingAllDescriptions, setGeneratingAllDescriptions] =
     useState(false);
+  const [generatingAllergensFor, setGeneratingAllergensFor] = useState<
+    string | null
+  >(null);
+  const [generatingAllAllergens, setGeneratingAllAllergens] = useState(false);
   const [descriptionAiError, setDescriptionAiError] = useState<string | null>(
     null,
   );
+  const [allergenAiError, setAllergenAiError] = useState<string | null>(null);
   const {
     translate,
     isTranslating,
@@ -162,6 +168,64 @@ export function ClientEditor({
   );
 
   const outdatedFieldCount = staleSummary.totalFields;
+
+  const isDishAiBusy =
+    generatingDescriptionFor !== null ||
+    generatingAllDescriptions ||
+    generatingAllergensFor !== null ||
+    generatingAllAllergens;
+
+  const dishStats = useMemo(() => {
+    const dishCount = client.dishes.length;
+    let missingDescriptions = 0;
+    const translatableDishIds: string[] = [];
+
+    for (const dish of client.dishes) {
+      const name = getDishField(client, "it", dish.id, "name").trim();
+      const description = getDishField(
+        client,
+        "it",
+        dish.id,
+        "description",
+      ).trim();
+
+      if (name.length === 0) continue;
+
+      translatableDishIds.push(dish.id);
+      if (description.length === 0) {
+        missingDescriptions += 1;
+      }
+    }
+
+    const totalTranslationSlots =
+      translatableDishIds.length * translationTargets.length;
+    let translatedSlots = 0;
+
+    for (const locale of translationTargets) {
+      const outdatedItemIds = new Set(
+        getOutdatedKeys(client, locale)
+          .filter((key) => key.kind === "item")
+          .map((key) => key.id),
+      );
+
+      for (const dishId of translatableDishIds) {
+        if (!outdatedItemIds.has(dishId)) {
+          translatedSlots += 1;
+        }
+      }
+    }
+
+    const translationPercent =
+      totalTranslationSlots === 0
+        ? null
+        : Math.round((translatedSlots / totalTranslationSlots) * 100);
+
+    return {
+      dishCount,
+      missingDescriptions,
+      translationPercent,
+    };
+  }, [client, translationTargets]);
 
   const canTranslate =
     Boolean(adminEmail) &&
@@ -411,6 +475,119 @@ export function ClientEditor({
       );
     } finally {
       setGeneratingAllDescriptions(false);
+    }
+  };
+
+  const fetchDishAllergens = async (
+    dishName: string,
+    dishDescription: string,
+    categoryName: string,
+  ) => {
+    const response = await fetch("/api/generate-dish-allergens", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: adminEmail,
+        dishName: dishName.trim(),
+        dishDescription,
+        categoryName,
+      }),
+    });
+
+    const payload = (await response.json()) as {
+      allergenIds?: number[];
+      error?: string;
+    };
+
+    if (!response.ok || !payload.allergenIds) {
+      throw new Error(payload.error ?? "Generazione allergeni non riuscita.");
+    }
+
+    return payload.allergenIds;
+  };
+
+  const generateDishAllergens = async (
+    dishId: string,
+    dishName: string,
+    dishDescription: string,
+    categoryName: string,
+  ) => {
+    if (!adminEmail || !dishName.trim()) return;
+
+    setGeneratingAllergensFor(dishId);
+    setAllergenAiError(null);
+
+    try {
+      const allergenIds = await fetchDishAllergens(
+        dishName,
+        dishDescription,
+        categoryName,
+      );
+      updateDish(dishId, { allergenIds });
+    } catch (error) {
+      setAllergenAiError(
+        error instanceof Error
+          ? error.message
+          : "Generazione allergeni non riuscita.",
+      );
+    } finally {
+      setGeneratingAllergensFor(null);
+    }
+  };
+
+  const generateAllAllergens = async () => {
+    if (!adminEmail || editingLocale !== "it") return;
+
+    const categoryNames = new Map(
+      client.categories.map((category) => [category.id, category.name]),
+    );
+
+    const targets = client.dishes.filter((dish) => {
+      const name = getDishField(client, "it", dish.id, "name").trim();
+      return name.length > 0 && dish.allergenIds.length === 0;
+    });
+
+    if (targets.length === 0) {
+      setAllergenAiError("Nessun piatto con nome e senza allergeni impostati.");
+      return;
+    }
+
+    setGeneratingAllAllergens(true);
+    setAllergenAiError(null);
+
+    let nextClient = client;
+
+    try {
+      for (const dish of targets) {
+        const dishName = getDishField(nextClient, "it", dish.id, "name");
+        const dishDescription = getDishField(
+          nextClient,
+          "it",
+          dish.id,
+          "description",
+        );
+        const categoryName = categoryNames.get(dish.categoryId) ?? "";
+        const allergenIds = await fetchDishAllergens(
+          dishName,
+          dishDescription,
+          categoryName,
+        );
+        nextClient = {
+          ...nextClient,
+          dishes: nextClient.dishes.map((entry) =>
+            entry.id === dish.id ? { ...entry, allergenIds } : entry,
+          ),
+        };
+        onChange(nextClient);
+      }
+    } catch (error) {
+      setAllergenAiError(
+        error instanceof Error
+          ? error.message
+          : "Generazione allergeni non riuscita.",
+      );
+    } finally {
+      setGeneratingAllAllergens(false);
     }
   };
 
@@ -908,6 +1085,46 @@ export function ClientEditor({
           />
         }
       >
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-[12px] border border-[#ececec] bg-[#fafafa] px-4 py-3">
+            <p className="text-[0.72rem] font-semibold text-[#606060]">
+              Piatti
+            </p>
+            <p className="mt-1 text-[1.45rem] font-bold tabular-nums text-[#141415]">
+              {dishStats.dishCount}
+            </p>
+          </div>
+          <div className="rounded-[12px] border border-[#ececec] bg-[#fafafa] px-4 py-3">
+            <p className="text-[0.72rem] font-semibold text-[#606060]">
+              Descrizioni mancanti
+            </p>
+            <p
+              className={`mt-1 text-[1.45rem] font-bold tabular-nums ${
+                dishStats.missingDescriptions > 0
+                  ? "text-amber-800"
+                  : "text-[#141415]"
+              }`}
+            >
+              {dishStats.missingDescriptions}
+            </p>
+          </div>
+          <div className="rounded-[12px] border border-[#ececec] bg-[#fafafa] px-4 py-3">
+            <p className="text-[0.72rem] font-semibold text-[#606060]">
+              Traduzioni piatti
+            </p>
+            <p className="mt-1 text-[1.45rem] font-bold tabular-nums text-[#141415]">
+              {dishStats.translationPercent === null
+                ? "—"
+                : `${dishStats.translationPercent}%`}
+            </p>
+            {dishStats.translationPercent === null ? (
+              <p className="mt-1 text-[0.68rem] leading-snug text-[#606060]">
+                Nessuna lingua extra attiva
+              </p>
+            ) : null}
+          </div>
+        </div>
+
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
@@ -924,8 +1141,7 @@ export function ClientEditor({
                 disabled={
                   editingLocale !== "it" ||
                   !adminEmail ||
-                  generatingAllDescriptions ||
-                  generatingDescriptionFor !== null
+                  isDishAiBusy
                 }
                 onClick={() => void generateAllDescriptions()}
                 className="inline-flex items-center gap-2 rounded-full border border-[#5b6cff]/35 bg-[#eef0ff] px-4 py-2 text-[0.82rem] font-semibold text-[#5b6cff] transition-colors hover:border-[#5b6cff]/50 hover:bg-[#e3e7ff] disabled:cursor-not-allowed disabled:opacity-50"
@@ -941,9 +1157,22 @@ export function ClientEditor({
                 type="button"
                 disabled={
                   editingLocale !== "it" ||
-                  generatingAllDescriptions ||
-                  generatingDescriptionFor !== null
+                  !adminEmail ||
+                  isDishAiBusy
                 }
+                onClick={() => void generateAllAllergens()}
+                className="inline-flex items-center gap-2 rounded-full border border-[#5b6cff]/35 bg-[#eef0ff] px-4 py-2 text-[0.82rem] font-semibold text-[#5b6cff] transition-colors hover:border-[#5b6cff]/50 hover:bg-[#e3e7ff] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {generatingAllAllergens ? (
+                  <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#5b6cff]/25 border-t-[#5b6cff]" />
+                ) : (
+                  <AiSparklesIcon className="h-4 w-4" />
+                )}
+                Genera Allergeni
+              </button>
+              <button
+                type="button"
+                disabled={editingLocale !== "it" || isDishAiBusy}
                 onClick={() =>
                   setConfirm({
                     title: "Elimina tutti i piatti",
@@ -961,9 +1190,9 @@ export function ClientEditor({
           ) : null}
         </div>
 
-        {descriptionAiError ? (
+        {(descriptionAiError || allergenAiError) ? (
           <p className="rounded-[12px] bg-[#fff1f1] px-4 py-3 text-[0.84rem] text-[#8a1f1f]">
-            {descriptionAiError}
+            {descriptionAiError ?? allergenAiError}
           </p>
         ) : null}
 
@@ -1126,7 +1355,7 @@ export function ClientEditor({
                                   loading={generatingDescriptionFor === dish.id}
                                   disabled={
                                     !adminEmail ||
-                                    generatingAllDescriptions ||
+                                    isDishAiBusy ||
                                     !getDishField(
                                       client,
                                       "it",
@@ -1219,9 +1448,45 @@ export function ClientEditor({
                           </label>
 
                           <div>
-                            <p className="mb-2 text-[0.78rem] font-semibold text-[#606060]">
-                              Allergeni
-                            </p>
+                            <div className="mb-2 flex items-center justify-between gap-2">
+                              <p className="text-[0.78rem] font-semibold text-[#606060]">
+                                Allergeni
+                              </p>
+                              {editingLocale === "it" ? (
+                                <AiDescriptionButton
+                                  label="Genera allergeni con AI"
+                                  loading={generatingAllergensFor === dish.id}
+                                  disabled={
+                                    !adminEmail ||
+                                    isDishAiBusy ||
+                                    !getDishField(
+                                      client,
+                                      "it",
+                                      dish.id,
+                                      "name",
+                                    ).trim()
+                                  }
+                                  onClick={() =>
+                                    void generateDishAllergens(
+                                      dish.id,
+                                      getDishField(
+                                        client,
+                                        "it",
+                                        dish.id,
+                                        "name",
+                                      ),
+                                      getDishField(
+                                        client,
+                                        "it",
+                                        dish.id,
+                                        "description",
+                                      ),
+                                      category.name,
+                                    )
+                                  }
+                                />
+                              ) : null}
+                            </div>
                             <div className="grid gap-2 sm:grid-cols-2">
                               {ALLERGENS.map((allergen) => {
                                 const checked = dish.allergenIds.includes(
