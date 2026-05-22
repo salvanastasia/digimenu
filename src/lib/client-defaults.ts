@@ -60,43 +60,6 @@ function createId(prefix: string) {
   return createPrefixedId(prefix);
 }
 
-export function createEmptyClient(name = "Nuovo cliente"): ClientConfig {
-  const now = new Date().toISOString();
-  const categoryId = createId("cat");
-  const slug = slugify(name);
-
-  return {
-    id: createId("client"),
-    name,
-    slug,
-    subtitle: DEFAULT_SUBTITLE.slice(0, SUBTITLE_MAX_LENGTH),
-    address: DEFAULT_ADDRESS,
-    phone: DEFAULT_PHONE,
-    tableServiceFee: DEFAULT_TABLE_SERVICE_FEE,
-    hidden: false,
-    brand: {
-      primaryColor: DEFAULT_PRIMARY,
-      secondaryColor: DEFAULT_SECONDARY,
-      fontFamily: DEFAULT_FONT,
-    },
-    header: createHeaderFromBrand(DEFAULT_PRIMARY, DEFAULT_SECONDARY),
-    customizations: { ...DEFAULT_CUSTOMIZATIONS },
-    categories: [{ id: categoryId, name: "Menu" }],
-    dishes: [
-      {
-        id: createId("dish"),
-        categoryId,
-        name: "",
-        description: "",
-        price: null,
-        allergenIds: [],
-      },
-    ],
-    createdAt: now,
-    updatedAt: now,
-  };
-}
-
 export function createAribriSeedClient(): ClientConfig {
   const now = new Date().toISOString();
   const primaryColor = DEFAULT_PRIMARY;
@@ -139,6 +102,71 @@ export function createAribriSeedClient(): ClientConfig {
     customizations: { ...DEFAULT_CUSTOMIZATIONS },
     categories,
     dishes,
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+export function createEmptyClient(name = "Nuovo cliente"): ClientConfig {
+  const now = new Date().toISOString();
+  const categoryId = createId("cat");
+  const slug = slugify(name);
+
+  return {
+    id: createId("client"),
+    name,
+    slug,
+    subtitle: DEFAULT_SUBTITLE.slice(0, SUBTITLE_MAX_LENGTH),
+    address: DEFAULT_ADDRESS,
+    phone: DEFAULT_PHONE,
+    tableServiceFee: DEFAULT_TABLE_SERVICE_FEE,
+    hidden: false,
+    brand: {
+      primaryColor: DEFAULT_PRIMARY,
+      secondaryColor: DEFAULT_SECONDARY,
+      fontFamily: DEFAULT_FONT,
+    },
+    header: createHeaderFromBrand(DEFAULT_PRIMARY, DEFAULT_SECONDARY),
+    customizations: { ...DEFAULT_CUSTOMIZATIONS },
+    categories: [{ id: categoryId, name: "Menu" }],
+    dishes: [
+      {
+        id: createId("dish"),
+        categoryId,
+        name: "",
+        description: "",
+        price: null,
+        allergenIds: [],
+      },
+    ],
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+export function createBarbayenneSeedClient(): ClientConfig {
+  const aribri = createAribriSeedClient();
+  const now = new Date().toISOString();
+  const primaryColor = "#124481";
+  const secondaryColor = "#F2E8D8";
+
+  return {
+    ...aribri,
+    id: "client-barbayenne",
+    name: "Barbayanne",
+    slug: "barbayenne",
+    subtitle: DEFAULT_SUBTITLE.slice(0, SUBTITLE_MAX_LENGTH),
+    address: "Lungomare Cristoforo Colombo, Trani (BT)",
+    phone: "+39 345 876 6869",
+    tableServiceFee: DEFAULT_TABLE_SERVICE_FEE,
+    hidden: false,
+    brand: {
+      primaryColor,
+      secondaryColor,
+      fontFamily: DEFAULT_FONT,
+    },
+    header: createHeaderFromBrand(primaryColor, secondaryColor),
+    customizations: { ...DEFAULT_CUSTOMIZATIONS },
     createdAt: now,
     updatedAt: now,
   };

@@ -78,7 +78,7 @@ function migrateLegacyHeader(client: ClientConfig): ClientConfig {
   };
 }
 
-function migrateClient(client: ClientConfig): ClientConfig {
+function migrateClientRecord(client: ClientConfig): ClientConfig {
   const migrated = migrateLegacyHeader(client);
 
   return {
@@ -121,7 +121,7 @@ function migrateSlugs(entries: ClientStoreEntry[]): ClientStoreEntry[] {
 }
 
 function toStoreEntry(config: ClientConfig): ClientStoreEntry {
-  const migrated = migrateClient(config);
+  const migrated = migrateClientRecord(config);
   return {
     config: migrated,
     versions: [createVersion(migrated)],
@@ -148,7 +148,7 @@ export function loadStore(): ClientStoreEntry[] {
         return migrateSlugs(
           parsed.map((entry) => ({
             ...entry,
-            config: migrateClient(entry.config),
+            config: migrateClientRecord(entry.config),
             versions: entry.versions?.length
               ? entry.versions
               : [createVersion(entry.config)],
@@ -215,4 +215,10 @@ export function saveClientVersion(
   });
 }
 
-export { cloneClient, createEmptyClient, createVersion };
+export {
+  cloneClient,
+  createEmptyClient,
+  createVersion,
+  migrateClientRecord,
+  toStoreEntry,
+};

@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:translations": "python3 scripts/build-static-translations.py"
+    "generate:translations": "python3 scripts/build-static-translations.py",
+    "instant:push": "env -u INSTANT_APP_ADMIN_TOKEN -u INSTANT_ADMIN_TOKEN npx instant-cli push schema && env -u INSTANT_APP_ADMIN_TOKEN -u INSTANT_ADMIN_TOKEN npx instant-cli push perms",
+    "seed:instant": "tsx scripts/seed-instant-clients.ts"
   },
   "dependencies": {
+    "@instantdb/admin": "^1.0.39",
     "@instantdb/react": "^1.0.39",
     "next": "16.2.6",
     "react": "19.2.4",
@@ -22,6 +25,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "tsx": "^4.20.6",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

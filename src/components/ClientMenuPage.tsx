@@ -1,31 +1,75 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useMemo } from "react";
 import { MenuApp } from "@/components/MenuApp";
 import { ClientMenuProvider } from "@/context/ClientMenuContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { db, isInstantConfigured } from "@/lib/db";
+import {
+  rowToEntry,
+  type InstantClientMenuRow,
+} from "@/lib/instant-client-sync";
 import { clientToMenuContent } from "@/lib/client-to-menu";
-import { getClientBySlug } from "@/lib/client-storage";
-import type { ClientConfig } from "@/types/client";
 
 type ClientMenuPageProps = {
   slug: string;
 };
 
 export function ClientMenuPage({ slug }: ClientMenuPageProps) {
-  const [client, setClient] = useState<ClientConfig | null | undefined>(
-    undefined,
-  );
+  const { isLoading, error, data } = db.useQuery({
+    clientMenus: {
+      $: {
+        where: {
+          slug,
+        },
+      },
+    },
+  });
 
-  useEffect(() => {
-    setClient(getClientBySlug(slug));
-  }, [slug]);
+  const client = useMemo(() => {
+    const row = data?.clientMenus?.[0] as InstantClientMenuRow | undefined;
+    if (!row) return null;
+    return rowToEntry(row).config;
+  }, [data?.clientMenus]);
 
-  if (client === undefined) {
+  if (!isInstantConfigured) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#f7f7f7] px-6 text-center">
+        <h1 className="text-[1.4rem] font-bold text-[#141415]">
+          InstantDB non configurato
+        </h1>
+        <p className="max-w-md text-[0.95rem] text-[#606060]">
+          Imposta <code>NEXT_PUBLIC_INSTANT_APP_ID</code> in <code>.env</code>{" "}
+          e sincronizza schema e permessi con Instant CLI.
+        </p>
+        <Link
+          href="/dashboard"
+          className="rounded-full bg-[#560200] px-5 py-2.5 text-[0.88rem] font-semibold text-white"
+        >
+          Vai alla dashboard
+        </Link>
+      </div>
+    );
+  }
+
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f7f7f7] text-[#606060]">
         Caricamento menu…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#f7f7f7] px-6 text-center">
+        <h1 className="text-[1.4rem] font-bold text-[#141415]">
+          Errore di connessione
+        </h1>
+        <p className="max-w-md text-[0.95rem] text-[#606060]">
+          Impossibile caricare il menu da InstantDB.
+        </p>
       </div>
     );
   }
@@ -37,7 +81,7 @@ export function ClientMenuPage({ slug }: ClientMenuPageProps) {
           Cliente non trovato
         </h1>
         <p className="max-w-md text-[0.95rem] text-[#606060]">
-          Nessun menu configurato per <code>/{slug}</code> su questo browser.
+          Nessun menu configurato per <code>/{slug}</code>.
         </p>
         <Link
           href="/dashboard"

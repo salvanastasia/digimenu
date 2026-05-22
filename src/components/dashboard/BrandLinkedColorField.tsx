@@ -96,7 +96,9 @@ export function BrandLinkedColorField({
 type LogoUploadFieldProps = {
   label: string;
   value: string;
-  onChange: (value: string) => void;
+  onFileSelect: (file: File) => void;
+  onRemove: () => void;
+  onUrlChange: (value: string) => void;
 };
 
 const ACCEPTED_LOGO_TYPES = [
@@ -107,10 +109,20 @@ const ACCEPTED_LOGO_TYPES = [
   "video/webm",
 ];
 
+function isPreviewableImage(value: string): boolean {
+  return (
+    !value.startsWith("data:") &&
+    !value.endsWith(".webm") &&
+    !value.includes(".webm?")
+  );
+}
+
 export function LogoUploadField({
   label,
   value,
-  onChange,
+  onFileSelect,
+  onRemove,
+  onUrlChange,
 }: LogoUploadFieldProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -118,15 +130,19 @@ export function LogoUploadField({
 
       {value ? (
         <div className="flex items-center gap-3 rounded-[10px] border border-[#d8dadc] bg-[#fafafa] p-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={value}
-            alt="Anteprima logo"
-            className="h-10 max-w-[160px] object-contain"
-          />
+          {isPreviewableImage(value) ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={value}
+              alt={`Anteprima ${label.toLowerCase()}`}
+              className="h-10 max-w-[160px] object-contain"
+            />
+          ) : (
+            <span className="text-[0.78rem] text-[#606060]">File selezionato</span>
+          )}
           <button
             type="button"
-            onClick={() => onChange("")}
+            onClick={onRemove}
             className="text-[0.78rem] font-semibold text-[#8a1f1f] hover:underline"
           >
             Rimuovi
@@ -136,10 +152,10 @@ export function LogoUploadField({
 
       <label className="flex cursor-pointer flex-col gap-1 rounded-[10px] border border-dashed border-[#d8dadc] bg-white px-4 py-4 text-center transition-colors hover:border-[#560200]/40 hover:bg-[#560200]/[0.03]">
         <span className="text-[0.84rem] font-semibold text-[#141415]">
-          Carica logo
+          Carica {label.toLowerCase()}
         </span>
         <span className="text-[0.74rem] text-[#606060]">
-          PNG, JPG, WEBP, SVG o WEBM
+          PNG, JPG, WEBP, SVG o WEBM · salvato con Salva
         </span>
         <input
           type="file"
@@ -149,13 +165,7 @@ export function LogoUploadField({
             const file = event.target.files?.[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = () => {
-              if (typeof reader.result === "string") {
-                onChange(reader.result);
-              }
-            };
-            reader.readAsDataURL(file);
+            onFileSelect(file);
             event.target.value = "";
           }}
         />
@@ -163,8 +173,8 @@ export function LogoUploadField({
 
       <TextFieldInline
         label="Oppure URL / path"
-        value={value.startsWith("data:") ? "" : value}
-        onChange={onChange}
+        value={value.startsWith("blob:") ? "" : value}
+        onChange={onUrlChange}
         placeholder="/logo.svg"
       />
     </div>

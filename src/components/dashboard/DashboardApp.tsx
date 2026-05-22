@@ -1,16 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ClientCard } from "@/components/dashboard/ClientCard";
 import { ClientEditor } from "@/components/dashboard/ClientEditor";
 import { useClients } from "@/hooks/useClients";
+import { usePendingClientAssets } from "@/hooks/usePendingClientAssets";
+import type { ClientAssetKind } from "@/lib/instant-file-storage";
 import type { ClientConfig } from "@/types/client";
 
 export function DashboardApp() {
   const {
     clients,
     ready,
+    error,
+    isInstantConfigured,
     addClient,
     removeClient,
     getEntry,
@@ -20,44 +24,158 @@ export function DashboardApp() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draft, setDraft] = useState<ClientConfig | null>(null);
   const [versionIndex, setVersionIndex] = useState(0);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [savedBaseline, setSavedBaseline] = useState<ClientConfig | null>(null);
+  const pendingAssets = usePendingClientAssets();
 
   const entry = selectedId ? getEntry(selectedId) : null;
 
   const closeClient = () => {
+    pendingAssets.reset();
     setSelectedId(null);
     setDraft(null);
+    setSavedBaseline(null);
     setVersionIndex(0);
+    setSaveStatus("idle");
+    setSaveError(null);
   };
 
   const isDirty = useMemo(() => {
-    if (!entry || !draft) return false;
-    const baseline =
-      entry.versions[versionIndex]?.config ?? entry.config;
-    return JSON.stringify(draft) !== JSON.stringify(baseline);
-  }, [draft, entry, versionIndex]);
+    if (!draft || !savedBaseline) return false;
+    return JSON.stringify(draft) !== JSON.stringify(savedBaseline);
+  }, [draft, savedBaseline]);
 
-  const handleSave = () => {
-    if (!selectedId || !draft) return;
-    const savedEntry = saveClient(selectedId, draft);
-    if (!savedEntry) return;
-    setDraft(cloneClient(savedEntry.config));
-    setVersionIndex(savedEntry.versions.length - 1);
+  useEffect(() => {
+    if (isDirty && saveStatus === "saved") {
+      setSaveStatus("idle");
+    }
+  }, [isDirty, saveStatus]);
+
+  const headerFieldForKind = (kind: ClientAssetKind) =>
+    kind === "logo" ? "logoUrl" : "backgroundImageUrl";
+
+  const handleAssetFileSelect = (kind: ClientAssetKind, file: File) => {
+    if (!draft) return;
+
+    const preview = pendingAssets.stageFile(kind, file);
+    setSaveError(null);
+    setDraft({
+      ...draft,
+      header: {
+        ...draft.header,
+        [headerFieldForKind(kind)]: preview,
+      },
+    });
+  };
+
+  const handleAssetRemove = (kind: ClientAssetKind) => {
+    if (!draft || !savedBaseline) return;
+
+    setSaveError(null);
+
+    if (pendingAssets.hasPending(kind)) {
+      pendingAssets.clearPending(kind);
+      setDraft({
+        ...draft,
+        header: {
+          ...draft.header,
+          [headerFieldForKind(kind)]:
+            savedBaseline.header[headerFieldForKind(kind)],
+        },
+      });
+      return;
+    }
+
+    pendingAssets.stageRemove(kind);
+    setDraft({
+      ...draft,
+      header: {
+        ...draft.header,
+        [headerFieldForKind(kind)]: "",
+      },
+    });
+  };
+
+  const handleAssetUrlChange = (kind: ClientAssetKind, url: string) => {
+    if (!draft) return;
+
+    pendingAssets.clearPending(kind);
+    pendingAssets.clearRemoved(kind);
+    setSaveError(null);
+    setDraft({
+      ...draft,
+      header: {
+        ...draft.header,
+        [headerFieldForKind(kind)]: url,
+      },
+    });
+  };
+
+  const handleSave = async () => {
+    if (!selectedId || !draft || isSaving) return;
+
+    setIsSaving(true);
+    setSaveError(null);
+
+    try {
+      const nextDraft = await pendingAssets.flush(selectedId, draft);
+      const savedEntry = saveClient(selectedId, nextDraft);
+      if (!savedEntry) return;
+
+      pendingAssets.reset();
+      const savedConfig = cloneClient(savedEntry.config);
+      setDraft(savedConfig);
+      setSavedBaseline(savedConfig);
+      setVersionIndex(savedEntry.versions.length - 1);
+      setSaveStatus("saved");
+    } catch (error) {
+      setSaveError(
+        error instanceof Error
+          ? error.message
+          : "Errore durante il salvataggio.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const goToVersion = (nextIndex: number) => {
     if (!entry) return;
+    pendingAssets.reset();
+    setSaveError(null);
+    setSaveStatus("idle");
     const safeIndex = Math.max(
       0,
       Math.min(nextIndex, entry.versions.length - 1),
     );
+    const versionConfig = cloneClient(entry.versions[safeIndex].config);
     setVersionIndex(safeIndex);
-    setDraft(cloneClient(entry.versions[safeIndex].config));
+    setDraft(versionConfig);
+    setSavedBaseline(versionConfig);
   };
+
+  if (!isInstantConfigured) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#f7f7f7] px-6 text-center">
+        <h1 className="text-[1.4rem] font-bold text-[#141415]">
+          InstantDB non configurato
+        </h1>
+        <p className="max-w-lg text-[0.95rem] leading-relaxed text-[#606060]">
+          Aggiungi <code>NEXT_PUBLIC_INSTANT_APP_ID</code> al file{" "}
+          <code>.env</code>, poi esegui{" "}
+          <code>npx instant-cli push schema</code> e{" "}
+          <code>npx instant-cli push perms</code>.
+        </p>
+      </div>
+    );
+  }
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f7f7f7] text-[#606060]">
-        Caricamento dashboard…
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#f7f7f7] text-[#606060]">
+        <p>{error ? "Errore connessione InstantDB…" : "Caricamento dashboard…"}</p>
       </div>
     );
   }
@@ -94,8 +212,13 @@ export function DashboardApp() {
                 type="button"
                 onClick={() => {
                   const client = addClient();
+                  pendingAssets.reset();
+                  setSaveStatus("idle");
+                  setSaveError(null);
+                  const clientCopy = cloneClient(client);
                   setSelectedId(client.id);
-                  setDraft(cloneClient(client));
+                  setDraft(clientCopy);
+                  setSavedBaseline(clientCopy);
                   setVersionIndex(0);
                 }}
                 className="rounded-full bg-[#560200] px-4 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200]"
@@ -143,18 +266,28 @@ export function DashboardApp() {
                 </button>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-2">
                 {isDirty ? (
                   <span className="text-[0.78rem] font-medium text-[#8a1f1f]">
                     Modifiche non salvate
                   </span>
+                ) : saveStatus === "saved" ? (
+                  <span className="text-[0.78rem] font-medium text-[#1f6b3a]">
+                    ✅ Modifiche salvate
+                  </span>
+                ) : null}
+                {saveError ? (
+                  <span className="text-[0.78rem] font-medium text-[#8a1f1f]">
+                    {saveError}
+                  </span>
                 ) : null}
                 <button
                   type="button"
-                  onClick={handleSave}
-                  className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200]"
+                  onClick={() => void handleSave()}
+                  disabled={isSaving || !isDirty}
+                  className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Salva
+                  {isSaving ? "Salvataggio..." : "Salva"}
                 </button>
               </div>
             </div>
@@ -173,6 +306,9 @@ export function DashboardApp() {
               }}
               canDelete={clients.length > 1}
               canRemoveCategory={draft.categories.length > 1}
+              onAssetFileSelect={handleAssetFileSelect}
+              onAssetRemove={handleAssetRemove}
+              onAssetUrlChange={handleAssetUrlChange}
             />
           </>
         ) : (
@@ -190,8 +326,13 @@ export function DashboardApp() {
                   onOpen={() => {
                     const nextEntry = getEntry(client.id);
                     if (!nextEntry) return;
+                    pendingAssets.reset();
+                    setSaveStatus("idle");
+                    setSaveError(null);
+                    const config = cloneClient(nextEntry.config);
                     setSelectedId(client.id);
-                    setDraft(cloneClient(nextEntry.config));
+                    setDraft(config);
+                    setSavedBaseline(config);
                     setVersionIndex(Math.max(0, nextEntry.versions.length - 1));
                   }}
                 />

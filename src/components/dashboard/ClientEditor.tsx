@@ -21,6 +21,7 @@ import {
 import { createPrefixedId } from "@/lib/create-id";
 import { ensureUniqueSlug, slugify } from "@/lib/client-slug";
 import { LANGUAGES } from "@/lib/languages";
+import type { ClientAssetKind } from "@/lib/instant-file-storage";
 import type {
   ClientConfig,
   ClientDish,
@@ -38,6 +39,9 @@ type ClientEditorProps = {
   onDelete: () => void;
   canDelete: boolean;
   canRemoveCategory: boolean;
+  onAssetFileSelect: (kind: ClientAssetKind, file: File) => void;
+  onAssetRemove: (kind: ClientAssetKind) => void;
+  onAssetUrlChange: (kind: ClientAssetKind, url: string) => void;
 };
 
 type ConfirmState = {
@@ -63,6 +67,9 @@ export function ClientEditor({
   onDelete,
   canDelete,
   canRemoveCategory,
+  onAssetFileSelect,
+  onAssetRemove,
+  onAssetUrlChange,
 }: ClientEditorProps) {
   const [confirm, setConfirm] = useState<ConfirmState | null>(null);
   const effectiveHeader = getEffectiveHeader(client);
@@ -312,7 +319,9 @@ export function ClientEditor({
         <LogoUploadField
           label="Logo"
           value={client.header.logoUrl}
-          onChange={(logoUrl) => updateHeader({ logoUrl })}
+          onFileSelect={(file) => onAssetFileSelect("logo", file)}
+          onRemove={() => onAssetRemove("logo")}
+          onUrlChange={(logoUrl) => onAssetUrlChange("logo", logoUrl)}
         />
 
         <div>
@@ -353,8 +362,10 @@ export function ClientEditor({
           <LogoUploadField
             label="Foto header"
             value={client.header.backgroundImageUrl}
-            onChange={(backgroundImageUrl) =>
-              updateHeader({ backgroundImageUrl })
+            onFileSelect={(file) => onAssetFileSelect("header", file)}
+            onRemove={() => onAssetRemove("header")}
+            onUrlChange={(backgroundImageUrl) =>
+              onAssetUrlChange("header", backgroundImageUrl)
             }
           />
         ) : null}
