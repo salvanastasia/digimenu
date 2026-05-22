@@ -36,7 +36,7 @@ export function MenuFooter({ restaurant, ui }: MenuFooterProps) {
         <p className="mb-8">
           <a
             href={`tel:${restaurant.phone.replace(/\s/g, "")}`}
-            className="text-[#560200] underline underline-offset-2"
+            className="underline underline-offset-2"
           >
             {restaurant.phone}
           </a>

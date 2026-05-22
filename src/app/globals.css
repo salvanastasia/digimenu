@@ -47,3 +47,7 @@ button {
 .menu-notes strong {
   font-weight: 700;
 }
+
+.client-menu a {
+  color: var(--brand-primary, #560200);
+}

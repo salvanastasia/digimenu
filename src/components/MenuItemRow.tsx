@@ -1,9 +1,11 @@
 import type { MenuItem } from "@/types/menu";
+import { HeartIcon } from "@/components/HeartIcon";
+import { useClientMenu } from "@/context/ClientMenuContext";
+import { getEffectiveHeader } from "@/lib/client-header";
 import {
   formatMenuDescription,
   shouldShowDietTags,
 } from "@/lib/format-menu-text";
-import { HeartIcon } from "@/components/HeartIcon";
 
 type MenuItemRowProps = {
   item: MenuItem;
@@ -42,6 +44,13 @@ export function MenuItemRow({
   addFavoriteLabel,
   removeFavoriteLabel,
 }: MenuItemRowProps) {
+  const clientMenu = useClientMenu();
+  const effectiveHeader = clientMenu
+    ? getEffectiveHeader(clientMenu.client)
+    : null;
+  const fabBackground = effectiveHeader?.fabBackground ?? "#F2E8D8";
+  const fabIconColor = effectiveHeader?.fabIconColor ?? "#560200";
+
   const price = formatPrice(item);
   const allergenIds =
     item.allergens?.map((allergen) => allergen.id).join(", ") ?? null;
@@ -109,9 +118,14 @@ export function MenuItemRow({
             onClick={() => onToggleFavorite(item.id)}
             className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
               favorite
-                ? "bg-[#560200] text-[#f8a5b8]"
+                ? "shadow-[0_4px_14px_rgba(0,0,0,0.12)]"
                 : "bg-transparent text-[#141415] hover:bg-[#ececec]"
             }`}
+            style={
+              favorite
+                ? { backgroundColor: fabBackground, color: fabIconColor }
+                : undefined
+            }
           >
             <HeartIcon filled={favorite} />
           </button>

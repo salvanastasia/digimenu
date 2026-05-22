@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { ClientMenuContext } from "@/context/ClientMenuContext";
 
-const STORAGE_KEY = "aribri-menu-favorites-v2";
 const LEGACY_STORAGE_KEY = "aribri-menu-favorites";
 
 export type FavoriteEntry = {
@@ -31,19 +31,21 @@ function normalizeEntries(raw: unknown): FavoriteEntry[] {
     }));
 }
 
-function loadStoredFavorites(): FavoriteEntry[] {
+function loadStoredFavorites(storageKey: string): FavoriteEntry[] {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(storageKey);
     if (stored) {
       return normalizeEntries(JSON.parse(stored));
     }
 
-    const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
-    if (legacy) {
-      const migrated = normalizeEntries(JSON.parse(legacy));
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
-      localStorage.removeItem(LEGACY_STORAGE_KEY);
-      return migrated;
+    if (storageKey === "aribri-menu-favorites-v2") {
+      const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (legacy) {
+        const migrated = normalizeEntries(JSON.parse(legacy));
+        localStorage.setItem(storageKey, JSON.stringify(migrated));
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        return migrated;
+      }
     }
   } catch {
     return [];
@@ -53,18 +55,26 @@ function loadStoredFavorites(): FavoriteEntry[] {
 }
 
 export function useFavorites() {
+  const clientMenu = useContext(ClientMenuContext);
+  const storageKey = clientMenu
+    ? `${clientMenu.slug}-menu-favorites-v2`
+    : "aribri-menu-favorites-v2";
+
   const [favorites, setFavorites] = useState<FavoriteEntry[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setFavorites(loadStoredFavorites());
+    setFavorites(loadStoredFavorites(storageKey));
     setReady(true);
-  }, []);
+  }, [storageKey]);
 
-  const persist = useCallback((next: FavoriteEntry[]) => {
-    setFavorites(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  }, []);
+  const persist = useCallback(
+    (next: FavoriteEntry[]) => {
+      setFavorites(next);
+      localStorage.setItem(storageKey, JSON.stringify(next));
+    },
+    [storageKey],
+  );
 
   const toggleFavorite = useCallback(
     (id: string) => {

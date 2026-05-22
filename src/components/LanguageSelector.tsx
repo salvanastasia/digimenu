@@ -6,10 +6,19 @@ import { useLanguage } from "@/context/LanguageContext";
 import type { Locale } from "@/types/translation";
 
 export function LanguageSelector() {
-  const { locale, setLocale, content } = useLanguage();
+  const { locale, setLocale, content, enabledLocales } = useLanguage();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const current = LANGUAGES.find((language) => language.locale === locale)!;
+  const availableLanguages = LANGUAGES.filter((language) =>
+    enabledLocales.includes(language.locale),
+  );
+  const current =
+    availableLanguages.find((language) => language.locale === locale) ??
+    availableLanguages[0];
+
+  if (!current) {
+    return null;
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -50,7 +59,7 @@ export function LanguageSelector() {
           aria-label={content.ui.selectLanguage}
           className="absolute right-0 top-[calc(100%+8px)] z-50 min-w-[180px] overflow-hidden rounded-[14px] border border-[#ececec] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.18)]"
         >
-          {LANGUAGES.map((language) => {
+          {availableLanguages.map((language) => {
             const selected = language.locale === locale;
             return (
               <button

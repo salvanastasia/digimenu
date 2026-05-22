@@ -1,7 +1,9 @@
 "use client";
 
-import { BRAND_ACCENT } from "@/components/MenuHeader";
 import { FavoritesList } from "@/components/FavoritesList";
+import { useClientMenu } from "@/context/ClientMenuContext";
+import { getEffectiveHeader } from "@/lib/client-header";
+import { BRAND_ACCENT } from "@/components/MenuHeader";
 import type { MenuCategory } from "@/types/menu";
 import type { FavoriteEntry } from "@/hooks/useFavorites";
 
@@ -36,6 +38,12 @@ export function FavoritesPanel({
   decreaseQuantityLabel,
   increaseQuantityLabel,
 }: FavoritesPanelProps) {
+  const clientMenu = useClientMenu();
+  const effectiveHeader = clientMenu
+    ? getEffectiveHeader(clientMenu.client)
+    : null;
+  const barColor = effectiveHeader?.fabBackground ?? BRAND_ACCENT;
+
   if (!open) {
     return null;
   }
@@ -52,7 +60,7 @@ export function FavoritesPanel({
       <div className="relative z-10 flex max-h-[min(92vh,920px)] w-full max-w-[640px] flex-col overflow-hidden rounded-t-[22px] bg-white shadow-[0_-12px_40px_rgba(0,0,0,0.18)]">
         <div
           className="flex shrink-0 items-center justify-between gap-4 px-5 py-4"
-          style={{ backgroundColor: BRAND_ACCENT }}
+          style={{ backgroundColor: barColor }}
         >
           <h2 className="text-[1.2rem] font-bold text-[#141415]">{title}</h2>
           <button
@@ -60,7 +68,7 @@ export function FavoritesPanel({
             aria-label={closeLabel}
             onClick={onClose}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#141415] text-[1.1rem] leading-none"
-            style={{ color: BRAND_ACCENT }}
+            style={{ color: barColor }}
           >
             ×
           </button>
