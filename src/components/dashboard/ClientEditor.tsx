@@ -346,6 +346,8 @@ export function ClientEditor({
         saveError={saveError}
         isSaving={isSaving}
         onSave={onSave}
+        menuSlug={client.slug}
+        menuHidden={client.hidden}
       />
 
       <div className="rounded-[18px] border border-[#e4e4e4] bg-white p-5">

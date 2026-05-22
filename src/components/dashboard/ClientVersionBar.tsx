@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type ClientVersionBarProps = {
   versionIndex: number;
   versionCount: number;
@@ -9,6 +11,8 @@ type ClientVersionBarProps = {
   saveError: string | null;
   isSaving: boolean;
   onSave: () => void;
+  menuSlug: string;
+  menuHidden?: boolean;
 };
 
 export function ClientVersionBar({
@@ -22,6 +26,8 @@ export function ClientVersionBar({
   saveError,
   isSaving,
   onSave,
+  menuSlug,
+  menuHidden = false,
 }: ClientVersionBarProps) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-[#e4e4e4] bg-white px-4 py-3">
@@ -72,14 +78,32 @@ export function ClientVersionBar({
             {saveError}
           </span>
         ) : null}
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={isSaving || !isDirty}
-          className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isSaving ? "Salvataggio..." : "Salva"}
-        </button>
+        {isDirty ? (
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={isSaving}
+            className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isSaving ? "Salvataggio..." : "Salva"}
+          </button>
+        ) : menuHidden ? (
+          <span
+            className="rounded-full bg-[#ececec] px-5 py-2 text-[0.84rem] font-semibold text-[#606060]"
+            title="Menu disattivato al pubblico"
+          >
+            Menu nascosto
+          </span>
+        ) : menuSlug ? (
+          <Link
+            href={`/${menuSlug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200]"
+          >
+            Apri menu
+          </Link>
+        ) : null}
       </div>
     </div>
   );
