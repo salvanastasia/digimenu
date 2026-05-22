@@ -8,6 +8,7 @@ import {
   DEFAULT_TABLE_SERVICE_FEE,
   SUBTITLE_MAX_LENGTH,
 } from "@/lib/client-defaults";
+import { createPrefixedId } from "@/lib/create-id";
 import { ensureUniqueSlug, slugify } from "@/lib/client-slug";
 import type { ClientConfig, ClientStoreEntry, ClientVersion } from "@/types/client";
 
@@ -20,7 +21,7 @@ function cloneClient(config: ClientConfig): ClientConfig {
 
 function createVersion(config: ClientConfig): ClientVersion {
   return {
-    id: `v-${crypto.randomUUID().slice(0, 8)}`,
+    id: createPrefixedId("v"),
     savedAt: new Date().toISOString(),
     config: cloneClient(config),
   };

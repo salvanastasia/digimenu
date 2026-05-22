@@ -18,6 +18,7 @@ import {
   getBrandLabelForHeaderColor,
   getEffectiveHeader,
 } from "@/lib/client-header";
+import { createPrefixedId } from "@/lib/create-id";
 import { ensureUniqueSlug, slugify } from "@/lib/client-slug";
 import { LANGUAGES } from "@/lib/languages";
 import type {
@@ -47,11 +48,11 @@ type ConfirmState = {
 };
 
 function createDishId() {
-  return `dish-${crypto.randomUUID().slice(0, 8)}`;
+  return createPrefixedId("dish");
 }
 
 function createCategoryId() {
-  return `cat-${crypto.randomUUID().slice(0, 8)}`;
+  return createPrefixedId("cat");
 }
 
 export function ClientEditor({

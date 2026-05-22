@@ -6,7 +6,8 @@ import type {
   ClientHeader,
 } from "@/types/client";
 import type { Locale } from "@/types/translation";
-import { ensureUniqueSlug, slugify } from "@/lib/client-slug";
+import { createPrefixedId } from "@/lib/create-id";
+import { slugify } from "@/lib/client-slug";
 
 export const DEFAULT_PRIMARY = "#560200";
 export const DEFAULT_SECONDARY = "#F2E8D8";
@@ -56,7 +57,7 @@ function createHeaderFromBrand(
 }
 
 function createId(prefix: string) {
-  return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
+  return createPrefixedId(prefix);
 }
 
 export function createEmptyClient(name = "Nuovo cliente"): ClientConfig {

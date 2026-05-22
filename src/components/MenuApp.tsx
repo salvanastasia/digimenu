@@ -7,9 +7,11 @@ import { FavoritesPanel } from "@/components/FavoritesPanel";
 import { FavoritesReceiptPanel } from "@/components/FavoritesReceiptPanel";
 import { MenuCategoryAccordion } from "@/components/MenuCategoryAccordion";
 import { MenuFooter } from "@/components/MenuFooter";
-import { MenuHeader } from "@/components/MenuHeader";
+import { MenuHeader, HEADER_BG } from "@/components/MenuHeader";
+import { ThemeColorSync } from "@/components/ThemeColorSync";
 import { useClientMenu } from "@/context/ClientMenuContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { getEffectiveHeader } from "@/lib/client-header";
 import { useFavorites } from "@/hooks/useFavorites";
 
 export function MenuApp() {
@@ -50,8 +52,14 @@ export function MenuApp() {
   const openFavorites = () => setFavoritesOpen(true);
   const closeFavorites = () => setFavoritesOpen(false);
 
+  const statusBarColor = clientMenu
+    ? getEffectiveHeader(clientMenu.client).backgroundColor
+    : HEADER_BG;
+
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[640px] bg-white shadow-none md:shadow-[0_0_40px_rgba(0,0,0,0.08)]">
+    <>
+      <ThemeColorSync color={statusBarColor} />
+      <div className="mx-auto min-h-screen w-full max-w-[640px] bg-white shadow-none md:shadow-[0_0_40px_rgba(0,0,0,0.08)]">
       <MenuHeader
         favoritesCount={totalQuantity}
         onOpenFavorites={openFavorites}
@@ -130,5 +138,6 @@ export function MenuApp() {
         />
       )}
     </div>
+    </>
   );
 }

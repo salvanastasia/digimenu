@@ -41,7 +41,7 @@ export function MenuHeader({
 
   return (
     <header
-      className="relative z-30 overflow-visible px-5 pb-8 pt-6 text-white"
+      className="relative z-30 overflow-visible px-5 pb-8 pt-[calc(1.5rem+env(safe-area-inset-top,0px))] text-white"
       style={headerBackgroundStyle}
     >
       {showBackgroundOverlay ? (
