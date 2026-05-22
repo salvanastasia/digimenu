@@ -2,6 +2,9 @@ import { i } from "@instantdb/react";
 
 const _schema = i.schema({
   entities: {
+    $users: i.entity({
+      email: i.string().unique().indexed().optional(),
+    }),
     $files: i.entity({
       path: i.string().unique().indexed(),
       url: i.string(),
@@ -14,8 +17,16 @@ const _schema = i.schema({
       versions: i.json(),
       updatedAt: i.string(),
     }),
+    dashboardAdmins: i.entity({
+      email: i.string().unique().indexed(),
+    }),
   },
-  links: {},
+  links: {
+    dashboardAdminUser: {
+      forward: { on: "dashboardAdmins", has: "one", label: "$user" },
+      reverse: { on: "$users", has: "one", label: "dashboardAdmin" },
+    },
+  },
   rooms: {},
 });
 

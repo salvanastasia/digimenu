@@ -17,7 +17,11 @@ import { getDefaultSeedEntriesToApply, getDuplicateDefaultCleanupClientIds } fro
 import { saveClientVersion } from "@/lib/client-store";
 import type { ClientConfig, ClientStoreEntry } from "@/types/client";
 
-export function useClients() {
+type UseClientsOptions = {
+  canWrite?: boolean;
+};
+
+export function useClients({ canWrite = false }: UseClientsOptions = {}) {
   const { isLoading, error, data } = db.useQuery({ clientMenus: {} });
   const [seedState, setSeedState] = useState<"idle" | "seeding" | "done">(
     "idle",
@@ -25,7 +29,9 @@ export function useClients() {
   const seedStarted = useRef(false);
 
   useEffect(() => {
-    if (!isInstantConfigured || isLoading || seedStarted.current) return;
+    if (!canWrite || !isInstantConfigured || isLoading || seedStarted.current) {
+      return;
+    }
 
     if ((data?.clientMenus?.length ?? 0) > 0) {
       setSeedState("done");
@@ -42,7 +48,13 @@ export function useClients() {
       .finally(() => {
         setSeedState("done");
       });
-  }, [data?.clientMenus, isLoading]);
+  }, [canWrite, data?.clientMenus, isLoading]);
+
+  useEffect(() => {
+    if (!canWrite) {
+      setSeedState("done");
+    }
+  }, [canWrite]);
 
   const entries = useMemo(
     () =>
@@ -53,7 +65,9 @@ export function useClients() {
   );
 
   useEffect(() => {
-    if (!isInstantConfigured || isLoading || seedState !== "done") return;
+    if (!canWrite || !isInstantConfigured || isLoading || seedState !== "done") {
+      return;
+    }
 
     const presentIds = new Set(entries.map((entry) => entry.config.id));
     const defaultEntries = getDefaultSeedEntriesToApply(entries);
@@ -66,10 +80,10 @@ export function useClients() {
     if (transactions.length === 0) return;
 
     void db.transact(transactions);
-  }, [entries, isLoading, seedState]);
+  }, [canWrite, entries, isLoading, seedState]);
 
   const ready =
-    isInstantConfigured && !isLoading && seedState === "done" && !error;
+    isInstantConfigured && !isLoading && (!canWrite || seedState === "done") && !error;
 
   const clients = useMemo(
     () => entries.map((entry) => entry.config),

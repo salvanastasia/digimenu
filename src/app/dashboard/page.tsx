@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DashboardApp } from "@/components/dashboard/DashboardApp";
+import { DashboardGate } from "@/components/dashboard/DashboardGate";
 
 export const metadata: Metadata = {
   title: "Dashboard clienti · DigiMenu",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  return <DashboardApp />;
+  return <DashboardGate />;
 }

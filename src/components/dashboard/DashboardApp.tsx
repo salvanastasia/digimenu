@@ -2,9 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { DashboardAdminsPanel } from "@/components/dashboard/DashboardAdminsPanel";
 import { ClientCard } from "@/components/dashboard/ClientCard";
 import { ClientEditor } from "@/components/dashboard/ClientEditor";
 import { useClients } from "@/hooks/useClients";
+import { useDashboardAdmin } from "@/hooks/useDashboardAdmin";
+import { db } from "@/lib/db";
 import { usePendingClientAssets } from "@/hooks/usePendingClientAssets";
 import type { ClientAssetKind } from "@/lib/instant-file-storage";
 import type { ClientConfig } from "@/types/client";
@@ -14,13 +17,13 @@ export function DashboardApp() {
     clients,
     ready,
     error,
-    isInstantConfigured,
     addClient,
     removeClient,
     getEntry,
     saveClient,
     cloneClient,
-  } = useClients();
+  } = useClients({ canWrite: true });
+  const { email: adminEmail } = useDashboardAdmin();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draft, setDraft] = useState<ClientConfig | null>(null);
   const [versionIndex, setVersionIndex] = useState(0);
@@ -156,22 +159,6 @@ export function DashboardApp() {
     setSavedBaseline(versionConfig);
   };
 
-  if (!isInstantConfigured) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#f7f7f7] px-6 text-center">
-        <h1 className="text-[1.4rem] font-bold text-[#141415]">
-          InstantDB non configurato
-        </h1>
-        <p className="max-w-lg text-[0.95rem] leading-relaxed text-[#606060]">
-          Aggiungi <code>NEXT_PUBLIC_INSTANT_APP_ID</code> al file{" "}
-          <code>.env</code>, poi esegui{" "}
-          <code>npx instant-cli push schema</code> e{" "}
-          <code>npx instant-cli push perms</code>.
-        </p>
-      </div>
-    );
-  }
-
   if (!ready) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#f7f7f7] text-[#606060]">
@@ -201,6 +188,13 @@ export function DashboardApp() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => void db.auth.signOut()}
+              className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.84rem] font-semibold text-[#606060] transition-colors hover:bg-[#f5f5f5]"
+            >
+              Esci
+            </button>
             <Link
               href={menuHref}
               className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.84rem] font-semibold text-[#141415] transition-colors hover:bg-[#f5f5f5]"
@@ -262,6 +256,8 @@ export function DashboardApp() {
             />
         ) : (
           <>
+            <DashboardAdminsPanel currentEmail={adminEmail} />
+
             <p className="mb-5 text-[0.92rem] text-[#606060]">
               Seleziona un cliente per modificare brand, header, lingue e piatti.
               Usa Salva per creare un backup versionato.

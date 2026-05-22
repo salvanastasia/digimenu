@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "generate:translations": "python3 scripts/build-static-translations.py",
-    "instant:push": "env -u INSTANT_APP_ADMIN_TOKEN -u INSTANT_ADMIN_TOKEN npx instant-cli push schema && env -u INSTANT_APP_ADMIN_TOKEN -u INSTANT_ADMIN_TOKEN npx instant-cli push perms",
+    "instant:push": "env -u INSTANT_APP_ADMIN_TOKEN -u INSTANT_ADMIN_TOKEN npx instant-cli push schema --yes && env -u INSTANT_APP_ADMIN_TOKEN -u INSTANT_ADMIN_TOKEN npx instant-cli push perms --yes",
     "seed:instant": "tsx scripts/seed-instant-clients.ts"
   },
   "dependencies": {
