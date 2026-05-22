@@ -1,5 +1,6 @@
 import { tx } from "@instantdb/react";
 import { db, isInstantConfigured } from "@/lib/db";
+import type { ClientConfig } from "@/types/client";
 
 export const CLIENT_ASSET_PATH_PREFIX = "clients";
 
@@ -39,6 +40,91 @@ export function clientAssetPathPrefix(
   kind: ClientAssetKind,
 ): string {
   return `${CLIENT_ASSET_PATH_PREFIX}/${clientId}/${kind}.`;
+}
+
+export function clientAssetsPathLike(clientId: string) {
+  return `${CLIENT_ASSET_PATH_PREFIX}/${clientId}/%`;
+}
+
+type StoredClientAssets = {
+  logoUrl?: string;
+  backgroundImageUrl?: string;
+};
+
+type InstantFileRow = {
+  path: string;
+  url: string;
+};
+
+export function storedAssetsFromFileRows(
+  files: InstantFileRow[] | undefined,
+): StoredClientAssets {
+  const assets: StoredClientAssets = {};
+
+  for (const file of files ?? []) {
+    if (!file.url) continue;
+    if (file.path.includes("/logo.")) {
+      assets.logoUrl = file.url;
+    } else if (file.path.includes("/header.")) {
+      assets.backgroundImageUrl = file.url;
+    }
+  }
+
+  return assets;
+}
+
+const DEFAULT_LOGO_URL = "/logo.svg";
+
+export function isPlaceholderLogoUrl(url: string) {
+  return !url || url === DEFAULT_LOGO_URL;
+}
+
+/** Merge Instant Storage URLs into config when config still has placeholders. */
+export function mergeConfigWithStoredAssets(
+  config: ClientConfig,
+  assets: StoredClientAssets,
+): ClientConfig {
+  const header = { ...config.header };
+  let changed = false;
+
+  if (assets.logoUrl && isPlaceholderLogoUrl(header.logoUrl)) {
+    header.logoUrl = assets.logoUrl;
+    changed = true;
+  }
+
+  if (assets.backgroundImageUrl && !header.backgroundImageUrl) {
+    header.backgroundImageUrl = assets.backgroundImageUrl;
+    header.backgroundMode = "image";
+    changed = true;
+  }
+
+  if (!changed) return config;
+
+  return {
+    ...config,
+    header,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export async function fetchClientAssetUrls(
+  clientId: string,
+): Promise<StoredClientAssets> {
+  if (!isInstantConfigured) return {};
+
+  const snapshot = await db.queryOnce({
+    $files: {
+      $: {
+        where: {
+          path: { $like: clientAssetsPathLike(clientId) },
+        },
+      },
+    },
+  });
+
+  return storedAssetsFromFileRows(
+    snapshot.data.$files as InstantFileRow[] | undefined,
+  );
 }
 
 export async function deleteClientAssets(

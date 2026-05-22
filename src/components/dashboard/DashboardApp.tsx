@@ -7,7 +7,11 @@ import { ClientEditor } from "@/components/dashboard/ClientEditor";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { useClients } from "@/hooks/useClients";
 import { usePendingClientAssets } from "@/hooks/usePendingClientAssets";
-import type { ClientAssetKind } from "@/lib/instant-file-storage";
+import {
+  fetchClientAssetUrls,
+  mergeConfigWithStoredAssets,
+  type ClientAssetKind,
+} from "@/lib/instant-file-storage";
 import type { ClientConfig } from "@/types/client";
 
 export function DashboardApp() {
@@ -36,17 +40,33 @@ export function DashboardApp() {
 
   const newClientFromQueryHandled = useRef(false);
 
+  const openClientEditor = useCallback(
+    async (clientId: string) => {
+      const nextEntry = getEntry(clientId);
+      if (!nextEntry) return;
+
+      pendingAssets.reset();
+      setSaveStatus("idle");
+      setSaveError(null);
+
+      const assets = await fetchClientAssetUrls(clientId);
+      const config = mergeConfigWithStoredAssets(
+        cloneClient(nextEntry.config),
+        assets,
+      );
+
+      setSelectedId(clientId);
+      setDraft(config);
+      setSavedBaseline(config);
+      setVersionIndex(Math.max(0, nextEntry.versions.length - 1));
+    },
+    [cloneClient, getEntry, pendingAssets],
+  );
+
   const openNewClient = useCallback(() => {
     const client = addClient();
-    pendingAssets.reset();
-    setSaveStatus("idle");
-    setSaveError(null);
-    const clientCopy = cloneClient(client);
-    setSelectedId(client.id);
-    setDraft(clientCopy);
-    setSavedBaseline(clientCopy);
-    setVersionIndex(0);
-  }, [addClient, cloneClient, pendingAssets]);
+    void openClientEditor(client.id);
+  }, [addClient, openClientEditor]);
 
   useEffect(() => {
     if (
@@ -240,18 +260,7 @@ export function DashboardApp() {
                 <ClientCard
                   key={client.id}
                   client={client}
-                  onOpen={() => {
-                    const nextEntry = getEntry(client.id);
-                    if (!nextEntry) return;
-                    pendingAssets.reset();
-                    setSaveStatus("idle");
-                    setSaveError(null);
-                    const config = cloneClient(nextEntry.config);
-                    setSelectedId(client.id);
-                    setDraft(config);
-                    setSavedBaseline(config);
-                    setVersionIndex(Math.max(0, nextEntry.versions.length - 1));
-                  }}
+                  onOpen={() => void openClientEditor(client.id)}
                 />
               ))}
             </div>

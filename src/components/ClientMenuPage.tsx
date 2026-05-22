@@ -11,6 +11,12 @@ import {
   type InstantClientMenuRow,
 } from "@/lib/instant-client-sync";
 import { clientToMenuContent } from "@/lib/client-to-menu";
+import {
+  CLIENT_ASSET_PATH_PREFIX,
+  clientAssetsPathLike,
+  mergeConfigWithStoredAssets,
+  storedAssetsFromFileRows,
+} from "@/lib/instant-file-storage";
 
 type ClientMenuPageProps = {
   slug: string;
@@ -27,11 +33,31 @@ export function ClientMenuPage({ slug }: ClientMenuPageProps) {
     },
   });
 
+  const menuRow = data?.clientMenus?.[0] as InstantClientMenuRow | undefined;
+  const clientId = menuRow?.clientId;
+
+  const { data: filesData, isLoading: filesLoading } = db.useQuery({
+    $files: {
+      $: {
+        where: {
+          path: {
+            $like: clientId
+              ? clientAssetsPathLike(clientId)
+              : `${CLIENT_ASSET_PATH_PREFIX}/__no_match__/%`,
+          },
+        },
+      },
+    },
+  });
+
   const client = useMemo(() => {
-    const row = data?.clientMenus?.[0] as InstantClientMenuRow | undefined;
-    if (!row) return null;
-    return rowToEntry(row).config;
-  }, [data?.clientMenus]);
+    if (!menuRow) return null;
+    const base = rowToEntry(menuRow).config;
+    const assets = storedAssetsFromFileRows(
+      filesData?.$files as { path: string; url: string }[] | undefined,
+    );
+    return mergeConfigWithStoredAssets(base, assets);
+  }, [menuRow, filesData?.$files]);
 
   if (!isInstantConfigured) {
     return (
@@ -53,7 +79,7 @@ export function ClientMenuPage({ slug }: ClientMenuPageProps) {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || (clientId && filesLoading)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f7f7f7] text-[#606060]">
         Caricamento menu…
