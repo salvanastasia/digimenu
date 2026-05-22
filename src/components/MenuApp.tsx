@@ -13,6 +13,7 @@ import { useClientMenu } from "@/context/ClientMenuContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { getEffectiveHeader } from "@/lib/client-header";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 export function MenuApp() {
   const { content, translationError } = useLanguage();
@@ -51,6 +52,8 @@ export function MenuApp() {
 
   const openFavorites = () => setFavoritesOpen(true);
   const closeFavorites = () => setFavoritesOpen(false);
+
+  useLockBodyScroll(favoritesOpen);
 
   const statusBarColor = clientMenu
     ? getEffectiveHeader(clientMenu.client).backgroundColor

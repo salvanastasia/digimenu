@@ -1,5 +1,6 @@
 "use client";
 
+import { forwardRef } from "react";
 import { FavoriteReceiptItemRow } from "@/components/FavoriteReceiptItemRow";
 import { ClientLogo } from "@/components/ClientLogo";
 import { useClientMenu } from "@/context/ClientMenuContext";
@@ -46,13 +47,13 @@ function formatTotal(amount: number) {
   }).format(amount);
 }
 
-export function FavoritesReceiptList({
-  emptyMessage,
-  listTitle,
-  totalLabel,
-  categories,
-  favorites,
-}: FavoritesReceiptListProps) {
+export const FavoritesReceiptList = forwardRef<
+  HTMLDivElement,
+  FavoritesReceiptListProps
+>(function FavoritesReceiptList(
+  { emptyMessage, listTitle, totalLabel, categories, favorites },
+  ref,
+) {
   const { content, locale } = useLanguage();
   const { restaurant } = content;
   const clientMenu = useClientMenu();
@@ -99,7 +100,10 @@ export function FavoritesReceiptList({
 
   if (sections.length === 0) {
     return (
-      <div className="relative w-full max-w-[300px] bg-[#fffdf8] px-5 py-8 text-center font-mono text-[0.72rem] leading-relaxed text-[#606060] shadow-[0_10px_36px_rgba(0,0,0,0.16)]">
+      <div
+        ref={ref}
+        className="relative mx-auto w-full max-w-[300px] bg-[#fffdf8] px-5 py-8 text-center font-mono text-[0.72rem] leading-relaxed text-[#606060] shadow-[0_10px_36px_rgba(0,0,0,0.16)]"
+      >
         {emptyMessage}
         <ReceiptZigzag />
       </div>
@@ -107,7 +111,11 @@ export function FavoritesReceiptList({
   }
 
   return (
-    <article className="relative w-full max-w-[300px] bg-[#fffdf8] px-5 py-6 font-mono text-[0.72rem] leading-relaxed text-[#1a1a1a] shadow-[0_10px_36px_rgba(0,0,0,0.16)]">
+    <div
+      ref={ref}
+      role="article"
+      className="relative mx-auto w-full max-w-[300px] bg-[#fffdf8] px-5 py-6 font-mono text-[0.72rem] leading-relaxed text-[#1a1a1a] shadow-[0_10px_36px_rgba(0,0,0,0.16)]"
+    >
       <div className="text-center">
         {hasLogo ? (
           <ClientLogo
@@ -179,6 +187,6 @@ export function FavoritesReceiptList({
       </p>
 
       <ReceiptZigzag />
-    </article>
+    </div>
   );
-}
+});

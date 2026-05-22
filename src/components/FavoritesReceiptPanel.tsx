@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef, useState } from "react";
 import { FavoritesReceiptList } from "@/components/FavoritesReceiptList";
 import { useClientMenu } from "@/context/ClientMenuContext";
 import type { FavoriteEntry } from "@/hooks/useFavorites";
@@ -33,6 +34,31 @@ export function FavoritesReceiptPanel({
   const clientMenu = useClientMenu();
   const accentColor = clientMenu?.client.brand.secondaryColor ?? "#F2E8D8";
   const primaryColor = clientMenu?.client.brand.primaryColor ?? "#560200";
+  const receiptRef = useRef<HTMLDivElement>(null);
+  const [closePos, setClosePos] = useState<{ top: number; left: number } | null>(
+    null,
+  );
+
+  useLayoutEffect(() => {
+    if (!open) {
+      setClosePos(null);
+      return;
+    }
+
+    const update = () => {
+      const el = receiptRef.current;
+      if (!el) return;
+      const { top, right } = el.getBoundingClientRect();
+      setClosePos({ top, left: right });
+    };
+
+    update();
+    window.addEventListener("resize", update);
+
+    return () => {
+      window.removeEventListener("resize", update);
+    };
+  }, [open, favorites, categories]);
 
   if (!open) {
     return null;
@@ -41,35 +67,41 @@ export function FavoritesReceiptPanel({
   const hasItems = favorites.length > 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-8 pt-16">
+    <div className="fixed inset-0 z-50 overflow-hidden flex items-end justify-center px-4 pb-8 pt-16">
       <button
         type="button"
         aria-label={closeLabel}
         onClick={onClose}
-        className="absolute inset-0 bg-[#141415]/35"
+        className="absolute inset-0 touch-none bg-[#141415]/35"
       />
 
-      <div className="relative z-10 flex w-full max-w-[640px] flex-col items-center gap-4">
+      {closePos ? (
         <button
           type="button"
           aria-label={closeLabel}
           onClick={onClose}
-          className="absolute -top-2 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-[#141415] text-[1.1rem] leading-none shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
-          style={{ color: accentColor }}
+          className="fixed z-[60] flex h-10 w-10 items-center justify-center rounded-full bg-[#141415] text-[1.1rem] leading-none shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
+          style={{
+            top: closePos.top,
+            left: closePos.left,
+            transform: "translate(-50%, -50%)",
+            color: accentColor,
+          }}
         >
           ×
         </button>
+      ) : null}
 
+      <div className="relative z-10 flex w-full max-w-[640px] flex-col items-center gap-4">
         <div className="max-h-[min(78vh,720px)] w-full overflow-y-auto overscroll-contain px-1 pb-2 pt-2">
-          <div className="flex justify-center">
-            <FavoritesReceiptList
-              emptyMessage={emptyMessage}
-              listTitle={title}
-              totalLabel={totalLabel}
-              categories={categories}
-              favorites={favorites}
-            />
-          </div>
+          <FavoritesReceiptList
+            ref={receiptRef}
+            emptyMessage={emptyMessage}
+            listTitle={title}
+            totalLabel={totalLabel}
+            categories={categories}
+            favorites={favorites}
+          />
         </div>
 
         {hasItems ? (
