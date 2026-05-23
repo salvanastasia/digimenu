@@ -9,9 +9,12 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Il menu digitale di aribrì",
+  title: {
+    default: "DigiMenu — Menu digitale per ristoranti",
+    template: "%s · DigiMenu",
+  },
   description:
-    "Menu digitale di aribrì Ristorante Pizzeria B&B a San Pancrazio Salentino.",
+    "Menu digitale multilingue per ristoranti e locali. Brand personalizzato, preferiti, allergeni e dashboard centralizzata.",
   appleWebApp: {
     statusBarStyle: "black-translucent",
   },
