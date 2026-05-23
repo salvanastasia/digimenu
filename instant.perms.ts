@@ -34,6 +34,15 @@ const rules = {
     },
     bind: adminBind,
   },
+  contactRequests: {
+    allow: {
+      view: "isDashboardAdmin",
+      create: "false",
+      update: "isDashboardAdmin",
+      delete: "isDashboardAdmin",
+    },
+    bind: adminBind,
+  },
 } satisfies InstantRules;
 
 export default rules;

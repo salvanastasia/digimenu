@@ -20,6 +20,15 @@ const _schema = i.schema({
     dashboardAdmins: i.entity({
       email: i.string().unique().indexed(),
     }),
+    contactRequests: i.entity({
+      firstName: i.string(),
+      lastName: i.string(),
+      businessName: i.string().optional(),
+      phone: i.string(),
+      email: i.string().indexed(),
+      read: i.boolean(),
+      createdAt: i.string(),
+    }),
   },
   links: {
     dashboardAdminUser: {

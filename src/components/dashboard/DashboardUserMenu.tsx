@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { db } from "@/lib/db";
+import { useContactRequests } from "@/hooks/useContactRequests";
 
 export function DashboardUserMenu() {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const { unreadCount } = useContactRequests();
 
   useEffect(() => {
     if (!open) return;
@@ -53,6 +55,19 @@ export function DashboardUserMenu() {
           role="menu"
           className="absolute right-0 z-50 mt-2 min-w-[11rem] overflow-hidden rounded-[12px] border border-[#e4e4e4] bg-white py-1 shadow-lg"
         >
+          <Link
+            href="/richieste"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+            className="flex items-center justify-between gap-3 px-4 py-2.5 text-[0.88rem] font-medium text-[#141415] transition-colors hover:bg-[#f5f5f5]"
+          >
+            <span>Richieste</span>
+            {unreadCount > 0 ? (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#560200] px-1.5 text-[0.68rem] font-bold tabular-nums text-white">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            ) : null}
+          </Link>
           <Link
             href="/settings"
             role="menuitem"

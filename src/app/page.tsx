@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LandingPage } from "@/components/landing/LandingPage";
+import { JoinUsProvider } from "@/components/landing/JoinUsProvider";
 
 export const metadata: Metadata = {
   title: "DigiMenu — Menu digitale per ristoranti",
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <LandingPage />;
+  return (
+    <JoinUsProvider>
+      <LandingPage />
+    </JoinUsProvider>
+  );
 }

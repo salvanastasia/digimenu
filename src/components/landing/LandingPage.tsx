@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { JoinUsButton } from "@/components/landing/JoinUsProvider";
 
 const FEATURES = [
   {
@@ -72,12 +73,7 @@ export function LandingPage() {
             >
               Esempio live
             </Link>
-            <Link
-              href="/dashboard"
-              className="rounded-full bg-[#560200] px-4 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200]"
-            >
-              Dashboard
-            </Link>
+            <JoinUsButton variant="primary" />
           </nav>
         </div>
       </header>
@@ -106,12 +102,7 @@ export function LandingPage() {
                 dashboard, senza ristampe.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href="/dashboard"
-                  className="rounded-full bg-[#f2e8d8] px-5 py-3 text-[0.92rem] font-semibold text-[#560200] transition-transform hover:scale-[1.02]"
-                >
-                  Vai alla dashboard
-                </Link>
+                <JoinUsButton variant="secondary" />
                 <Link
                   href="/aribri"
                   className="rounded-full border border-white/30 px-5 py-3 text-[0.92rem] font-semibold text-white transition-colors hover:bg-white/10"
@@ -232,16 +223,11 @@ export function LandingPage() {
               Pronto a digitalizzare il tuo menu?
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-[1rem] leading-relaxed text-[#f2e8d8]">
-              Accedi alla dashboard per creare o modificare i menu dei tuoi
-              clienti. Ogni locale ha il suo link pubblico e il suo brand.
+              Raccontaci del tuo locale: il nostro staff ti ricontatta per
+              configurare il menu digitale su misura.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/dashboard"
-                className="rounded-full bg-[#f2e8d8] px-5 py-3 text-[0.92rem] font-semibold text-[#560200] transition-transform hover:scale-[1.02]"
-              >
-                Apri la dashboard
-              </Link>
+              <JoinUsButton variant="secondary" />
               <Link
                 href="/aribri"
                 className="rounded-full border border-white/30 px-5 py-3 text-[0.92rem] font-semibold text-white transition-colors hover:bg-white/10"
@@ -260,9 +246,7 @@ export function LandingPage() {
             digitale per ristoranti
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/dashboard" className="font-semibold hover:text-[#560200]">
-              Dashboard
-            </Link>
+            <JoinUsButton variant="ghost" />
             <Link href="/aribri" className="font-semibold hover:text-[#560200]">
               Menu demo
             </Link>
