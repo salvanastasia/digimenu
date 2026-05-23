@@ -37,11 +37,12 @@ export function formatTableServiceFee(fee: number | null): string | undefined {
 
 export const FONT_OPTIONS = [
   { value: "Manrope, sans-serif", label: "Manrope" },
-  { value: "Inter, sans-serif", label: "Inter" },
+  { value: "'Inter Tight', sans-serif", label: "Inter Tight" },
   { value: "'Instrument Sans', sans-serif", label: "Instrument Sans" },
   { value: "Fraunces, serif", label: "Fraunces" },
   { value: "Geist, sans-serif", label: "Geist Sans" },
-  { value: "'IBM Plex Mono', monospace", label: "IBM Plex Mono" },
+  { value: "'Epilogue', sans-serif", label: "Epilogue" },
+  { value: "'JetBrains Mono', monospace", label: "JetBrains Mono" },
   { value: "Georgia, serif", label: "Georgia" },
   { value: "'Playfair Display', serif", label: "Playfair Display" },
   { value: "system-ui, sans-serif", label: "System UI" },
