@@ -198,22 +198,35 @@ export function LandingPage() {
               </h2>
             </div>
 
-            <ol className="mt-10 grid gap-4 lg:grid-cols-3">
-              {STEPS.map((item) => (
-                <li
-                  key={item.step}
-                  className="rounded-[18px] border border-[#ececec] bg-[#fafafa] p-5"
-                >
-                  <p className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-[#560200]">
-                    {item.step}
-                  </p>
-                  <h3 className="mt-3 text-[1.05rem] font-bold">{item.title}</h3>
-                  <p className="mt-2 text-[0.9rem] leading-relaxed text-[#606060]">
-                    {item.description}
-                  </p>
-                </li>
-              ))}
-            </ol>
+            <div className="mt-10 grid gap-8 md:grid-cols-2 md:items-stretch md:gap-10">
+              <ol className="flex flex-col gap-4 md:h-full md:min-h-0">
+                {STEPS.map((item) => (
+                  <li
+                    key={item.step}
+                    className="flex flex-col rounded-[18px] border border-[#ececec] bg-[#fafafa] p-5 md:flex-1 md:p-6"
+                  >
+                    <p className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-[#560200] md:text-[clamp(2.25rem,3.5vw,3.5rem)] md:font-bold md:leading-none md:tracking-[-0.04em]">
+                      {item.step}
+                    </p>
+                    <h3 className="mt-3 text-[1.05rem] font-bold md:mt-3">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-[0.9rem] leading-relaxed text-[#606060]">
+                      {item.description}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+
+              <div className="aspect-square w-full overflow-hidden rounded-[18px] border border-[#e4e4e4] bg-[#fafafa] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/landing-menu-photo.jpg"
+                  alt="Cliente consulta il menu digitale DigiMenu al ristorante"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </div>
           </div>
         </section>
 
