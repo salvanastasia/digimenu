@@ -52,7 +52,7 @@ export function MenuHeader({
           aria-hidden="true"
         />
       ) : null}
-      <div className="relative z-30 flex items-center justify-between gap-3">
+      <div className="relative z-20 flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           <ClientLogo
             client={clientMenu?.client}
@@ -86,7 +86,7 @@ export function MenuHeader({
 
       {restaurant.subtitle ? (
         <p
-          className="relative z-30 mt-3 truncate whitespace-nowrap text-[0.62rem] font-medium uppercase tracking-[0.12em] sm:text-[0.72rem] sm:tracking-[0.28em]"
+          className="relative z-0 mt-3 truncate whitespace-nowrap text-[0.62rem] font-medium uppercase tracking-[0.12em] sm:text-[0.72rem] sm:tracking-[0.28em]"
           style={{ color: sloganColor }}
         >
           {restaurant.subtitle}

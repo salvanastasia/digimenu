@@ -69,7 +69,7 @@ export function MenuApp() {
       />
 
       <main
-        className={`relative z-0 space-y-3 px-3 pt-3 ${totalQuantity > 0 ? "pb-24" : "pb-6"}`}
+        className={`relative z-0 space-y-3 px-3 pt-3 ${totalQuantity > 0 ? "pb-24" : "pb-0"}`}
       >
         {translationError ? (
           <div className="rounded-[15px] bg-[#fff1f1] px-4 py-3 text-[0.88rem] text-[#8a1f1f]">

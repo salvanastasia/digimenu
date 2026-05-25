@@ -12,7 +12,7 @@ export function AllergenList({ allergens, title }: AllergenListProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <section className="px-5 py-7 text-[0.85rem] leading-relaxed text-[#141415]">
+    <section className="px-5 pt-3 pb-7 text-[0.85rem] leading-relaxed text-[#141415]">
       <button
         type="button"
         aria-expanded={open}
