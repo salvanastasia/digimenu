@@ -28,7 +28,7 @@ export function buildClientTranslationBundle(
   if (!variable) return null;
 
   const tableServiceFee =
-    formatTableServiceFee(client.tableServiceFee) ?? undefined;
+    formatTableServiceFee(client.tableServiceFee, locale) ?? undefined;
   const fixed = getFixedTranslationParts(locale, tableServiceFee);
   const translateDishNames =
     client.customizations.translateDishNames ??

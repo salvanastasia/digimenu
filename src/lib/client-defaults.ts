@@ -25,15 +25,45 @@ export const DEFAULT_CUSTOMIZATIONS: ClientCustomizations = {
   showFavoritesPrices: true,
 };
 
-export function formatTableServiceFee(fee: number | null): string | undefined {
+const TABLE_SERVICE_FEE_LABELS: Record<Locale, string> = {
+  it: "Servizio al tavolo",
+  en: "Table service",
+  fr: "Service à table",
+  de: "Tischservice",
+  es: "Servicio en mesa",
+};
+
+const TABLE_SERVICE_FEE_LOCALES: Record<Locale, string> = {
+  it: "it-IT",
+  en: "en-GB",
+  fr: "fr-FR",
+  de: "de-DE",
+  es: "es-ES",
+};
+
+export function formatTableServiceFee(
+  fee: number | null,
+  locale: Locale = "it",
+): string | undefined {
   if (fee == null) return undefined;
 
-  const formatted = new Intl.NumberFormat("it-IT", {
+  const formatted = new Intl.NumberFormat(TABLE_SERVICE_FEE_LOCALES[locale], {
     minimumFractionDigits: fee % 1 === 0 ? 0 : 1,
     maximumFractionDigits: 2,
   }).format(fee);
 
-  return `Servizio al tavolo: ${formatted}€`;
+  const label = TABLE_SERVICE_FEE_LABELS[locale];
+
+  switch (locale) {
+    case "en":
+      return `${label}: €${formatted}`;
+    case "fr":
+    case "de":
+    case "es":
+      return `${label} : ${formatted} €`;
+    default:
+      return `${label}: ${formatted}€`;
+  }
 }
 
 export const FONT_OPTIONS = [
