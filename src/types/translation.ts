@@ -24,6 +24,7 @@ export type UiStrings = {
   wifiConnectLabel: string;
   wifiConnectSubtitle: string;
   wifiConnectHint: string;
+  wifiConnectHintOpen: string;
 };
 
 export type TranslationPayload = {

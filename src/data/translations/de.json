@@ -22,8 +22,9 @@
     "increaseQuantity": "Menge erhöhen",
     "listTotal": "Gesamt",
     "wifiConnectLabel": "Mit unserem WLAN verbinden",
-    "wifiConnectSubtitle": "Tippen Sie hier, um das Passwort zu kopieren",
-    "wifiConnectHint": "<strong>Passwort kopiert.</strong> Öffnen Sie <strong>Einstellungen → WLAN</strong>, wählen Sie „{ssid}“ und <strong>fügen Sie es ein</strong>."
+    "wifiConnectSubtitle": "Tippen, um das Passwort zu kopieren",
+    "wifiConnectHint": "<strong>Passwort kopiert.</strong> Öffnen Sie <strong>Einstellungen → WLAN</strong>, wählen Sie „{ssid}“ und <strong>fügen Sie es ein</strong>.",
+    "wifiConnectHintOpen": "Verbinden Sie sich in den Telefoneinstellungen mit „{ssid}“. Kein Passwort erforderlich."
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",

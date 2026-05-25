@@ -48,6 +48,10 @@ export function openMobileWifiSettings(): boolean {
   return false;
 }
 
+export function hasWifiPassword(password: string): boolean {
+  return password.trim().length > 0;
+}
+
 export async function prepareWifiConnection({
   ssid,
   password,

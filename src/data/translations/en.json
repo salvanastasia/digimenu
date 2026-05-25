@@ -21,9 +21,10 @@
     "decreaseQuantity": "Decrease quantity",
     "increaseQuantity": "Increase quantity",
     "listTotal": "Total",
-    "wifiConnectLabel": "Connect to our Wi-Fi",
-    "wifiConnectSubtitle": "Tap here to copy the password",
-    "wifiConnectHint": "<strong>Password copied.</strong> Open <strong>Settings → Wi‑Fi</strong>, select “{ssid}”, and <strong>paste</strong>."
+    "wifiConnectLabel": "Connect to our Wi‑Fi",
+    "wifiConnectSubtitle": "Tap to copy the password",
+    "wifiConnectHint": "<strong>Password copied.</strong> Open <strong>Settings → Wi‑Fi</strong>, select “{ssid}”, and <strong>paste</strong>.",
+    "wifiConnectHintOpen": "Connect to “{ssid}” from your phone settings. No password required."
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",

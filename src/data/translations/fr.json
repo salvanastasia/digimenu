@@ -21,9 +21,10 @@
     "decreaseQuantity": "Diminuer la quantité",
     "increaseQuantity": "Augmenter la quantité",
     "listTotal": "Total",
-    "wifiConnectLabel": "Connectez-vous à notre Wi-Fi",
-    "wifiConnectSubtitle": "Appuyez ici pour copier le mot de passe",
-    "wifiConnectHint": "<strong>Mot de passe copié.</strong> Ouvrez <strong>Réglages → Wi‑Fi</strong>, sélectionnez « {ssid} » et <strong>collez</strong>."
+    "wifiConnectLabel": "Connectez-vous à notre Wi‑Fi",
+    "wifiConnectSubtitle": "Appuyez pour copier le mot de passe",
+    "wifiConnectHint": "<strong>Mot de passe copié.</strong> Ouvrez <strong>Réglages → Wi‑Fi</strong>, sélectionnez « {ssid} » et <strong>collez</strong>.",
+    "wifiConnectHintOpen": "Connectez-vous au réseau « {ssid} » depuis les réglages de votre téléphone. Aucun mot de passe requis."
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · Chambres d'hôtes",
