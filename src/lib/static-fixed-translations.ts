@@ -30,6 +30,22 @@ export function buildClientTranslationBundle(
   const tableServiceFee =
     formatTableServiceFee(client.tableServiceFee) ?? undefined;
   const fixed = getFixedTranslationParts(locale, tableServiceFee);
+  const translateDishNames =
+    client.customizations.translateDishNames ??
+    true;
+
+  const items = Object.fromEntries(
+    Object.entries(variable.items).map(([id, translation]) => {
+      if (translateDishNames) {
+        return [id, translation];
+      }
+
+      const italianName =
+        client.dishes.find((dish) => dish.id === id)?.name ?? translation.name;
+
+      return [id, { ...translation, name: italianName }];
+    }),
+  );
 
   return {
     version: variable.version,
@@ -41,7 +57,7 @@ export function buildClientTranslationBundle(
       notes: fixed.restaurantNotes,
     },
     categories: variable.categories,
-    items: variable.items,
+    items,
     allergens: fixed.allergens,
   };
 }

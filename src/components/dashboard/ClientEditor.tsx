@@ -10,6 +10,7 @@ import { AiDescriptionButton } from "@/components/dashboard/AiDescriptionButton"
 import { AiSparklesIcon } from "@/components/dashboard/AiSparklesIcon";
 import { ConfirmDialog } from "@/components/dashboard/ConfirmDialog";
 import { ClientVersionBar } from "@/components/dashboard/ClientVersionBar";
+import { SettingsToggle } from "@/components/dashboard/SettingsToggle";
 import {
   ColorField,
   Section,
@@ -1021,56 +1022,31 @@ export function ClientEditor({
           </p>
         </div>
 
-        <div className="mt-5 space-y-4">
-          {(
-            [
-              {
-                key: "showFavoritesQuantity" as const,
-                label: "Quantità",
-                hint: "Selettore quantità nel pannello preferiti.",
-              },
-              {
-                key: "showFavoritesPrices" as const,
-                label: "Prezzi",
-                hint: "Prezzi nel pannello e nello scontrino preferiti.",
-              },
-            ] as const
-          ).map((option) => (
-            <div key={option.key}>
-              <p className="mb-2 text-[0.78rem] font-semibold text-[#606060]">
-                {option.label}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {(
-                  [
-                    { value: true, label: "Mostra" },
-                    { value: false, label: "Nascondi" },
-                  ] as const
-                ).map((toggle) => {
-                  const active = client.customizations[option.key] === toggle.value;
-                  return (
-                    <button
-                      key={toggle.label}
-                      type="button"
-                      onClick={() =>
-                        updateCustomizations({ [option.key]: toggle.value })
-                      }
-                      className={`rounded-full border px-4 py-2 text-[0.82rem] font-semibold transition-colors ${
-                        active
-                          ? "border-[#560200] bg-[#560200]/8 text-[#560200]"
-                          : "border-[#d8dadc] bg-white text-[#606060] hover:bg-[#f5f5f5]"
-                      }`}
-                    >
-                      {toggle.label}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="mt-2 text-[0.72rem] leading-snug text-[#606060]">
-                {option.hint}
-              </p>
-            </div>
-          ))}
+        <div className="mt-5 space-y-5">
+          <SettingsToggle
+            label="Traduzione nome piatto"
+            hint="Disattivato: in altre lingue resta il nome italiano; descrizione e resto del menu restano tradotti."
+            checked={client.customizations.translateDishNames}
+            onChange={(checked) =>
+              updateCustomizations({ translateDishNames: checked })
+            }
+          />
+          <SettingsToggle
+            label="Quantità"
+            hint="Selettore quantità nel pannello preferiti."
+            checked={client.customizations.showFavoritesQuantity}
+            onChange={(checked) =>
+              updateCustomizations({ showFavoritesQuantity: checked })
+            }
+          />
+          <SettingsToggle
+            label="Prezzi"
+            hint="Prezzi nel pannello e nello scontrino preferiti."
+            checked={client.customizations.showFavoritesPrices}
+            onChange={(checked) =>
+              updateCustomizations({ showFavoritesPrices: checked })
+            }
+          />
         </div>
       </Section>
 

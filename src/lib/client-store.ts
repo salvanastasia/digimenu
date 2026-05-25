@@ -98,6 +98,9 @@ function migrateClientRecord(client: ClientConfig): ClientConfig {
       favoritesView:
         migrated.customizations?.favoritesView ??
         DEFAULT_CUSTOMIZATIONS.favoritesView,
+      translateDishNames:
+        migrated.customizations?.translateDishNames ??
+        DEFAULT_CUSTOMIZATIONS.translateDishNames,
       showFavoritesQuantity:
         migrated.customizations?.showFavoritesQuantity ??
         DEFAULT_CUSTOMIZATIONS.showFavoritesQuantity,

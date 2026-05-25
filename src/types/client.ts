@@ -44,6 +44,8 @@ export type FavoritesViewMode = "panel" | "receipt";
 
 export type ClientCustomizations = {
   favoritesView: FavoritesViewMode;
+  /** Traduce il nome piatto nelle lingue estere. */
+  translateDishNames: boolean;
   /** Selettore quantità nel pannello preferiti. */
   showFavoritesQuantity: boolean;
   /** Prezzi nel pannello e nello scontrino preferiti. */
