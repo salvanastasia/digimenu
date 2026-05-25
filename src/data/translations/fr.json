@@ -18,9 +18,12 @@
     "vegetarianTag": "Végétarien",
     "yourListTitle": "Votre liste",
     "clearList": "Vider la liste",
-    "listTotal": "Total",
     "decreaseQuantity": "Diminuer la quantité",
-    "increaseQuantity": "Augmenter la quantité"
+    "increaseQuantity": "Augmenter la quantité",
+    "listTotal": "Total",
+    "wifiConnectLabel": "Connectez-vous à notre Wi-Fi",
+    "wifiConnectSubtitle": "Appuyez ici pour copier le mot de passe",
+    "wifiConnectHint": "<strong>Mot de passe copié.</strong> Ouvrez <strong>Réglages → Wi‑Fi</strong>, sélectionnez « {ssid} » et <strong>collez</strong>."
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · Chambres d'hôtes",

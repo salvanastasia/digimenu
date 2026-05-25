@@ -18,9 +18,12 @@
     "vegetarianTag": "Vegetarisch",
     "yourListTitle": "Deine Liste",
     "clearList": "Liste leeren",
-    "listTotal": "Gesamt",
     "decreaseQuantity": "Menge verringern",
-    "increaseQuantity": "Menge erhöhen"
+    "increaseQuantity": "Menge erhöhen",
+    "listTotal": "Gesamt",
+    "wifiConnectLabel": "Mit unserem WLAN verbinden",
+    "wifiConnectSubtitle": "Tippen Sie hier, um das Passwort zu kopieren",
+    "wifiConnectHint": "<strong>Passwort kopiert.</strong> Öffnen Sie <strong>Einstellungen → WLAN</strong>, wählen Sie „{ssid}“ und <strong>fügen Sie es ein</strong>."
   },
   "restaurant": {
     "subtitle": "Restaurant · Pizzeria · B&B",

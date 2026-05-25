@@ -18,11 +18,18 @@ export const SUBTITLE_MAX_LENGTH = 32;
 export const DEFAULT_ADDRESS = rawMenu.restaurant.address ?? "";
 export const DEFAULT_PHONE = rawMenu.restaurant.phone ?? "";
 export const DEFAULT_TABLE_SERVICE_FEE = 2.5;
+export const DEFAULT_WIFI_ACCESS = {
+  enabled: false,
+  ssid: "",
+  password: "",
+} as const;
+
 export const DEFAULT_CUSTOMIZATIONS: ClientCustomizations = {
   favoritesView: "panel",
   translateDishNames: true,
   showFavoritesQuantity: true,
   showFavoritesPrices: true,
+  wifiAccess: { ...DEFAULT_WIFI_ACCESS },
 };
 
 const TABLE_SERVICE_FEE_LABELS: Record<Locale, string> = {

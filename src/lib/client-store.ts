@@ -107,6 +107,17 @@ function migrateClientRecord(client: ClientConfig): ClientConfig {
       showFavoritesPrices:
         migrated.customizations?.showFavoritesPrices ??
         DEFAULT_CUSTOMIZATIONS.showFavoritesPrices,
+      wifiAccess: {
+        enabled:
+          migrated.customizations?.wifiAccess?.enabled ??
+          DEFAULT_CUSTOMIZATIONS.wifiAccess.enabled,
+        ssid:
+          migrated.customizations?.wifiAccess?.ssid ??
+          DEFAULT_CUSTOMIZATIONS.wifiAccess.ssid,
+        password:
+          migrated.customizations?.wifiAccess?.password ??
+          DEFAULT_CUSTOMIZATIONS.wifiAccess.password,
+      },
     },
     header: {
       ...migrated.header,

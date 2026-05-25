@@ -18,9 +18,12 @@
     "vegetarianTag": "Vegetariano",
     "yourListTitle": "Tu lista",
     "clearList": "Vaciar lista",
-    "listTotal": "Total",
     "decreaseQuantity": "Disminuir cantidad",
-    "increaseQuantity": "Aumentar cantidad"
+    "increaseQuantity": "Aumentar cantidad",
+    "listTotal": "Total",
+    "wifiConnectLabel": "Conéctate a nuestro Wi-Fi",
+    "wifiConnectSubtitle": "Toca aquí para copiar la contraseña",
+    "wifiConnectHint": "<strong>Contraseña copiada.</strong> Abre <strong>Ajustes → Wi‑Fi</strong>, selecciona «{ssid}» y <strong>pega</strong>."
   },
   "restaurant": {
     "subtitle": "Restaurante · Pizzería · B&B",

@@ -22,4 +22,8 @@ export const UI_STRINGS_IT: UiStrings = {
   listTotal: "Totale",
   decreaseQuantity: "Diminuisci quantità",
   increaseQuantity: "Aumenta quantità",
+  wifiConnectLabel: "Connettiti al nostro Wi-Fi",
+  wifiConnectSubtitle: "Tap qui per copiare la password",
+  wifiConnectHint:
+    "<strong>Password copiata.</strong> Apri <strong>Impostazioni → Wi‑Fi</strong>, seleziona «{ssid}» e <strong>incolla</strong>.",
 };

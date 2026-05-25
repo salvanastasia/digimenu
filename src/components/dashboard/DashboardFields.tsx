@@ -35,6 +35,7 @@ type TextFieldProps = {
   placeholder?: string;
   maxLength?: number;
   hint?: string;
+  type?: "text" | "password";
 };
 
 export function TextField({
@@ -44,6 +45,7 @@ export function TextField({
   placeholder,
   maxLength,
   hint,
+  type = "text",
 }: TextFieldProps) {
   return (
     <label className="flex flex-col gap-1.5">
@@ -56,7 +58,7 @@ export function TextField({
         ) : null}
       </div>
       <input
-        type="text"
+        type={type}
         value={value}
         placeholder={placeholder}
         maxLength={maxLength}

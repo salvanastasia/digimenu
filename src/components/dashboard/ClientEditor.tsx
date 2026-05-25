@@ -1047,6 +1047,51 @@ export function ClientEditor({
               updateCustomizations({ showFavoritesPrices: checked })
             }
           />
+          <SettingsToggle
+            label="Accesso Wi-Fi"
+            hint="Mostra un banner nel menu per connettersi alla rete del locale."
+            checked={client.customizations.wifiAccess.enabled}
+            onChange={(enabled) =>
+              updateCustomizations({
+                wifiAccess: {
+                  ...client.customizations.wifiAccess,
+                  enabled,
+                },
+              })
+            }
+          />
+          {client.customizations.wifiAccess.enabled ? (
+            <div className="space-y-3 rounded-[14px] border border-[#ececec] bg-[#fafafa] p-4">
+              <TextField
+                label="SSID"
+                value={client.customizations.wifiAccess.ssid}
+                onChange={(ssid) =>
+                  updateCustomizations({
+                    wifiAccess: {
+                      ...client.customizations.wifiAccess,
+                      ssid,
+                    },
+                  })
+                }
+                placeholder="Nome rete Wi-Fi"
+              />
+              <TextField
+                label="Password"
+                type="password"
+                value={client.customizations.wifiAccess.password}
+                onChange={(password) =>
+                  updateCustomizations({
+                    wifiAccess: {
+                      ...client.customizations.wifiAccess,
+                      password,
+                    },
+                  })
+                }
+                placeholder="Password rete"
+                hint="Lascia vuoto per reti aperte senza password."
+              />
+            </div>
+          ) : null}
         </div>
       </Section>
 

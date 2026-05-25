@@ -42,6 +42,12 @@ export type ClientDish = {
 
 export type FavoritesViewMode = "panel" | "receipt";
 
+export type ClientWifiAccess = {
+  enabled: boolean;
+  ssid: string;
+  password: string;
+};
+
 export type ClientCustomizations = {
   favoritesView: FavoritesViewMode;
   /** Traduce il nome piatto nelle lingue estere. */
@@ -50,6 +56,8 @@ export type ClientCustomizations = {
   showFavoritesQuantity: boolean;
   /** Prezzi nel pannello e nello scontrino preferiti. */
   showFavoritesPrices: boolean;
+  /** Banner Wi-Fi nel menu pubblico. */
+  wifiAccess: ClientWifiAccess;
 };
 
 /** Impronte del testo italiano all'ultima traduzione automatica per campo. */

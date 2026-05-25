@@ -21,6 +21,9 @@ export type UiStrings = {
   listTotal: string;
   decreaseQuantity: string;
   increaseQuantity: string;
+  wifiConnectLabel: string;
+  wifiConnectSubtitle: string;
+  wifiConnectHint: string;
 };
 
 export type TranslationPayload = {

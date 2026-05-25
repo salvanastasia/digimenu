@@ -68,9 +68,7 @@ export function MenuApp() {
         onOpenFavorites={openFavorites}
       />
 
-      <main
-        className={`relative z-0 space-y-3 px-3 pt-3 ${totalQuantity > 0 ? "pb-24" : "pb-0"}`}
-      >
+      <main className="relative z-0 space-y-3 px-3 pt-3 pb-0">
         {translationError ? (
           <div className="rounded-[15px] bg-[#fff1f1] px-4 py-3 text-[0.88rem] text-[#8a1f1f]">
             {translationError}
@@ -94,13 +92,15 @@ export function MenuApp() {
         ))}
       </main>
 
-      {restaurant.showAllergens ? (
-        <AllergenList
-          allergens={content.allergens}
-          title={ui.allergenListTitle}
-        />
-      ) : null}
-      <MenuFooter restaurant={restaurant} ui={ui} />
+      <div className={totalQuantity > 0 ? "pb-20" : undefined}>
+        {restaurant.showAllergens ? (
+          <AllergenList
+            allergens={content.allergens}
+            title={ui.allergenListTitle}
+          />
+        ) : null}
+        <MenuFooter restaurant={restaurant} ui={ui} />
+      </div>
 
       {!favoritesOpen ? (
         <FavoritesFab

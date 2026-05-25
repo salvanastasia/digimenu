@@ -30,6 +30,10 @@ UI = {
         "clearList": "Clear list",
         "decreaseQuantity": "Decrease quantity",
         "increaseQuantity": "Increase quantity",
+        "listTotal": "Total",
+        "wifiConnectLabel": "Connect to our Wi-Fi",
+        "wifiConnectSubtitle": "Tap here to copy the password",
+        "wifiConnectHint": "<strong>Password copied.</strong> Open <strong>Settings → Wi‑Fi</strong>, select “{ssid}”, and <strong>paste</strong>.",
     },
     "fr": {
         "allergenListTitle": "LISTE DES ALLERGÈNES",
@@ -51,6 +55,10 @@ UI = {
         "clearList": "Vider la liste",
         "decreaseQuantity": "Diminuer la quantité",
         "increaseQuantity": "Augmenter la quantité",
+        "listTotal": "Total",
+        "wifiConnectLabel": "Connectez-vous à notre Wi-Fi",
+        "wifiConnectSubtitle": "Appuyez ici pour copier le mot de passe",
+        "wifiConnectHint": "<strong>Mot de passe copié.</strong> Ouvrez <strong>Réglages → Wi‑Fi</strong>, sélectionnez « {ssid} » et <strong>collez</strong>.",
     },
     "de": {
         "allergenListTitle": "ALLERGENLISTE",
@@ -72,6 +80,10 @@ UI = {
         "clearList": "Liste leeren",
         "decreaseQuantity": "Menge verringern",
         "increaseQuantity": "Menge erhöhen",
+        "listTotal": "Gesamt",
+        "wifiConnectLabel": "Mit unserem WLAN verbinden",
+        "wifiConnectSubtitle": "Tippen Sie hier, um das Passwort zu kopieren",
+        "wifiConnectHint": "<strong>Passwort kopiert.</strong> Öffnen Sie <strong>Einstellungen → WLAN</strong>, wählen Sie „{ssid}“ und <strong>fügen Sie es ein</strong>.",
     },
     "es": {
         "allergenListTitle": "LISTA DE ALÉRGENOS",
@@ -93,6 +105,10 @@ UI = {
         "clearList": "Vaciar lista",
         "decreaseQuantity": "Disminuir cantidad",
         "increaseQuantity": "Aumentar cantidad",
+        "listTotal": "Total",
+        "wifiConnectLabel": "Conéctate a nuestro Wi-Fi",
+        "wifiConnectSubtitle": "Toca aquí para copiar la contraseña",
+        "wifiConnectHint": "<strong>Contraseña copiada.</strong> Abre <strong>Ajustes → Wi‑Fi</strong>, selecciona «{ssid}» y <strong>pega</strong>.",
     },
 }
 

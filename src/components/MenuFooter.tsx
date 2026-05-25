@@ -1,4 +1,9 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { WifiAccessBanner } from "@/components/WifiAccessBanner";
+import { useClientMenu } from "@/context/ClientMenuContext";
+import { useLanguage } from "@/context/LanguageContext";
 import type { RestaurantConfig } from "@/types/menu";
 import type { UiStrings } from "@/types/translation";
 
@@ -18,10 +23,16 @@ function formatImpactValue(value: number) {
 }
 
 export function MenuFooter({ restaurant, ui }: MenuFooterProps) {
+  const { content } = useLanguage();
+  const clientMenu = useClientMenu();
   const impactStats = restaurant.impactStats;
+  const wifiAccess = clientMenu?.client.customizations.wifiAccess;
+  const showWifiBanner = Boolean(
+    wifiAccess?.enabled && wifiAccess.ssid.trim().length > 0,
+  );
 
   return (
-    <footer className="border-t border-[#141415]/10 px-5 pb-10 pt-8 text-[0.85rem] leading-relaxed text-[#909090]">
+    <footer className="border-t border-[#141415]/10 px-5 pb-1 pt-8 text-[0.85rem] leading-relaxed text-[#909090]">
       {restaurant.notes ? (
         <div
           className="menu-notes mb-8 text-[#141415]"
@@ -63,7 +74,20 @@ export function MenuFooter({ restaurant, ui }: MenuFooterProps) {
         </div>
       ) : null}
 
-      <div className="mt-8 border-t border-[#141415]" />
+      {showWifiBanner ? (
+        <div className="mt-8 border-t border-[#141415]" />
+      ) : null}
+
+      {showWifiBanner && wifiAccess && clientMenu ? (
+        <WifiAccessBanner
+          ssid={wifiAccess.ssid}
+          password={wifiAccess.password}
+          label={content.ui.wifiConnectLabel}
+          subtitle={content.ui.wifiConnectSubtitle}
+          primaryColor={clientMenu.client.brand.primaryColor}
+          secondaryColor={clientMenu.client.brand.secondaryColor}
+        />
+      ) : null}
     </footer>
   );
 }
