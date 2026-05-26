@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ALLERGENS } from "@/data/allergens";
 import {
   BrandLinkedColorField,
@@ -90,6 +90,16 @@ type ConfirmState = {
   onConfirm: () => void;
 };
 
+const MOVE_HIGHLIGHT_MS = 1200;
+
+function getScrollHighlightDelay(element: HTMLElement) {
+  const rect = element.getBoundingClientRect();
+  const elementCenter = rect.top + rect.height / 2;
+  const viewportCenter = window.innerHeight / 2;
+  const distance = Math.abs(elementCenter - viewportCenter);
+  return Math.min(Math.max(Math.round(distance * 0.6), 200), 1000);
+}
+
 function createDishId() {
   return createPrefixedId("dish");
 }
@@ -136,6 +146,29 @@ export function ClientEditor({
     null,
   );
   const [allergenAiError, setAllergenAiError] = useState<string | null>(null);
+  const [expandedCategoryIds, setExpandedCategoryIds] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const [orderingCategoryIds, setOrderingCategoryIds] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const [movedCategoryHighlightId, setMovedCategoryHighlightId] = useState<
+    string | null
+  >(null);
+  const [highlightedDishId, setHighlightedDishId] = useState<string | null>(
+    null,
+  );
+  const [openCategoryMenuId, setOpenCategoryMenuId] = useState<string | null>(
+    null,
+  );
+  const prevCategoryIdsRef = useRef<Set<string>>(new Set());
+  const movedCategoryHighlightTimeoutRef = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+  const dishHighlightTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const pendingNewDishIdRef = useRef<string | null>(null);
   const {
     translate,
     isTranslating,
@@ -145,6 +178,141 @@ export function ClientEditor({
     resetFeedback,
   } = useMenuTranslation();
   const effectiveHeader = getEffectiveHeader(client);
+
+  useEffect(() => {
+    const currentIds = new Set(client.categories.map((category) => category.id));
+    const previousIds = prevCategoryIdsRef.current;
+
+    setExpandedCategoryIds((current) => {
+      const next = new Set(current);
+      for (const id of next) {
+        if (!currentIds.has(id)) {
+          next.delete(id);
+        }
+      }
+      if (previousIds.size > 0) {
+        for (const category of client.categories) {
+          if (!previousIds.has(category.id)) {
+            next.add(category.id);
+          }
+        }
+      }
+      return next;
+    });
+
+    setOrderingCategoryIds((current) => {
+      const next = new Set(current);
+      for (const id of next) {
+        if (!currentIds.has(id)) {
+          next.delete(id);
+        }
+      }
+      return next;
+    });
+
+    prevCategoryIdsRef.current = currentIds;
+  }, [client.categories]);
+
+  useEffect(() => {
+    return () => {
+      if (movedCategoryHighlightTimeoutRef.current) {
+        clearTimeout(movedCategoryHighlightTimeoutRef.current);
+      }
+      if (dishHighlightTimeoutRef.current) {
+        clearTimeout(dishHighlightTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const dishId = pendingNewDishIdRef.current;
+    if (!dishId) return;
+    if (!client.dishes.some((dish) => dish.id === dishId)) return;
+
+    pendingNewDishIdRef.current = null;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const element = document.getElementById(`dish-${dishId}`);
+        if (!element) return;
+
+        const scrollDelay = getScrollHighlightDelay(element);
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        if (dishHighlightTimeoutRef.current) {
+          clearTimeout(dishHighlightTimeoutRef.current);
+        }
+
+        dishHighlightTimeoutRef.current = setTimeout(() => {
+          setHighlightedDishId(null);
+          requestAnimationFrame(() => {
+            setHighlightedDishId(dishId);
+            dishHighlightTimeoutRef.current = setTimeout(() => {
+              setHighlightedDishId(null);
+              dishHighlightTimeoutRef.current = null;
+            }, MOVE_HIGHLIGHT_MS);
+          });
+        }, scrollDelay);
+      });
+    });
+  }, [client.dishes]);
+
+  const triggerCategoryMoveHighlight = (categoryId: string) => {
+    if (movedCategoryHighlightTimeoutRef.current) {
+      clearTimeout(movedCategoryHighlightTimeoutRef.current);
+    }
+
+    setMovedCategoryHighlightId(null);
+    requestAnimationFrame(() => {
+      setMovedCategoryHighlightId(categoryId);
+      movedCategoryHighlightTimeoutRef.current = setTimeout(() => {
+        setMovedCategoryHighlightId(null);
+        movedCategoryHighlightTimeoutRef.current = null;
+      }, MOVE_HIGHLIGHT_MS);
+    });
+  };
+
+  const toggleCategoryExpanded = (categoryId: string) => {
+    if (expandedCategoryIds.has(categoryId)) {
+      setOpenCategoryMenuId((current) =>
+        current === categoryId ? null : current,
+      );
+    }
+    setExpandedCategoryIds((current) => {
+      const next = new Set(current);
+      if (next.has(categoryId)) {
+        next.delete(categoryId);
+      } else {
+        next.add(categoryId);
+      }
+      return next;
+    });
+    setOrderingCategoryIds((current) => {
+      if (!current.has(categoryId)) {
+        return current;
+      }
+      const next = new Set(current);
+      next.delete(categoryId);
+      return next;
+    });
+  };
+
+  const toggleCategoryOrdering = (categoryId: string) => {
+    setOrderingCategoryIds((current) => {
+      const next = new Set(current);
+      if (next.has(categoryId)) {
+        next.delete(categoryId);
+      } else {
+        next.add(categoryId);
+      }
+      return next;
+    });
+    setExpandedCategoryIds((current) => {
+      const next = new Set(current);
+      next.add(categoryId);
+      return next;
+    });
+  };
 
   const translationTargets = useMemo(
     () =>
@@ -306,11 +474,31 @@ export function ClientEditor({
   };
 
   const addDish = (categoryId: string) => {
+    const dishId = createDishId();
+    pendingNewDishIdRef.current = dishId;
+    if (dishHighlightTimeoutRef.current) {
+      clearTimeout(dishHighlightTimeoutRef.current);
+      dishHighlightTimeoutRef.current = null;
+    }
+    setHighlightedDishId(null);
+    setExpandedCategoryIds((current) => {
+      const next = new Set(current);
+      next.add(categoryId);
+      return next;
+    });
+    setOrderingCategoryIds((current) => {
+      if (!current.has(categoryId)) {
+        return current;
+      }
+      const next = new Set(current);
+      next.delete(categoryId);
+      return next;
+    });
     update({
       dishes: [
         ...client.dishes,
         {
-          id: createDishId(),
+          id: dishId,
           categoryId,
           name: "",
           description: "",
@@ -368,6 +556,34 @@ export function ClientEditor({
     const [moved] = categories.splice(index, 1);
     categories.splice(targetIndex, 0, moved);
     update({ categories });
+    triggerCategoryMoveHighlight(categoryId);
+  };
+
+  const moveDish = (
+    categoryId: string,
+    dishId: string,
+    direction: -1 | 1,
+  ) => {
+    const categoryDishes = client.dishes.filter(
+      (dish) => dish.categoryId === categoryId,
+    );
+    const index = categoryDishes.findIndex((dish) => dish.id === dishId);
+    if (index === -1) return;
+
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= categoryDishes.length) return;
+
+    const reorderedCategoryDishes = [...categoryDishes];
+    const [moved] = reorderedCategoryDishes.splice(index, 1);
+    reorderedCategoryDishes.splice(targetIndex, 0, moved);
+
+    const dishes = client.categories.flatMap((category) =>
+      category.id === categoryId
+        ? reorderedCategoryDishes
+        : client.dishes.filter((dish) => dish.categoryId === category.id),
+    );
+
+    update({ dishes });
   };
 
   const removeAllDishes = () => {
@@ -1270,47 +1486,116 @@ export function ClientEditor({
           </p>
         ) : null}
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {client.categories.map((category, categoryIndex) => {
             const categoryDishes = client.dishes.filter(
               (dish) => dish.categoryId === category.id,
             );
+            const isCategoryExpanded = expandedCategoryIds.has(category.id);
+            const isOrderingDishes = orderingCategoryIds.has(category.id);
+            const categoryName = getCategoryName(
+              client,
+              editingLocale,
+              category.id,
+            );
+            const canReorderDishes =
+              editingLocale === "it" && categoryDishes.length > 1;
 
             return (
               <div
                 key={category.id}
-                className="rounded-[14px] border border-[#ececec] bg-[#fafafa] p-4"
+                className={`relative overflow-hidden rounded-[16px] border bg-white shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-colors ${
+                  isCategoryExpanded
+                    ? "border-[#560200]/35 ring-1 ring-[#560200]/10"
+                    : "border-[#e4e4e4]"
+                }`}
               >
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {editingLocale === "it" ? (
-                      <div className="flex shrink-0 flex-col gap-1">
-                        <button
-                          type="button"
-                          aria-label={`Sposta "${category.name}" prima`}
-                          disabled={categoryIndex === 0}
-                          onClick={() => moveCategory(category.id, -1)}
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#d8dadc] bg-white text-[0.95rem] leading-none text-[#141415] transition-colors hover:bg-[#f5f5f5] disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          ↑
-                        </button>
-                        <button
-                          type="button"
-                          aria-label={`Sposta "${category.name}" dopo`}
-                          disabled={
-                            categoryIndex === client.categories.length - 1
-                          }
-                          onClick={() => moveCategory(category.id, 1)}
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#d8dadc] bg-white text-[0.95rem] leading-none text-[#141415] transition-colors hover:bg-[#f5f5f5] disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          ↓
-                        </button>
-                      </div>
+                {movedCategoryHighlightId === category.id ? (
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 z-10 animate-category-move-highlight bg-[#560200]/8"
+                  />
+                ) : null}
+                <div
+                  className={`flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3 ${
+                    isCategoryExpanded
+                      ? "border-[#560200]/15 bg-[#560200]/5"
+                      : "border-[#ececec] bg-[#fafafa]"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex min-w-[2rem] items-center justify-center rounded-full bg-[#560200]/8 px-2.5 py-1 text-[0.78rem] font-bold tabular-nums text-[#560200]">
+                      {categoryDishes.length}
+                    </span>
+                    <span className="text-[0.84rem] font-medium text-[#606060]">
+                      {categoryDishes.length === 1 ? "piatto" : "piatti"}
+                    </span>
+                    {isCategoryExpanded ? (
+                      <span className="rounded-full bg-[#560200]/12 px-2.5 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[#560200]">
+                        In modifica
+                      </span>
                     ) : null}
-                    <div className="min-w-[180px] flex-1">
+                    {isOrderingDishes ? (
+                      <span className="rounded-full bg-[#560200] px-2.5 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-white">
+                        Ordine
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      aria-expanded={isCategoryExpanded}
+                      aria-controls={`category-dishes-${category.id}`}
+                      onClick={() => toggleCategoryExpanded(category.id)}
+                      className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[0.82rem] font-semibold transition-colors ${
+                        isCategoryExpanded
+                          ? "border-2 border-[#560200] bg-white text-[#560200] hover:bg-[#560200]/5"
+                          : "bg-[#560200] text-white hover:bg-[#6d0200]"
+                      }`}
+                    >
+                      {isCategoryExpanded ? (
+                        <>
+                          <ReorderChevronIcon direction="up" />
+                          Chiudi categoria
+                        </>
+                      ) : (
+                        "Modifica"
+                      )}
+                    </button>
+                    {isCategoryExpanded && canRemoveCategory ? (
+                      <CategoryMoreMenu
+                        isOpen={openCategoryMenuId === category.id}
+                        onToggle={() =>
+                          setOpenCategoryMenuId((current) =>
+                            current === category.id ? null : category.id,
+                          )
+                        }
+                        onClose={() =>
+                          setOpenCategoryMenuId((current) =>
+                            current === category.id ? null : current,
+                          )
+                        }
+                        onRemove={() => {
+                          setOpenCategoryMenuId(null);
+                          setConfirm({
+                            title: "Rimuovi categoria",
+                            message: `Rimuovere "${category.name}" e tutti i piatti collegati?`,
+                            confirmLabel: "Rimuovi",
+                            onConfirm: () => removeCategory(category.id),
+                          });
+                        }}
+                      />
+                    ) : null}
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="mb-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#909090]">
+                    Categoria
+                  </p>
+                  <div className="flex items-center gap-3">
                     <input
                       type="text"
-                      value={getCategoryName(client, editingLocale, category.id)}
+                      value={categoryName}
                       onChange={(event) =>
                         onChange(
                           setCategoryName(
@@ -1321,68 +1606,120 @@ export function ClientEditor({
                           ),
                         )
                       }
-                      placeholder={getCategoryNamePlaceholder(client, category.id)}
-                      className="w-full rounded-[10px] border border-[#d8dadc] bg-white px-3 py-2 text-[0.95rem] font-bold text-[#141415] outline-none focus:border-[#560200]"
+                      placeholder={getCategoryNamePlaceholder(
+                        client,
+                        category.id,
+                      )}
+                      className="min-w-0 flex-1 rounded-[10px] border border-[#d8dadc] bg-white px-3 py-2.5 text-[1rem] font-bold text-[#141415] outline-none transition-colors focus:border-[#560200]"
                     />
-                    {editingLocale !== "it" &&
-                    !getCategoryName(client, editingLocale, category.id) ? (
-                      <p className="mt-1 text-[0.72rem] text-[#606060]">
-                        IT: {getCategoryNamePlaceholder(client, category.id)}
-                      </p>
-                    ) : null}
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {canRemoveCategory ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setConfirm({
-                            title: "Rimuovi categoria",
-                            message: `Rimuovere "${category.name}" e tutti i piatti collegati?`,
-                            confirmLabel: "Rimuovi",
-                            onConfirm: () => removeCategory(category.id),
-                          })
+                    {editingLocale === "it" ? (
+                      <ReorderButtonGroup
+                        layout="horizontal"
+                        upLabel={`Sposta "${category.name}" prima`}
+                        downLabel={`Sposta "${category.name}" dopo`}
+                        disableUp={categoryIndex === 0}
+                        disableDown={
+                          categoryIndex === client.categories.length - 1
                         }
-                        className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1]"
-                      >
-                        Rimuovi categoria
-                      </button>
+                        onUp={() => moveCategory(category.id, -1)}
+                        onDown={() => moveCategory(category.id, 1)}
+                      />
                     ) : null}
-                    <button
-                      type="button"
-                      onClick={() => addDish(category.id)}
-                      disabled={editingLocale !== "it"}
-                      className="rounded-full bg-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      + Piatto
-                    </button>
                   </div>
+                  {editingLocale !== "it" && !categoryName ? (
+                    <p className="mt-1.5 text-[0.72rem] text-[#606060]">
+                      IT: {getCategoryNamePlaceholder(client, category.id)}
+                    </p>
+                  ) : null}
                 </div>
 
-                <div className="space-y-4">
-                  {categoryDishes.length === 0 ? (
-                    <p className="text-[0.84rem] text-[#606060]">
-                      Nessun piatto in questa categoria.
-                    </p>
-                  ) : (
-                    categoryDishes.map((dish) => (
-                      <div
-                        key={dish.id}
-                        className="rounded-[12px] border border-[#e4e4e4] bg-white p-4"
-                      >
-                        <div className="mb-3 flex items-start justify-between gap-3">
-                          <p className="text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-[#606060]">
-                            Piatto
-                          </p>
+                {isCategoryExpanded ? (
+                  <div
+                    id={`category-dishes-${category.id}`}
+                    className="space-y-4 border-t border-[#ececec] bg-[#fafafa] p-4"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <p className="text-[0.78rem] font-semibold text-[#606060]">
+                        {isOrderingDishes
+                          ? "Usa le frecce per riordinare i piatti"
+                          : "Gestisci piatti e contenuti"}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {canReorderDishes ? (
                           <button
                             type="button"
-                            onClick={() => removeDish(dish.id)}
-                            className="text-[0.78rem] font-semibold text-[#8a1f1f] hover:underline"
+                            onClick={() =>
+                              toggleCategoryOrdering(category.id)
+                            }
+                            className={`rounded-full px-4 py-2 text-[0.82rem] font-semibold transition-colors ${
+                              isOrderingDishes
+                                ? "border border-[#560200] bg-white text-[#560200] hover:bg-[#560200]/5"
+                                : "border border-[#d8dadc] bg-white text-[#141415] hover:bg-white/80"
+                            }`}
                           >
-                            Rimuovi
+                            {isOrderingDishes ? "Fine ordine" : "Ordina piatti"}
                           </button>
-                        </div>
+                        ) : null}
+                        {!isOrderingDishes ? (
+                          <button
+                            type="button"
+                            onClick={() => addDish(category.id)}
+                            disabled={editingLocale !== "it"}
+                            className="rounded-full bg-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            + Piatto
+                          </button>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    {isOrderingDishes ? (
+                      <CategoryDishOrderList
+                        client={client}
+                        dishes={categoryDishes}
+                        onMove={(dishId, direction) =>
+                          moveDish(category.id, dishId, direction)
+                        }
+                      />
+                    ) : categoryDishes.length === 0 ? (
+                      <div className="rounded-[12px] border border-dashed border-[#d8dadc] bg-white px-4 py-8 text-center">
+                        <p className="text-[0.88rem] font-medium text-[#606060]">
+                          Nessun piatto in questa categoria.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => addDish(category.id)}
+                          disabled={editingLocale !== "it"}
+                          className="mt-3 rounded-full bg-[#560200] px-4 py-2 text-[0.82rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          Aggiungi il primo piatto
+                        </button>
+                      </div>
+                    ) : (
+                      categoryDishes.map((dish) => (
+                        <div
+                          key={dish.id}
+                          id={`dish-${dish.id}`}
+                          className="relative rounded-[14px] border border-[#e4e4e4] bg-white p-4 shadow-[0_1px_4px_rgba(0,0,0,0.03)]"
+                        >
+                          {highlightedDishId === dish.id ? (
+                            <div
+                              aria-hidden
+                              className="pointer-events-none absolute inset-0 z-10 animate-category-move-highlight rounded-[14px] bg-[#560200]/8"
+                            />
+                          ) : null}
+                          <div className="mb-3 flex items-start justify-between gap-3">
+                            <p className="text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-[#909090]">
+                              Piatto
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => removeDish(dish.id)}
+                              className="rounded-full px-2 py-1 text-[0.78rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1]"
+                            >
+                              Rimuovi
+                            </button>
+                          </div>
 
                         <div className="grid gap-3">
                           <TextField
@@ -1598,12 +1935,229 @@ export function ClientEditor({
                       </div>
                     ))
                   )}
-                </div>
+                    <div className="flex justify-center border-t border-[#ececec] pt-4">
+                      <button
+                        type="button"
+                        onClick={() => toggleCategoryExpanded(category.id)}
+                        className="inline-flex items-center gap-1.5 rounded-full border-2 border-[#560200] bg-white px-5 py-2 text-[0.82rem] font-semibold text-[#560200] transition-colors hover:bg-[#560200]/5"
+                      >
+                        <ReorderChevronIcon direction="up" />
+                        Chiudi categoria
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             );
           })}
         </div>
       </Section>
     </div>
+  );
+}
+
+function CategoryMoreMenu({
+  isOpen,
+  onToggle,
+  onClose,
+  onRemove,
+}: {
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  onRemove: () => void;
+}) {
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [isOpen, onClose]);
+
+  return (
+    <div ref={menuRef} className="relative">
+      <button
+        type="button"
+        aria-label="Altre azioni categoria"
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        onClick={onToggle}
+        className={`inline-flex items-center justify-center p-1 transition-colors ${
+          isOpen
+            ? "text-[#606060]"
+            : "text-[#909090] hover:text-[#606060]"
+        }`}
+      >
+        <VerticalDotsIcon />
+      </button>
+      {isOpen ? (
+        <div
+          role="menu"
+          className="absolute right-0 top-[calc(100%+6px)] z-30 min-w-[11rem] overflow-hidden rounded-[12px] border border-[#e4e4e4] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            onClick={onRemove}
+            className="w-full px-3.5 py-2.5 text-left text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1]"
+          >
+            Rimuovi categoria
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function VerticalDotsIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-[1.125rem] w-[1.125rem]"
+      fill="currentColor"
+    >
+      <circle cx="12" cy="5" r="1.35" />
+      <circle cx="12" cy="12" r="1.35" />
+      <circle cx="12" cy="19" r="1.35" />
+    </svg>
+  );
+}
+
+function CategoryDishOrderList({
+  client,
+  dishes,
+  onMove,
+}: {
+  client: ClientConfig;
+  dishes: ClientDish[];
+  onMove: (dishId: string, direction: -1 | 1) => void;
+}) {
+  return (
+    <div className="space-y-2">
+      {dishes.map((dish, index) => {
+        const name =
+          getDishField(client, "it", dish.id, "name").trim() || "Senza nome";
+        const priceLabel =
+          dish.price != null
+            ? new Intl.NumberFormat("it-IT", {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: dish.price % 1 === 0 ? 0 : 2,
+              }).format(dish.price)
+            : null;
+
+        return (
+          <div
+            key={dish.id}
+            className="flex items-center gap-3 rounded-[12px] border border-[#e4e4e4] bg-white px-3 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]"
+          >
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#560200]/8 text-[0.72rem] font-bold tabular-nums text-[#560200]">
+              {index + 1}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[0.9rem] font-semibold text-[#141415]">
+                {name}
+              </p>
+              {priceLabel ? (
+                <p className="text-[0.72rem] text-[#606060]">{priceLabel}</p>
+              ) : (
+                <p className="text-[0.72rem] text-[#909090]">Prezzo non impostato</p>
+              )}
+            </div>
+            <ReorderButtonGroup
+              upLabel={`Sposta "${name}" prima`}
+              downLabel={`Sposta "${name}" dopo`}
+              disableUp={index === 0}
+              disableDown={index === dishes.length - 1}
+              onUp={() => onMove(dish.id, -1)}
+              onDown={() => onMove(dish.id, 1)}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ReorderButtonGroup({
+  upLabel,
+  downLabel,
+  disableUp,
+  disableDown,
+  onUp,
+  onDown,
+  layout = "vertical",
+}: {
+  upLabel: string;
+  downLabel: string;
+  disableUp: boolean;
+  disableDown: boolean;
+  onUp: () => void;
+  onDown: () => void;
+  layout?: "vertical" | "horizontal";
+}) {
+  const dividerClass =
+    layout === "horizontal" ? "border-l border-white/20" : "border-t border-white/20";
+
+  return (
+    <div
+      className={`flex shrink-0 overflow-hidden rounded-[10px] ${
+        layout === "horizontal" ? "flex-row" : "flex-col"
+      }`}
+    >
+      <button
+        type="button"
+        aria-label={upLabel}
+        disabled={disableUp}
+        onClick={onUp}
+        className="flex h-8 w-9 items-center justify-center bg-[#560200] text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <ReorderChevronIcon direction="up" />
+      </button>
+      <button
+        type="button"
+        aria-label={downLabel}
+        disabled={disableDown}
+        onClick={onDown}
+        className={`flex h-8 w-9 items-center justify-center bg-[#560200] text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-40 ${dividerClass}`}
+      >
+        <ReorderChevronIcon direction="down" />
+      </button>
+    </div>
+  );
+}
+
+function ReorderChevronIcon({
+  direction,
+}: {
+  direction: "up" | "down";
+}) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+    >
+      {direction === "up" ? (
+        <path d="M6 15l6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+      ) : (
+        <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+      )}
+    </svg>
   );
 }

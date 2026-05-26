@@ -61,3 +61,18 @@ button {
 .client-menu a {
   color: var(--brand-primary, #560200);
 }
+
+@keyframes category-move-highlight {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-category-move-highlight {
+  animation: category-move-highlight 1200ms ease-in-out;
+}
