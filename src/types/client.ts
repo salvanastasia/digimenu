@@ -42,7 +42,7 @@ export type ClientDish = {
 
 export type FavoritesViewMode = "panel" | "receipt";
 
-export type MenuTheme = "classic" | "framed";
+export type MenuTheme = "classic" | "framed" | "framed-big";
 
 export type ClientWifiAccess = {
   enabled: boolean;

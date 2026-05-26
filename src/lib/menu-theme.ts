@@ -1,12 +1,64 @@
 import type { CSSProperties } from "react";
 import type { ClientConfig, MenuTheme } from "@/types/client";
 
+export type FramedThemeVariant = "framed" | "framed-big";
+
+export type FramedThemeConfig = {
+  checkerboardCellPx: number;
+  headerBorderBottomPx: number;
+  framePaddingClass: string;
+  innerMinHeightClass: string;
+  headerPaddingClass: string;
+  accordionPaddingClass: string;
+  bracketToggleOnRight: boolean;
+};
+
+export const FRAMED_THEME_CONFIG: Record<FramedThemeVariant, FramedThemeConfig> =
+  {
+    framed: {
+      checkerboardCellPx: 14,
+      headerBorderBottomPx: 2,
+      framePaddingClass: "p-2.5",
+      innerMinHeightClass: "min-h-[calc(100dvh-20px)]",
+      headerPaddingClass:
+        "px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top,0px))]",
+      accordionPaddingClass: "px-4 py-3.5",
+      bracketToggleOnRight: false,
+    },
+    "framed-big": {
+      checkerboardCellPx: 22,
+      headerBorderBottomPx: 2,
+      framePaddingClass: "p-5",
+      innerMinHeightClass: "min-h-[calc(100dvh-40px)]",
+      headerPaddingClass:
+        "px-5 pb-5 pt-[calc(1.25rem+env(safe-area-inset-top,0px))]",
+      accordionPaddingClass: "px-5 py-4",
+      bracketToggleOnRight: true,
+    },
+  };
+
 export function getMenuTheme(client?: ClientConfig | null): MenuTheme {
   return client?.customizations.menuTheme ?? "classic";
 }
 
 export function isFramedMenuTheme(theme: MenuTheme): boolean {
-  return theme === "framed";
+  return theme === "framed" || theme === "framed-big";
+}
+
+export function getFramedThemeVariant(
+  theme: MenuTheme,
+): FramedThemeVariant | null {
+  if (theme === "framed" || theme === "framed-big") {
+    return theme;
+  }
+  return null;
+}
+
+export function getFramedThemeConfig(
+  theme: MenuTheme,
+): FramedThemeConfig | null {
+  const variant = getFramedThemeVariant(theme);
+  return variant ? FRAMED_THEME_CONFIG[variant] : null;
 }
 
 export function isMenuZebraRowsEnabled(client?: ClientConfig | null): boolean {
@@ -42,7 +94,10 @@ export function getAccordionHeaderBackground({
 export function getCheckerboardFrameStyle(
   primaryColor: string,
   secondaryColor: string,
+  cellPx: number,
 ): CSSProperties {
+  const half = cellPx / 2;
+
   return {
     backgroundColor: secondaryColor,
     backgroundImage: `
@@ -51,7 +106,7 @@ export function getCheckerboardFrameStyle(
       linear-gradient(45deg, transparent 75%, ${primaryColor} 75%),
       linear-gradient(-45deg, transparent 75%, ${primaryColor} 75%)
     `,
-    backgroundSize: "14px 14px",
-    backgroundPosition: "0 0, 0 7px, 7px -7px, -7px 0",
+    backgroundSize: `${cellPx}px ${cellPx}px`,
+    backgroundPosition: `0 0, 0 ${half}px, ${half}px -${half}px, -${half}px 0`,
   };
 }

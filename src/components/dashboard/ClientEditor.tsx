@@ -993,6 +993,7 @@ export function ClientEditor({
               [
                 { value: "classic", label: "Classico" },
                 { value: "framed", label: "Framed" },
+                { value: "framed-big", label: "Framed Big" },
               ] as const
             ).map((option) => {
               const active = client.customizations.menuTheme === option.value;
@@ -1019,7 +1020,8 @@ export function ClientEditor({
           <p className="mt-2 text-[0.72rem] leading-snug text-[#606060]">
             Classico mantiene il layout attuale. Framed aggiunge una cornice a
             scacchiera con i colori brand, header urbano e voci menu più
-            editoriali.
+            editoriali. Framed Big usa quadratini più grandi, più padding e le
+            quadre con pallino al posto del +/−.
           </p>
         </div>
 

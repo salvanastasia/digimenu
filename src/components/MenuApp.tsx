@@ -159,6 +159,7 @@ export function MenuApp() {
       >
         {isFramed && clientMenu ? (
           <MenuCheckerboardFrame
+            menuTheme={menuTheme}
             primaryColor={clientMenu.client.brand.primaryColor}
             secondaryColor={clientMenu.client.brand.secondaryColor}
           >

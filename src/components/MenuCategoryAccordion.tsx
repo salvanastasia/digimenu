@@ -3,7 +3,7 @@
 import type { MenuCategory } from "@/types/menu";
 import { MenuItemRow } from "@/components/MenuItemRow";
 import { useClientMenu } from "@/context/ClientMenuContext";
-import { getMenuTheme, getAccordionHeaderBackground, isFramedMenuTheme, isMenuZebraRowsEnabled } from "@/lib/menu-theme";
+import { getMenuTheme, getAccordionHeaderBackground, getFramedThemeConfig, isFramedMenuTheme, isMenuZebraRowsEnabled } from "@/lib/menu-theme";
 
 type MenuCategoryAccordionProps = {
   category: MenuCategory;
@@ -33,7 +33,9 @@ export function MenuCategoryAccordion({
   removeFavoriteLabel,
 }: MenuCategoryAccordionProps) {
   const clientMenu = useClientMenu();
-  const isFramed = isFramedMenuTheme(getMenuTheme(clientMenu?.client));
+  const menuTheme = getMenuTheme(clientMenu?.client);
+  const isFramed = isFramedMenuTheme(menuTheme);
+  const framedConfig = getFramedThemeConfig(menuTheme);
   const menuZebraRows = isMenuZebraRowsEnabled(clientMenu?.client);
   const primaryColor = clientMenu?.client.brand.primaryColor ?? "#560200";
   const secondaryColor = clientMenu?.client.brand.secondaryColor ?? "#F2E8D8";
@@ -47,7 +49,15 @@ export function MenuCategoryAccordion({
   const panelId = `panel-${category.id}`;
   const buttonId = `button-${category.id}`;
 
-  if (isFramed) {
+  if (isFramed && framedConfig) {
+    const bracketIndicator = (
+      <FramedBracketIndicator
+        expanded={expanded}
+        primaryColor={primaryColor}
+        large={framedConfig.bracketToggleOnRight}
+      />
+    );
+
     return (
       <section className="border-b border-[#141415]/15">
         <button
@@ -56,7 +66,7 @@ export function MenuCategoryAccordion({
           aria-expanded={expanded}
           aria-controls={panelId}
           onClick={() => onToggle(category.id)}
-          className={`flex w-full items-center gap-2 px-4 py-3.5 text-left text-[#141415] transition-colors ${
+          className={`flex w-full items-center gap-2 text-left text-[#141415] transition-colors ${framedConfig.accordionPaddingClass} ${
             headerBackground ? "" : "bg-white hover:bg-[#fafafa]"
           }`}
           style={
@@ -65,26 +75,14 @@ export function MenuCategoryAccordion({
               : undefined
           }
         >
-          <span
-            className="flex shrink-0 items-center gap-1 font-mono text-[0.72rem] font-bold leading-none"
-            aria-hidden="true"
-          >
-            <span>[</span>
-            <span className="flex h-2.5 w-2.5 items-center justify-center">
-              {expanded ? (
-                <span
-                  className="block h-2 w-2 rounded-full"
-                  style={{ backgroundColor: primaryColor }}
-                />
-              ) : (
-                <span>○</span>
-              )}
-            </span>
-            <span>]</span>
-          </span>
+          {!framedConfig.bracketToggleOnRight ? bracketIndicator : null}
 
           <span
-            className="shrink-0 text-[0.78rem] font-bold uppercase tracking-[0.18em]"
+            className={`shrink-0 font-bold uppercase tracking-[0.18em] ${
+              framedConfig.bracketToggleOnRight
+                ? "text-[0.82rem]"
+                : "text-[0.78rem]"
+            }`}
             style={{ color: primaryColor }}
           >
             {category.name}
@@ -92,12 +90,16 @@ export function MenuCategoryAccordion({
 
           <span className="min-w-0 flex-1" aria-hidden="true" />
 
-          <span
-            className="shrink-0 text-[1rem] font-bold leading-none tabular-nums"
-            style={{ color: primaryColor }}
-          >
-            {expanded ? "−" : "+"}
-          </span>
+          {framedConfig.bracketToggleOnRight ? (
+            bracketIndicator
+          ) : (
+            <span
+              className="shrink-0 text-[1rem] font-bold leading-none tabular-nums"
+              style={{ color: primaryColor }}
+            >
+              {expanded ? "−" : "+"}
+            </span>
+          )}
         </button>
 
         <div
@@ -192,6 +194,44 @@ export function MenuCategoryAccordion({
         </div>
       </div>
     </section>
+  );
+}
+
+function FramedBracketIndicator({
+  expanded,
+  primaryColor,
+  large = false,
+}: {
+  expanded: boolean;
+  primaryColor: string;
+  large?: boolean;
+}) {
+  return (
+    <span
+      className={`flex shrink-0 items-center gap-1 font-mono font-bold leading-none ${
+        large ? "text-[0.82rem]" : "text-[0.72rem]"
+      }`}
+      aria-hidden="true"
+    >
+      <span>[</span>
+      <span
+        className={`flex items-center justify-center ${
+          large ? "h-3 w-3" : "h-2.5 w-2.5"
+        }`}
+      >
+        {expanded ? (
+          <span
+            className={`block rounded-full ${
+              large ? "h-2.5 w-2.5" : "h-2 w-2"
+            }`}
+            style={{ backgroundColor: primaryColor }}
+          />
+        ) : (
+          <span>○</span>
+        )}
+      </span>
+      <span>]</span>
+    </span>
   );
 }
 

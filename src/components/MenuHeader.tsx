@@ -10,7 +10,7 @@ import {
   getHeaderBackgroundStyle,
   hasHeaderBackgroundImage,
 } from "@/lib/client-header";
-import { getMenuTheme, isFramedMenuTheme } from "@/lib/menu-theme";
+import { getMenuTheme, getFramedThemeConfig, isFramedMenuTheme } from "@/lib/menu-theme";
 
 export const HEADER_BG = "#560200";
 export const BRAND_ACCENT = "#F2E8D8";
@@ -27,7 +27,9 @@ export function MenuHeader({
   const { content } = useLanguage();
   const clientMenu = useClientMenu();
   const { ui, restaurant } = content;
-  const isFramed = isFramedMenuTheme(getMenuTheme(clientMenu?.client));
+  const menuTheme = getMenuTheme(clientMenu?.client);
+  const isFramed = isFramedMenuTheme(menuTheme);
+  const framedConfig = getFramedThemeConfig(menuTheme);
   const effectiveHeader = clientMenu
     ? getEffectiveHeader(clientMenu.client)
     : null;
@@ -48,13 +50,14 @@ export function MenuHeader({
     ? hasHeaderBackgroundImage(effectiveHeader)
     : false;
 
-  if (isFramed) {
+  if (isFramed && framedConfig) {
     return (
       <header
-        className="relative z-30 overflow-visible border-b-4 px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top,0px))] text-[#141415]"
+        className={`relative z-30 overflow-visible border-b ${framedConfig.headerPaddingClass} text-[#141415]`}
         style={{
           backgroundColor: accentColor,
           borderColor: primaryColor,
+          borderBottomWidth: framedConfig.headerBorderBottomPx,
         }}
       >
         <div
