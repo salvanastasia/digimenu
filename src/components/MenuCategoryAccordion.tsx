@@ -2,6 +2,8 @@
 
 import type { MenuCategory } from "@/types/menu";
 import { MenuItemRow } from "@/components/MenuItemRow";
+import { useClientMenu } from "@/context/ClientMenuContext";
+import { getMenuTheme, isFramedMenuTheme } from "@/lib/menu-theme";
 
 type MenuCategoryAccordionProps = {
   category: MenuCategory;
@@ -28,8 +30,100 @@ export function MenuCategoryAccordion({
   addFavoriteLabel,
   removeFavoriteLabel,
 }: MenuCategoryAccordionProps) {
+  const clientMenu = useClientMenu();
+  const isFramed = isFramedMenuTheme(getMenuTheme(clientMenu?.client));
+  const primaryColor = clientMenu?.client.brand.primaryColor ?? "#560200";
   const panelId = `panel-${category.id}`;
   const buttonId = `button-${category.id}`;
+
+  if (isFramed) {
+    return (
+      <section className="border-b border-[#141415]/15">
+        <button
+          id={buttonId}
+          type="button"
+          aria-expanded={expanded}
+          aria-controls={panelId}
+          onClick={() => onToggle(category.id)}
+          className={`flex w-full items-center gap-2 px-4 py-3.5 text-left text-[#141415] transition-colors ${
+            expanded ? "" : "bg-white hover:bg-[#fafafa]"
+          }`}
+          style={
+            expanded
+              ? {
+                  backgroundColor: `color-mix(in srgb, ${primaryColor} 5%, transparent)`,
+                }
+              : undefined
+          }
+        >
+          <span
+            className="flex shrink-0 items-center gap-1 font-mono text-[0.72rem] font-bold leading-none"
+            aria-hidden="true"
+          >
+            <span>[</span>
+            <span className="flex h-2.5 w-2.5 items-center justify-center">
+              {expanded ? (
+                <span
+                  className="block h-2 w-2 rounded-full"
+                  style={{ backgroundColor: primaryColor }}
+                />
+              ) : (
+                <span>○</span>
+              )}
+            </span>
+            <span>]</span>
+          </span>
+
+          <span
+            className="shrink-0 text-[0.78rem] font-bold uppercase tracking-[0.18em]"
+            style={{ color: primaryColor }}
+          >
+            {category.name}
+          </span>
+
+          <span className="min-w-0 flex-1" aria-hidden="true" />
+
+          <span
+            className="shrink-0 text-[1rem] font-bold leading-none tabular-nums"
+            style={{ color: primaryColor }}
+          >
+            {expanded ? "−" : "+"}
+          </span>
+        </button>
+
+        <div
+          id={panelId}
+          role="region"
+          aria-labelledby={buttonId}
+          hidden={!expanded}
+          className={expanded ? "block bg-white" : "hidden"}
+        >
+          {category.notes ? (
+            <div
+              className="border-b border-[#141415] px-4 py-3 text-[0.78rem] uppercase leading-relaxed tracking-[0.04em] text-[#606060]"
+              dangerouslySetInnerHTML={{ __html: category.notes }}
+            />
+          ) : null}
+
+          <div>
+            {category.items.map((item) => (
+              <MenuItemRow
+                key={item.id}
+                item={item}
+                favorite={favoriteIds.has(item.id)}
+                onToggleFavorite={onToggleFavorite}
+                allergensLabel={allergensLabel}
+                veganTagLabel={veganTagLabel}
+                vegetarianTagLabel={vegetarianTagLabel}
+                addFavoriteLabel={addFavoriteLabel}
+                removeFavoriteLabel={removeFavoriteLabel}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="overflow-hidden rounded-[15px] bg-[#eef0f1]">

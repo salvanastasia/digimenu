@@ -95,6 +95,9 @@ function migrateClientRecord(client: ClientConfig): ClientConfig {
     tableServiceFee:
       migrated.tableServiceFee ?? DEFAULT_TABLE_SERVICE_FEE,
     customizations: {
+      menuTheme:
+        migrated.customizations?.menuTheme ??
+        DEFAULT_CUSTOMIZATIONS.menuTheme,
       favoritesView:
         migrated.customizations?.favoritesView ??
         DEFAULT_CUSTOMIZATIONS.favoritesView,

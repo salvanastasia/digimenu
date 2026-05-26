@@ -2,12 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FlagIcon } from "@/components/FlagIcon";
+import { useClientMenu } from "@/context/ClientMenuContext";
 import { LANGUAGES } from "@/lib/languages";
 import { useLanguage } from "@/context/LanguageContext";
 import type { Locale } from "@/types/translation";
 
-export function LanguageSelector() {
+export function LanguageSelector({
+  tone = "dark",
+  size = "default",
+}: {
+  tone?: "dark" | "light";
+  size?: "default" | "compact";
+}) {
   const { locale, setLocale, content, enabledLocales } = useLanguage();
+  const clientMenu = useClientMenu();
+  const primaryColor = clientMenu?.client.brand.primaryColor ?? "#560200";
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const availableLanguages = LANGUAGES.filter((language) =>
@@ -49,7 +58,9 @@ export function LanguageSelector() {
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/70"
+        className={`flex items-center justify-center overflow-hidden rounded-full border ${
+          size === "compact" ? "h-8 w-8" : "h-11 w-11"
+        } ${tone === "light" ? "border-[#141415]/25" : "border-white/70"}`}
       >
         <FlagIcon flag={current.flag} />
       </button>
@@ -71,9 +82,17 @@ export function LanguageSelector() {
                 onClick={() => handleSelect(language.locale)}
                 className={`flex w-full items-center gap-3 px-4 py-3 text-left text-[0.92rem] transition-colors ${
                   selected
-                    ? "bg-[#560200]/8 font-semibold text-[#560200]"
+                    ? "font-semibold"
                     : "text-[#141415] hover:bg-[#f5f5f5]"
                 }`}
+                style={
+                  selected
+                    ? {
+                        backgroundColor: `color-mix(in srgb, ${primaryColor} 8%, transparent)`,
+                        color: primaryColor,
+                      }
+                    : undefined
+                }
               >
                 <span className="flex h-7 w-7 shrink-0 overflow-hidden rounded-full border border-black/10">
                   <FlagIcon flag={language.flag} />

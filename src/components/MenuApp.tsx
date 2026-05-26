@@ -8,16 +8,20 @@ import { FavoritesReceiptPanel } from "@/components/FavoritesReceiptPanel";
 import { MenuCategoryAccordion } from "@/components/MenuCategoryAccordion";
 import { MenuFooter } from "@/components/MenuFooter";
 import { MenuHeader, HEADER_BG } from "@/components/MenuHeader";
+import { MenuCheckerboardFrame } from "@/components/menu/MenuCheckerboardFrame";
 import { ThemeColorSync } from "@/components/ThemeColorSync";
 import { useClientMenu } from "@/context/ClientMenuContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { getEffectiveHeader } from "@/lib/client-header";
+import { getMenuTheme, isFramedMenuTheme } from "@/lib/menu-theme";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 export function MenuApp() {
   const { content, translationError } = useLanguage();
   const clientMenu = useClientMenu();
+  const menuTheme = getMenuTheme(clientMenu?.client);
+  const isFramed = isFramedMenuTheme(menuTheme);
   const favoritesView =
     clientMenu?.client.customizations.favoritesView ?? "panel";
   const {
@@ -59,18 +63,20 @@ export function MenuApp() {
     ? getEffectiveHeader(clientMenu.client).backgroundColor
     : HEADER_BG;
 
-  return (
+  const menuBody = (
     <>
-      <ThemeColorSync color={statusBarColor} />
-      <div className="mx-auto min-h-screen w-full max-w-[640px] bg-white shadow-none md:shadow-[0_0_40px_rgba(0,0,0,0.08)]">
       <MenuHeader
         favoritesCount={totalQuantity}
         onOpenFavorites={openFavorites}
       />
 
-      <main className="relative z-0 space-y-3 px-3 pt-3 pb-0">
+      <main
+        className={`relative z-0 pb-0 ${isFramed ? "space-y-0 px-0 pt-0" : "space-y-3 px-3 pt-3"}`}
+      >
         {translationError ? (
-          <div className="rounded-[15px] bg-[#fff1f1] px-4 py-3 text-[0.88rem] text-[#8a1f1f]">
+          <div
+            className={`rounded-[15px] bg-[#fff1f1] px-4 py-3 text-[0.88rem] text-[#8a1f1f] ${isFramed ? "mx-3 mt-3" : ""}`}
+          >
             {translationError}
           </div>
         ) : null}
@@ -141,7 +147,26 @@ export function MenuApp() {
           increaseQuantityLabel={ui.increaseQuantity}
         />
       )}
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      <ThemeColorSync color={statusBarColor} />
+      <div
+        className={`mx-auto min-h-screen w-full max-w-[640px] ${isFramed ? "bg-transparent shadow-none" : "bg-white shadow-none md:shadow-[0_0_40px_rgba(0,0,0,0.08)]"}`}
+      >
+        {isFramed && clientMenu ? (
+          <MenuCheckerboardFrame
+            primaryColor={clientMenu.client.brand.primaryColor}
+            secondaryColor={clientMenu.client.brand.secondaryColor}
+          >
+            {menuBody}
+          </MenuCheckerboardFrame>
+        ) : (
+          menuBody
+        )}
+      </div>
     </>
   );
 }

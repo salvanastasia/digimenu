@@ -25,6 +25,7 @@ export const DEFAULT_WIFI_ACCESS = {
 } as const;
 
 export const DEFAULT_CUSTOMIZATIONS: ClientCustomizations = {
+  menuTheme: "classic",
   favoritesView: "panel",
   translateDishNames: true,
   showFavoritesQuantity: true,

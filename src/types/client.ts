@@ -42,6 +42,8 @@ export type ClientDish = {
 
 export type FavoritesViewMode = "panel" | "receipt";
 
+export type MenuTheme = "classic" | "framed";
+
 export type ClientWifiAccess = {
   enabled: boolean;
   ssid: string;
@@ -49,6 +51,8 @@ export type ClientWifiAccess = {
 };
 
 export type ClientCustomizations = {
+  /** Layout e stile del menu pubblico. */
+  menuTheme: MenuTheme;
   favoritesView: FavoritesViewMode;
   /** Traduce il nome piatto nelle lingue estere. */
   translateDishNames: boolean;

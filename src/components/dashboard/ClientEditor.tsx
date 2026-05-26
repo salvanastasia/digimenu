@@ -54,6 +54,7 @@ import type {
   FavoritesViewMode,
   HeaderBackgroundMode,
   HeaderColorKey,
+  MenuTheme,
 } from "@/types/client";
 import type { Locale } from "@/types/translation";
 
@@ -984,6 +985,45 @@ export function ClientEditor({
 
       <Section title="Personalizzazioni">
         <div>
+          <p className="mb-2 text-[0.78rem] font-semibold text-[#606060]">
+            Tema menu
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {(
+              [
+                { value: "classic", label: "Classico" },
+                { value: "framed", label: "Framed" },
+              ] as const
+            ).map((option) => {
+              const active = client.customizations.menuTheme === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() =>
+                    updateCustomizations({
+                      menuTheme: option.value as MenuTheme,
+                    })
+                  }
+                  className={`rounded-full border px-4 py-2 text-[0.82rem] font-semibold transition-colors ${
+                    active
+                      ? "border-[#560200] bg-[#560200]/8 text-[#560200]"
+                      : "border-[#d8dadc] bg-white text-[#606060] hover:bg-[#f5f5f5]"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-2 text-[0.72rem] leading-snug text-[#606060]">
+            Classico mantiene il layout attuale. Framed aggiunge una cornice a
+            scacchiera con i colori brand, header urbano e voci menu più
+            editoriali.
+          </p>
+        </div>
+
+        <div className="mt-5">
           <p className="mb-2 text-[0.78rem] font-semibold text-[#606060]">
             Vista preferiti
           </p>
