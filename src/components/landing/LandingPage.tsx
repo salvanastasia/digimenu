@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DigiMenuLogo } from "@/components/DigiMenuLogo";
 import { JoinUsButton } from "@/components/landing/JoinUsProvider";
 import { LandingPhotoCarousel } from "@/components/landing/LandingPhotoCarousel";
 
@@ -58,14 +59,7 @@ export function LandingPage() {
     <div className="min-h-screen bg-[#f7f7f7] text-[#141415]">
       <header className="sticky top-0 z-50 border-b border-[#e4e4e4] bg-white/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link href="/" className="min-w-0">
-            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-[#560200]">
-              DigiMenu
-            </p>
-            <p className="truncate text-[1.1rem] font-bold text-[#141415]">
-              Menu digitale
-            </p>
-          </Link>
+          <DigiMenuLogo />
 
           <nav className="flex shrink-0 items-center gap-2 sm:gap-3">
             <Link
