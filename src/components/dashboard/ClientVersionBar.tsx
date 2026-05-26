@@ -6,6 +6,7 @@ type ClientVersionBarProps = {
   versionSavedAt?: string;
   onPrevious: () => void;
   onNext: () => void;
+  onRestoreVersion: () => void;
   isDirty: boolean;
   saveStatus: "idle" | "saved";
   saveError: string | null;
@@ -22,6 +23,7 @@ export function ClientVersionBar({
   versionSavedAt,
   onPrevious,
   onNext,
+  onRestoreVersion,
   isDirty,
   saveStatus,
   saveError,
@@ -31,6 +33,9 @@ export function ClientVersionBar({
   menuHidden = false,
   translationStaleFields = 0,
 }: ClientVersionBarProps) {
+  const isViewingHistoricalVersion =
+    versionCount > 0 && versionIndex < versionCount - 1;
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-[#e4e4e4] bg-white px-4 py-3">
       <div className="flex flex-wrap items-center gap-2">
@@ -94,6 +99,15 @@ export function ClientVersionBar({
             className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSaving ? "Salvataggio..." : "Salva"}
+          </button>
+        ) : isViewingHistoricalVersion ? (
+          <button
+            type="button"
+            onClick={onRestoreVersion}
+            disabled={isSaving}
+            className="rounded-full bg-[#560200] px-5 py-2 text-[0.84rem] font-semibold text-white transition-colors hover:bg-[#6d0200] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isSaving ? "Ripristino..." : "Ripristina versione"}
           </button>
         ) : menuHidden ? (
           <span

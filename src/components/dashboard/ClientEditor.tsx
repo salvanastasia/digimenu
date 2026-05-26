@@ -75,6 +75,7 @@ type ClientEditorProps = {
   versionSavedAt?: string;
   onPreviousVersion: () => void;
   onNextVersion: () => void;
+  onRestoreVersion: () => void;
   isDirty: boolean;
   saveStatus: "idle" | "saved";
   saveError: string | null;
@@ -125,6 +126,7 @@ export function ClientEditor({
   versionSavedAt,
   onPreviousVersion,
   onNextVersion,
+  onRestoreVersion,
   isDirty,
   saveStatus,
   saveError,
@@ -883,6 +885,7 @@ export function ClientEditor({
         versionSavedAt={versionSavedAt}
         onPrevious={onPreviousVersion}
         onNext={onNextVersion}
+        onRestoreVersion={onRestoreVersion}
         isDirty={isDirty}
         saveStatus={saveStatus}
         saveError={saveError}

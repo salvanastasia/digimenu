@@ -245,6 +245,7 @@ export function DashboardApp() {
               versionSavedAt={entry.versions[versionIndex]?.savedAt}
               onPreviousVersion={() => goToVersion(versionIndex - 1)}
               onNextVersion={() => goToVersion(versionIndex + 1)}
+              onRestoreVersion={() => void handleSave()}
               isDirty={isDirty}
               saveStatus={saveStatus}
               saveError={saveError}
