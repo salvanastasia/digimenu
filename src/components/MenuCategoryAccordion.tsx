@@ -3,10 +3,11 @@
 import type { MenuCategory } from "@/types/menu";
 import { MenuItemRow } from "@/components/MenuItemRow";
 import { useClientMenu } from "@/context/ClientMenuContext";
-import { getMenuTheme, isFramedMenuTheme } from "@/lib/menu-theme";
+import { getMenuTheme, getAccordionHeaderBackground, isFramedMenuTheme, isMenuZebraRowsEnabled } from "@/lib/menu-theme";
 
 type MenuCategoryAccordionProps = {
   category: MenuCategory;
+  categoryIndex: number;
   expanded: boolean;
   onToggle: (id: string) => void;
   favoriteIds: Set<string>;
@@ -20,6 +21,7 @@ type MenuCategoryAccordionProps = {
 
 export function MenuCategoryAccordion({
   category,
+  categoryIndex,
   expanded,
   onToggle,
   favoriteIds,
@@ -32,7 +34,16 @@ export function MenuCategoryAccordion({
 }: MenuCategoryAccordionProps) {
   const clientMenu = useClientMenu();
   const isFramed = isFramedMenuTheme(getMenuTheme(clientMenu?.client));
+  const menuZebraRows = isMenuZebraRowsEnabled(clientMenu?.client);
   const primaryColor = clientMenu?.client.brand.primaryColor ?? "#560200";
+  const secondaryColor = clientMenu?.client.brand.secondaryColor ?? "#F2E8D8";
+  const headerBackground = getAccordionHeaderBackground({
+    expanded,
+    zebraEnabled: menuZebraRows,
+    categoryIndex,
+    primaryColor,
+    secondaryColor,
+  });
   const panelId = `panel-${category.id}`;
   const buttonId = `button-${category.id}`;
 
@@ -46,13 +57,11 @@ export function MenuCategoryAccordion({
           aria-controls={panelId}
           onClick={() => onToggle(category.id)}
           className={`flex w-full items-center gap-2 px-4 py-3.5 text-left text-[#141415] transition-colors ${
-            expanded ? "" : "bg-white hover:bg-[#fafafa]"
+            headerBackground ? "" : "bg-white hover:bg-[#fafafa]"
           }`}
           style={
-            expanded
-              ? {
-                  backgroundColor: `color-mix(in srgb, ${primaryColor} 5%, transparent)`,
-                }
+            headerBackground
+              ? { backgroundColor: headerBackground }
               : undefined
           }
         >
@@ -133,7 +142,12 @@ export function MenuCategoryAccordion({
         aria-expanded={expanded}
         aria-controls={panelId}
         onClick={() => onToggle(category.id)}
-        className="flex w-full items-center justify-between px-[15px] py-[18px] text-left"
+        className="flex w-full items-center justify-between px-[15px] py-[18px] text-left transition-colors"
+        style={
+          headerBackground
+            ? { backgroundColor: headerBackground }
+            : undefined
+        }
       >
         <span className="text-[1rem] font-bold text-[#141415]">
           {category.name}

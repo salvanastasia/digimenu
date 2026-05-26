@@ -121,6 +121,9 @@ function migrateClientRecord(client: ClientConfig): ClientConfig {
           migrated.customizations?.wifiAccess?.password ??
           DEFAULT_CUSTOMIZATIONS.wifiAccess.password,
       },
+      menuZebraRows:
+        migrated.customizations?.menuZebraRows ??
+        DEFAULT_CUSTOMIZATIONS.menuZebraRows,
     },
     header: {
       ...migrated.header,

@@ -81,10 +81,11 @@ export function MenuApp() {
           </div>
         ) : null}
 
-        {categories.map((category) => (
+        {categories.map((category, categoryIndex) => (
           <MenuCategoryAccordion
             key={category.id}
             category={category}
+            categoryIndex={categoryIndex}
             expanded={expandedCategories.has(category.id)}
             onToggle={toggleCategory}
             favoriteIds={favoriteSet}

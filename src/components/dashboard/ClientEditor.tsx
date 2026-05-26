@@ -1062,6 +1062,17 @@ export function ClientEditor({
           </p>
         </div>
 
+        <div className="mt-5">
+          <SettingsToggle
+            label="Voci menu (Zebra)"
+            hint="Alterna lo sfondo delle voci di categoria all'interno del menu."
+            checked={client.customizations.menuZebraRows}
+            onChange={(checked) =>
+              updateCustomizations({ menuZebraRows: checked })
+            }
+          />
+        </div>
+
         <div className="mt-5 space-y-5">
           <SettingsToggle
             label="Traduzione nome piatto"

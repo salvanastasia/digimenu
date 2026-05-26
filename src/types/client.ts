@@ -62,6 +62,8 @@ export type ClientCustomizations = {
   showFavoritesPrices: boolean;
   /** Banner Wi-Fi nel menu pubblico. */
   wifiAccess: ClientWifiAccess;
+  /** Alternanza colori sulle voci menu (accordion header). */
+  menuZebraRows: boolean;
 };
 
 /** Impronte del testo italiano all'ultima traduzione automatica per campo. */

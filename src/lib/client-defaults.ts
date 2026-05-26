@@ -31,6 +31,7 @@ export const DEFAULT_CUSTOMIZATIONS: ClientCustomizations = {
   showFavoritesQuantity: true,
   showFavoritesPrices: true,
   wifiAccess: { ...DEFAULT_WIFI_ACCESS },
+  menuZebraRows: false,
 };
 
 const TABLE_SERVICE_FEE_LABELS: Record<Locale, string> = {
