@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { JoinUsButton } from "@/components/landing/JoinUsProvider";
+import { LandingPhotoCarousel } from "@/components/landing/LandingPhotoCarousel";
 
 const FEATURES = [
   {
@@ -148,7 +149,7 @@ export function LandingPage() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-[#f7f7f7] px-4 py-3 text-center text-[0.72rem] font-medium text-[#606060]">
+                <div className="bg-[#f7f7f7] px-4 py-3 text-center text-[0.72rem] font-medium text-[rgba(96,96,96,0)]">
                   Anteprima interfaccia menu
                 </div>
               </div>
@@ -218,14 +219,7 @@ export function LandingPage() {
                 ))}
               </ol>
 
-              <div className="aspect-square w-full overflow-hidden rounded-[18px] border border-[#e4e4e4] bg-[#fafafa] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/landing-menu-photo.jpg"
-                  alt="Cliente consulta il menu digitale DigiMenu al ristorante"
-                  className="h-full w-full object-cover"
-                />
-              </div>
+              <LandingPhotoCarousel />
             </div>
           </div>
         </section>
