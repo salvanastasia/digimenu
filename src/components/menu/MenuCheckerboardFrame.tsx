@@ -14,7 +14,7 @@ export function MenuCheckerboardFrame({
 }: MenuCheckerboardFrameProps) {
   return (
     <div className="p-2.5" style={getCheckerboardFrameStyle(primaryColor, secondaryColor)}>
-      <div className="min-h-[calc(100dvh-20px)] bg-white">{children}</div>
+      <div className="flex min-h-[calc(100dvh-20px)] flex-col bg-white">{children}</div>
     </div>
   );
 }

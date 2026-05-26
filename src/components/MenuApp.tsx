@@ -71,7 +71,7 @@ export function MenuApp() {
       />
 
       <main
-        className={`relative z-0 pb-0 ${isFramed ? "space-y-0 px-0 pt-0" : "space-y-3 px-3 pt-3"}`}
+        className={`relative z-0 flex-1 pb-0 ${isFramed ? "space-y-0 px-0 pt-0" : "space-y-3 px-3 pt-3"}`}
       >
         {translationError ? (
           <div
@@ -98,7 +98,7 @@ export function MenuApp() {
         ))}
       </main>
 
-      <div className={totalQuantity > 0 ? "pb-20" : undefined}>
+      <div className="pb-24">
         {restaurant.showAllergens ? (
           <AllergenList
             allergens={content.allergens}
@@ -154,7 +154,7 @@ export function MenuApp() {
     <>
       <ThemeColorSync color={statusBarColor} />
       <div
-        className={`mx-auto min-h-screen w-full max-w-[640px] ${isFramed ? "bg-transparent shadow-none" : "bg-white shadow-none md:shadow-[0_0_40px_rgba(0,0,0,0.08)]"}`}
+        className={`mx-auto flex min-h-screen w-full max-w-[640px] flex-col ${isFramed ? "bg-transparent shadow-none" : "bg-white shadow-none md:shadow-[0_0_40px_rgba(0,0,0,0.08)]"}`}
       >
         {isFramed && clientMenu ? (
           <MenuCheckerboardFrame

@@ -32,7 +32,7 @@ export function MenuFooter({ restaurant, ui }: MenuFooterProps) {
   );
 
   return (
-    <footer className="border-t border-[#141415]/10 px-5 pb-1 pt-8 text-[0.85rem] leading-relaxed text-[#909090]">
+    <footer className="border-t border-[#141415]/10 px-5 pb-5 pt-8 text-[0.85rem] leading-relaxed text-[#909090]">
       {restaurant.notes ? (
         <div
           className="menu-notes mb-8 text-[#141415]"
