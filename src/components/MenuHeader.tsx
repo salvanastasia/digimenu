@@ -77,7 +77,7 @@ export function MenuHeader({
               type="button"
               aria-label={ui.showFavorites}
               onClick={onOpenFavorites}
-              className="relative flex h-11 w-11 items-center justify-center transition-colors"
+              className="relative flex h-[34px] w-[34px] items-center justify-center rounded-full transition-colors"
               style={
                 favoritesCount > 0
                   ? {
@@ -87,14 +87,16 @@ export function MenuHeader({
                   : { color: primaryColor }
               }
             >
-              <HeartIcon filled={favoritesCount > 0} />
+              <HeartIcon
+                filled={favoritesCount > 0}
+                className={favoritesCount > 0 ? "h-4 w-4" : "h-5 w-5"}
+              />
               {favoritesCount > 0 ? (
                 <span
-                  className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[0.65rem] font-bold leading-none tabular-nums"
+                  className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none tabular-nums"
                   style={{
-                    backgroundColor: sloganColor,
-                    color: primaryColor,
-                    borderColor: primaryColor,
+                    backgroundColor: primaryColor,
+                    color: sloganColor,
                   }}
                 >
                   {favoritesCount}
