@@ -154,10 +154,12 @@ export function ClientEditor({
     string | null
   >(null);
   const [generatingAllAllergens, setGeneratingAllAllergens] = useState(false);
+  const [generatingAllPrices, setGeneratingAllPrices] = useState(false);
   const [descriptionAiError, setDescriptionAiError] = useState<string | null>(
     null,
   );
   const [allergenAiError, setAllergenAiError] = useState<string | null>(null);
+  const [priceAiError, setPriceAiError] = useState<string | null>(null);
   const [expandedCategoryIds, setExpandedCategoryIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -359,7 +361,8 @@ export function ClientEditor({
     generatingDescriptionFor !== null ||
     generatingAllDescriptions ||
     generatingAllergensFor !== null ||
-    generatingAllAllergens;
+    generatingAllAllergens ||
+    generatingAllPrices;
 
   const dishStats = useMemo(() => {
     const dishCount = client.dishes.length;
@@ -915,6 +918,91 @@ export function ClientEditor({
       );
     } finally {
       setGeneratingAllAllergens(false);
+    }
+  };
+
+  const fetchDishPrice = async (
+    dishName: string,
+    dishDescription: string,
+    categoryName: string,
+  ) => {
+    const response = await fetch("/api/generate-dish-price", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: adminEmail,
+        dishName: dishName.trim(),
+        dishDescription,
+        categoryName,
+        restaurantName: client.name,
+      }),
+    });
+
+    const payload = (await response.json()) as {
+      price?: number;
+      error?: string;
+    };
+
+    if (!response.ok || payload.price == null || !Number.isFinite(payload.price)) {
+      throw new Error(payload.error ?? "Generazione prezzo non riuscita.");
+    }
+
+    return payload.price;
+  };
+
+  const generateAllPrices = async () => {
+    if (!adminEmail || editingLocale !== "it") return;
+
+    const categoryNames = new Map(
+      client.categories.map((category) => [category.id, category.name]),
+    );
+
+    const targets = client.dishes.filter((dish) => {
+      const name = getDishField(client, "it", dish.id, "name").trim();
+      return name.length > 0 && dish.price == null;
+    });
+
+    if (targets.length === 0) {
+      setPriceAiError("Nessun piatto con nome e senza prezzo impostato.");
+      return;
+    }
+
+    setGeneratingAllPrices(true);
+    setPriceAiError(null);
+
+    let nextClient = client;
+
+    try {
+      for (const dish of targets) {
+        const dishName = getDishField(nextClient, "it", dish.id, "name");
+        const dishDescription = getDishField(
+          nextClient,
+          "it",
+          dish.id,
+          "description",
+        );
+        const categoryName = categoryNames.get(dish.categoryId) ?? "";
+        const price = await fetchDishPrice(
+          dishName,
+          dishDescription,
+          categoryName,
+        );
+        nextClient = {
+          ...nextClient,
+          dishes: nextClient.dishes.map((entry) =>
+            entry.id === dish.id ? { ...entry, price } : entry,
+          ),
+        };
+        onChange(nextClient);
+      }
+    } catch (error) {
+      setPriceAiError(
+        error instanceof Error
+          ? error.message
+          : "Generazione prezzi non riuscita.",
+      );
+    } finally {
+      setGeneratingAllPrices(false);
     }
   };
 
@@ -1525,7 +1613,7 @@ export function ClientEditor({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={addCategory}
@@ -1534,27 +1622,6 @@ export function ClientEditor({
           >
             + Categoria
           </button>
-          {editingLocale === "it" ? (
-            <DishesActionsMenu
-              hasDishes={client.dishes.length > 0}
-              disabled={isDishAiBusy}
-              isImporting={isImportingDishes}
-              importError={dishesImportError}
-              onExportCsv={handleExportDishesCsv}
-              onExportJson={handleExportDishesJson}
-              onImportCsvFile={(file) => void handleImportDishesCsvFile(file)}
-              onImportGemini={handleImportDishesWithGemini}
-              onDeleteAll={() =>
-                setConfirm({
-                  title: "Elimina tutti i piatti",
-                  message: `Verranno rimossi tutti i ${client.dishes.length} piatti di "${client.name}". Le categorie resteranno invariate.`,
-                  confirmLabel: "Elimina tutti i piatti",
-                  confirmationPhrase: client.name,
-                  onConfirm: removeAllDishes,
-                })
-              }
-            />
-          ) : null}
           {client.dishes.length > 0 ? (
             <>
               <button
@@ -1591,7 +1658,47 @@ export function ClientEditor({
                 )}
                 Genera Allergeni
               </button>
+              <button
+                type="button"
+                disabled={
+                  editingLocale !== "it" ||
+                  !adminEmail ||
+                  isDishAiBusy
+                }
+                onClick={() => void generateAllPrices()}
+                className="inline-flex items-center gap-2 rounded-full border border-[#5b6cff]/35 bg-[#eef0ff] px-4 py-2 text-[0.82rem] font-semibold text-[#5b6cff] transition-colors hover:border-[#5b6cff]/50 hover:bg-[#e3e7ff] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {generatingAllPrices ? (
+                  <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#5b6cff]/25 border-t-[#5b6cff]" />
+                ) : (
+                  <AiSparklesIcon className="h-4 w-4" />
+                )}
+                Genera Prezzi
+              </button>
             </>
+          ) : null}
+          {editingLocale === "it" ? (
+            <div className="ml-auto shrink-0">
+              <DishesActionsMenu
+                hasDishes={client.dishes.length > 0}
+                disabled={isDishAiBusy}
+                isImporting={isImportingDishes}
+                importError={dishesImportError}
+                onExportCsv={handleExportDishesCsv}
+                onExportJson={handleExportDishesJson}
+                onImportCsvFile={(file) => void handleImportDishesCsvFile(file)}
+                onImportGemini={handleImportDishesWithGemini}
+                onDeleteAll={() =>
+                  setConfirm({
+                    title: "Elimina tutti i piatti",
+                    message: `Verranno rimossi tutti i ${client.dishes.length} piatti di "${client.name}". Le categorie resteranno invariate.`,
+                    confirmLabel: "Elimina tutti i piatti",
+                    confirmationPhrase: client.name,
+                    onConfirm: removeAllDishes,
+                  })
+                }
+              />
+            </div>
           ) : null}
         </div>
 
@@ -1601,9 +1708,9 @@ export function ClientEditor({
           </p>
         ) : null}
 
-        {(descriptionAiError || allergenAiError) ? (
+        {(descriptionAiError || allergenAiError || priceAiError) ? (
           <p className="rounded-[12px] bg-[#fff1f1] px-4 py-3 text-[0.84rem] text-[#8a1f1f]">
-            {descriptionAiError ?? allergenAiError}
+            {descriptionAiError ?? allergenAiError ?? priceAiError}
           </p>
         ) : null}
 

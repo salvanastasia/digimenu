@@ -132,6 +132,13 @@ export type GenerateDishAllergensInput = {
   categoryName?: string;
 };
 
+export type GenerateDishPriceInput = {
+  dishName: string;
+  dishDescription?: string;
+  categoryName?: string;
+  restaurantName?: string;
+};
+
 const EU_ALLERGEN_CATALOG = [
   { id: 1, label: "Cereali contenenti glutine (grano, farro, segale, orzo, avena, pasta, pane, impanatura)" },
   { id: 2, label: "Crostacei (gamberi, scampi, aragoste, granchi)" },
@@ -227,6 +234,73 @@ export async function generateDishAllergensWithGemini(
   );
 
   return parseAllergenIdsResponse(raw);
+}
+
+function parseDishPriceResponse(raw: string): number {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    const numeric = Number(raw.replace(",", ".").trim());
+    if (Number.isFinite(numeric) && numeric > 0) {
+      return Math.round(numeric * 100) / 100;
+    }
+    throw new Error("Risposta prezzo non valida.");
+  }
+
+  const value =
+    parsed &&
+    typeof parsed === "object" &&
+    "price" in parsed &&
+    (parsed as { price: unknown }).price !== null &&
+    (parsed as { price: unknown }).price !== undefined
+      ? Number((parsed as { price: number | string }).price)
+      : Number(parsed);
+
+  if (!Number.isFinite(value) || value <= 0 || value > 500) {
+    throw new Error("Prezzo suggerito non valido.");
+  }
+
+  return Math.round(value * 100) / 100;
+}
+
+export async function generateDishPriceWithGemini(
+  input: GenerateDishPriceInput,
+): Promise<number> {
+  const dishName = input.dishName.trim();
+  if (!dishName) {
+    throw new Error("Nome piatto mancante.");
+  }
+
+  const prompt = [
+    "Sei un assistente per menu ristorante italiano.",
+    "Suggerisci un prezzo di listino realistico in euro (EUR) per il piatto.",
+    input.restaurantName
+      ? `Ristorante: ${input.restaurantName.trim()}`
+      : null,
+    `Piatto: ${dishName}`,
+    input.categoryName ? `Categoria: ${input.categoryName.trim()}` : null,
+    input.dishDescription?.trim()
+      ? `Descrizione: ${input.dishDescription.trim()}`
+      : "Descrizione: (non fornita)",
+    "",
+    "Regole:",
+    '- Restituisci SOLO JSON valido: {"price":12.5}',
+    "- Prezzo in euro, numero decimale con al massimo 2 decimali",
+    "- Valuta tipica ristorante/pizzeria italiano medio-alto",
+    "- Non usare simboli € nel JSON",
+    "- Se il piatto è contorno semplice, prezzo più basso; se pesce/carne premium, più alto",
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+
+  const raw = await runGeminiPrompt(
+    prompt,
+    { responseMimeType: "application/json", temperature: 0.25 },
+    (text) => text,
+  );
+
+  return parseDishPriceResponse(raw);
 }
 
 export type ParseMenuFromTextInput = {
