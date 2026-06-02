@@ -88,7 +88,7 @@ export function DishesActionsMenu({
         {isOpen ? (
           <div
             role="menu"
-            className="absolute left-0 top-[calc(100%+6px)] z-30 min-w-[14rem] overflow-hidden rounded-[12px] border border-[#e4e4e4] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+            className="absolute right-0 top-[calc(100%+6px)] z-30 min-w-[14rem] overflow-hidden rounded-[12px] border border-[#e4e4e4] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
           >
             <MenuItem
               disabled={!hasDishes}
