@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createEmptyClient } from "@/lib/client-defaults";
 import { db, isInstantConfigured } from "@/lib/db";
+import { instantTransact } from "@/lib/instant-query";
 import {
   buildCreateTransaction,
   buildDeleteTransaction,
@@ -65,7 +66,13 @@ export function useClients({ canWrite = false }: UseClientsOptions = {}) {
   );
 
   useEffect(() => {
-    if (!canWrite || !isInstantConfigured || isLoading || seedState !== "done") {
+    if (
+      !canWrite ||
+      !isInstantConfigured ||
+      isLoading ||
+      seedState !== "done" ||
+      error
+    ) {
       return;
     }
 
@@ -79,8 +86,8 @@ export function useClients({ canWrite = false }: UseClientsOptions = {}) {
 
     if (transactions.length === 0) return;
 
-    void db.transact(transactions);
-  }, [canWrite, entries, isLoading, seedState]);
+    instantTransact(db.transact(transactions), "sync-default-clients");
+  }, [canWrite, entries, error, isLoading, seedState]);
 
   const ready =
     isInstantConfigured && !isLoading && (!canWrite || seedState === "done") && !error;
@@ -92,14 +99,14 @@ export function useClients({ canWrite = false }: UseClientsOptions = {}) {
 
   const addClient = useCallback((): ClientConfig => {
     const empty = createEmptyClient();
-    void db.transact(buildCreateTransaction(empty));
+    instantTransact(db.transact(buildCreateTransaction(empty)), "create-client");
     return empty;
   }, []);
 
   const removeClient = useCallback(
     (id: string) => {
       if (entries.length <= 1) return false;
-      void db.transact(buildDeleteTransaction(id));
+      instantTransact(db.transact(buildDeleteTransaction(id)), "delete-client");
       return true;
     },
     [entries.length],
@@ -121,7 +128,7 @@ export function useClients({ canWrite = false }: UseClientsOptions = {}) {
       if (!transaction) return null;
 
       const next = saveClientVersion(entries, id, draft);
-      void db.transact(transaction);
+      instantTransact(db.transact(transaction), "save-client");
       return next.find((entry) => entry.config.id === id) ?? null;
     },
     [entries],

@@ -1,5 +1,6 @@
 import { id, tx } from "@instantdb/react";
 import { db } from "@/lib/db";
+import { withInstantRecovery } from "@/lib/instant-query";
 import {
   normalizeAdminEmail,
   parseDashboardAdminEmails,
@@ -27,7 +28,15 @@ export function buildDeleteAdminTransaction(adminId: string) {
 }
 
 export async function linkUserToAdminRow(adminId: string, userId: string) {
-  await db.transact(buildLinkAdminTransaction(adminId, userId));
+  const result = await withInstantRecovery(
+    db.transact(buildLinkAdminTransaction(adminId, userId)),
+    "link-admin-user",
+  );
+  if (result === undefined) {
+    throw new Error(
+      "Connessione a InstantDB non disponibile. Riprova tra poco.",
+    );
+  }
 }
 
 export function buildSeedAdminTransactions(

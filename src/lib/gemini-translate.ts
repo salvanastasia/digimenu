@@ -228,3 +228,128 @@ export async function generateDishAllergensWithGemini(
 
   return parseAllergenIdsResponse(raw);
 }
+
+export type ParseMenuFromTextInput = {
+  menuText: string;
+  restaurantName?: string;
+};
+
+type GeminiMenuImportResponse = {
+  categories?: Array<{ name?: string }>;
+  dishes?: Array<{
+    category?: string;
+    categoryName?: string;
+    name?: string;
+    description?: string;
+    price?: number | string | null;
+    allergenIds?: number[];
+  }>;
+};
+
+export async function parseMenuFromTextWithGemini(
+  input: ParseMenuFromTextInput,
+): Promise<{
+  categories: Array<{ name: string }>;
+  dishes: Array<{
+    category: string;
+    name: string;
+    description: string;
+    price: number | null;
+    allergenIds: number[];
+  }>;
+}> {
+  const menuText = input.menuText.trim();
+  if (!menuText) {
+    throw new Error("Incolla il testo del menu da importare.");
+  }
+
+  const prompt = [
+    "Analizza il testo di un menu ristorante italiano e restituisci JSON strutturato.",
+    input.restaurantName
+      ? `Ristorante: ${input.restaurantName.trim()}`
+      : null,
+    "",
+    "Schema JSON richiesto:",
+    '{ "categories": [{ "name": "Antipasti" }], "dishes": [{ "category": "Antipasti", "name": "Bruschetta", "description": "...", "price": 8, "allergenIds": [] }] }',
+    "",
+    "Regole:",
+    "- Estrai tutte le categorie e i piatti che trovi.",
+    "- `category` su ogni piatto deve corrispondere al nome categoria.",
+    "- `price` numerico in euro oppure null se assente.",
+    "- `description` breve; stringa vuota se assente.",
+    "- `allergenIds` sempre array (anche vuoto).",
+    "- Non inventare piatti non presenti nel testo.",
+    "",
+    "Testo menu:",
+    menuText,
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+
+  const raw = await runGeminiPrompt(
+    prompt,
+    { responseMimeType: "application/json", temperature: 0.15 },
+    (text) => text,
+  );
+
+  let parsed: GeminiMenuImportResponse;
+  try {
+    parsed = JSON.parse(raw) as GeminiMenuImportResponse;
+  } catch {
+    throw new Error("Risposta AI non valida. Riprova.");
+  }
+
+  const dishes = (parsed.dishes ?? [])
+    .map((dish) => {
+      const category = (dish.category ?? dish.categoryName ?? "").trim();
+      const name = (dish.name ?? "").trim();
+      if (!category || !name) return null;
+
+      const priceRaw = dish.price;
+      const price =
+        priceRaw === null || priceRaw === undefined || priceRaw === ""
+          ? null
+          : Number(priceRaw);
+
+      return {
+        category,
+        name,
+        description: (dish.description ?? "").trim(),
+        price: Number.isFinite(price) ? price : null,
+        allergenIds: Array.isArray(dish.allergenIds)
+          ? dish.allergenIds
+              .map((value) => Number(value))
+              .filter((value) => Number.isInteger(value) && value > 0)
+          : [],
+      };
+    })
+    .filter(
+      (
+        dish,
+      ): dish is {
+        category: string;
+        name: string;
+        description: string;
+        price: number | null;
+        allergenIds: number[];
+      } => dish !== null,
+    );
+
+  if (dishes.length === 0) {
+    throw new Error("Nessun piatto riconosciuto nel testo.");
+  }
+
+  const categoryNames = new Set<string>();
+  for (const category of parsed.categories ?? []) {
+    const name = category.name?.trim();
+    if (name) categoryNames.add(name);
+  }
+  for (const dish of dishes) {
+    categoryNames.add(dish.category);
+  }
+
+  return {
+    categories: [...categoryNames].map((name) => ({ name })),
+    dishes,
+  };
+}

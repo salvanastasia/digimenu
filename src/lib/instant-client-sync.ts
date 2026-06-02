@@ -2,6 +2,7 @@ import { id, lookup, tx } from "@instantdb/react";
 import { createAribriSeedClient } from "@/lib/client-defaults";
 import { getDefaultSeedEntries } from "@/lib/client-seeds";
 import { db } from "@/lib/db";
+import { withInstantRecovery } from "@/lib/instant-query";
 import { migrateClientTranslations } from "@/lib/client-translation-payload";
 import {
   cloneClient,
@@ -116,7 +117,11 @@ function hasPersistedLocalClients(): boolean {
 }
 
 export async function seedInstantFromLocalStorageIfEmpty() {
-  const snapshot = await db.queryOnce({ clientMenus: {} });
+  const snapshot = await withInstantRecovery(
+    db.queryOnce({ clientMenus: {} }),
+    "seed-query-clients",
+  );
+  if (!snapshot) return false;
   if ((snapshot.data.clientMenus?.length ?? 0) > 0) {
     return false;
   }
@@ -125,8 +130,11 @@ export async function seedInstantFromLocalStorageIfEmpty() {
     ? loadStore()
     : getDefaultSeedEntries();
 
-  await db.transact(buildSeedUpsertTransactions(entries, new Set()));
-  return true;
+  const wrote = await withInstantRecovery(
+    db.transact(buildSeedUpsertTransactions(entries, new Set())),
+    "seed-clients",
+  );
+  return wrote !== undefined;
 }
 
 export async function seedDefaultClientsToInstant() {

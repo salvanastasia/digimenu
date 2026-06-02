@@ -13,6 +13,7 @@ import {
   mergeConfigWithStoredAssets,
   type ClientAssetKind,
 } from "@/lib/instant-file-storage";
+import { getInstantErrorMessage } from "@/lib/instant-query";
 import type { ClientConfig } from "@/types/client";
 
 export function DashboardApp() {
@@ -210,7 +211,11 @@ export function DashboardApp() {
   if (!ready) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#f7f7f7] text-[#606060]">
-        <p>{error ? "Errore connessione InstantDB…" : "Caricamento dashboard…"}</p>
+        <p>
+          {error
+            ? getInstantErrorMessage(error)
+            : "Caricamento dashboard…"}
+        </p>
       </div>
     );
   }

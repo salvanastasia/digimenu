@@ -2,6 +2,7 @@
 
 import { DashboardAccessCheck } from "@/components/dashboard/DashboardAccessCheck";
 import { DashboardAuth } from "@/components/dashboard/DashboardAuth";
+import { InstantUnhandledRejectionGuard } from "@/components/dashboard/InstantUnhandledRejectionGuard";
 import { db, isInstantConfigured } from "@/lib/db";
 
 export function DashboardGate({
@@ -24,13 +25,13 @@ export function DashboardGate({
   }
 
   return (
-    <>
+    <InstantUnhandledRejectionGuard>
       <db.SignedOut>
         <DashboardAuth />
       </db.SignedOut>
       <db.SignedIn>
         <DashboardAccessCheck>{children}</DashboardAccessCheck>
       </db.SignedIn>
-    </>
+    </InstantUnhandledRejectionGuard>
   );
 }

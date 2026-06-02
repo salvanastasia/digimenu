@@ -9,6 +9,7 @@ import {
 import { AiDescriptionButton } from "@/components/dashboard/AiDescriptionButton";
 import { AiSparklesIcon } from "@/components/dashboard/AiSparklesIcon";
 import { ConfirmDialog } from "@/components/dashboard/ConfirmDialog";
+import { DishesActionsMenu } from "@/components/dashboard/DishesActionsMenu";
 import { ClientVersionBar } from "@/components/dashboard/ClientVersionBar";
 import { SettingsToggle } from "@/components/dashboard/SettingsToggle";
 import {
@@ -47,6 +48,14 @@ import { LANGUAGES } from "@/lib/languages";
 import { EditingLocaleFlagPicker } from "@/components/dashboard/EditingLocaleFlagPicker";
 import { TranslationProgressBar } from "@/components/dashboard/TranslationProgressBar";
 import { useMenuTranslation } from "@/hooks/useMenuTranslation";
+import {
+  applyMenuImport,
+  downloadTextFile,
+  exportMenuDishesCsv,
+  exportMenuDishesJson,
+  parseMenuDishesCsv,
+  type MenuImportPayload,
+} from "@/lib/menu-dishes-io";
 import type { ClientAssetKind } from "@/lib/instant-file-storage";
 import type {
   ClientConfig,
@@ -161,6 +170,10 @@ export function ClientEditor({
     null,
   );
   const [openCategoryMenuId, setOpenCategoryMenuId] = useState<string | null>(
+    null,
+  );
+  const [isImportingDishes, setIsImportingDishes] = useState(false);
+  const [dishesImportError, setDishesImportError] = useState<string | null>(
     null,
   );
   const prevCategoryIdsRef = useRef<Set<string>>(new Set());
@@ -590,6 +603,92 @@ export function ClientEditor({
 
   const removeAllDishes = () => {
     update({ dishes: [] });
+  };
+
+  const requestDishesImport = (payload: MenuImportPayload, sourceLabel: string) => {
+    setDishesImportError(null);
+    setConfirm({
+      title: "Importa piatti",
+      message:
+        client.dishes.length > 0
+          ? `Sostituire i ${client.dishes.length} piatti attuali con ${payload.dishes.length} piatti importati (${sourceLabel})? Le categorie verranno allineate all'import.`
+          : `Importare ${payload.dishes.length} piatti (${sourceLabel})?`,
+      confirmLabel: "Importa",
+      onConfirm: () => {
+        onChange(applyMenuImport(client, payload));
+        setExpandedCategoryIds(new Set());
+        setOrderingCategoryIds(new Set());
+      },
+    });
+  };
+
+  const handleExportDishesCsv = () => {
+    downloadTextFile(
+      `${client.slug}-piatti.csv`,
+      exportMenuDishesCsv(client),
+      "text/csv;charset=utf-8",
+    );
+  };
+
+  const handleExportDishesJson = () => {
+    downloadTextFile(
+      `${client.slug}-piatti.json`,
+      exportMenuDishesJson(client),
+      "application/json;charset=utf-8",
+    );
+  };
+
+  const handleImportDishesCsvFile = async (file: File) => {
+    setDishesImportError(null);
+    try {
+      const text = await file.text();
+      requestDishesImport(parseMenuDishesCsv(text), "CSV");
+    } catch (error) {
+      setDishesImportError(
+        error instanceof Error ? error.message : "Importazione CSV non riuscita.",
+      );
+    }
+  };
+
+  const handleImportDishesWithGemini = async (menuText: string) => {
+    if (!adminEmail) {
+      setDishesImportError("Accesso amministratore richiesto per l'import con Gemini.");
+      return;
+    }
+
+    setDishesImportError(null);
+    setIsImportingDishes(true);
+
+    try {
+      const response = await fetch("/api/import-menu-prompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: adminEmail,
+          menuText,
+          restaurantName: client.name,
+        }),
+      });
+
+      const payload = (await response.json()) as MenuImportPayload & {
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Importazione con Gemini non riuscita.");
+      }
+
+      requestDishesImport(payload, "Gemini");
+    } catch (error) {
+      setDishesImportError(
+        error instanceof Error
+          ? error.message
+          : "Importazione con Gemini non riuscita.",
+      );
+      throw error;
+    } finally {
+      setIsImportingDishes(false);
+    }
   };
 
   const fetchDishDescription = async (
@@ -1427,6 +1526,27 @@ export function ClientEditor({
           >
             + Categoria
           </button>
+          {editingLocale === "it" ? (
+            <DishesActionsMenu
+              hasDishes={client.dishes.length > 0}
+              disabled={isDishAiBusy}
+              isImporting={isImportingDishes}
+              importError={dishesImportError}
+              onExportCsv={handleExportDishesCsv}
+              onExportJson={handleExportDishesJson}
+              onImportCsvFile={(file) => void handleImportDishesCsvFile(file)}
+              onImportGemini={handleImportDishesWithGemini}
+              onDeleteAll={() =>
+                setConfirm({
+                  title: "Elimina tutti i piatti",
+                  message: `Verranno rimossi tutti i ${client.dishes.length} piatti di "${client.name}". Le categorie resteranno invariate.`,
+                  confirmLabel: "Elimina tutti i piatti",
+                  confirmationPhrase: client.name,
+                  onConfirm: removeAllDishes,
+                })
+              }
+            />
+          ) : null}
           {client.dishes.length > 0 ? (
             <>
               <button
@@ -1463,25 +1583,15 @@ export function ClientEditor({
                 )}
                 Genera Allergeni
               </button>
-              <button
-                type="button"
-                disabled={editingLocale !== "it" || isDishAiBusy}
-                onClick={() =>
-                  setConfirm({
-                    title: "Elimina tutti i piatti",
-                    message: `Verranno rimossi tutti i ${client.dishes.length} piatti di "${client.name}". Le categorie resteranno invariate.`,
-                    confirmLabel: "Elimina tutti i piatti",
-                    confirmationPhrase: client.name,
-                    onConfirm: removeAllDishes,
-                  })
-                }
-                className="rounded-full border border-[#d8dadc] bg-white px-4 py-2 text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1] disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Elimina tutti i piatti
-              </button>
             </>
           ) : null}
         </div>
+
+        {dishesImportError ? (
+          <p className="rounded-[12px] bg-[#fff1f1] px-4 py-3 text-[0.84rem] text-[#8a1f1f]">
+            {dishesImportError}
+          </p>
+        ) : null}
 
         {(descriptionAiError || allergenAiError) ? (
           <p className="rounded-[12px] bg-[#fff1f1] px-4 py-3 text-[0.84rem] text-[#8a1f1f]">

@@ -1,6 +1,6 @@
 import { tx } from "@instantdb/react";
 import { db, isInstantConfigured } from "@/lib/db";
-import { isBrowserOffline, isInstantOfflineError } from "@/lib/instant-query";
+import { isBrowserOffline, withInstantRecovery } from "@/lib/instant-query";
 import type { ClientConfig } from "@/types/client";
 
 export const CLIENT_ASSET_PATH_PREFIX = "clients";
@@ -111,8 +111,8 @@ export function mergeConfigWithStoredAssets(
 async function queryClientFiles(pathLike: string) {
   if (!isInstantConfigured || isBrowserOffline()) return null;
 
-  try {
-    return await db.queryOnce({
+  return withInstantRecovery(
+    db.queryOnce({
       $files: {
         $: {
           where: {
@@ -120,11 +120,9 @@ async function queryClientFiles(pathLike: string) {
           },
         },
       },
-    });
-  } catch (error) {
-    if (isInstantOfflineError(error)) return null;
-    throw error;
-  }
+    }),
+    "query-client-files",
+  );
 }
 
 export async function fetchClientAssetUrls(
@@ -149,9 +147,11 @@ export async function deleteClientAssets(
   const files = snapshot?.data.$files ?? [];
   if (files.length === 0) return;
 
-  await db.transact(
-    files.map((file: { id: string }) => tx.$files[file.id].delete()),
+  const deleted = await withInstantRecovery(
+    db.transact(files.map((file: { id: string }) => tx.$files[file.id].delete())),
+    "delete-client-assets",
   );
+  if (deleted === undefined) return;
 }
 
 export async function uploadClientAsset(
@@ -172,18 +172,18 @@ export async function uploadClientAsset(
     contentDisposition: "inline",
   });
 
-  const snapshot = await db.queryOnce({
-    $files: {
-      $: {
-        where: {
-          path,
+  const snapshot = await withInstantRecovery(
+    db.queryOnce({
+      $files: {
+        $: {
+          where: {
+            path,
+          },
         },
       },
-    },
-  }).catch((error: unknown) => {
-    if (isInstantOfflineError(error)) return null;
-    throw error;
-  });
+    }),
+    "query-uploaded-file",
+  );
 
   if (!snapshot) {
     throw new Error(

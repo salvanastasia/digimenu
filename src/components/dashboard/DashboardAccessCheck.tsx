@@ -2,6 +2,7 @@
 
 import { useDashboardAdmin } from "@/hooks/useDashboardAdmin";
 import { db } from "@/lib/db";
+import { getInstantErrorMessage } from "@/lib/instant-query";
 
 export function DashboardAccessCheck({
   children,
@@ -27,7 +28,9 @@ export function DashboardAccessCheck({
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#f7f7f7] px-6 text-center">
         <h1 className="text-[1.2rem] font-bold text-[#141415]">Errore accesso</h1>
         <p className="max-w-md text-[0.92rem] text-[#8a1f1f]">
-          {linkError ?? queryError?.message ?? "Riprova tra poco."}
+          {linkError ??
+            (queryError ? getInstantErrorMessage(queryError) : null) ??
+            "Riprova tra poco."}
         </p>
         <button
           type="button"
