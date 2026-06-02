@@ -220,7 +220,7 @@ export function saveClientVersion(
   clientId: string,
   draft: ClientConfig,
 ): ClientStoreEntry[] {
-  const MAX_VERSIONS = 40;
+  const MAX_VERSIONS = 20;
 
   return entries.map((entry) => {
     if (entry.config.id !== clientId) return entry;

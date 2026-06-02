@@ -2,7 +2,7 @@ import { id, lookup, tx } from "@instantdb/react";
 import { createAribriSeedClient } from "@/lib/client-defaults";
 import { getDefaultSeedEntries } from "@/lib/client-seeds";
 import { db } from "@/lib/db";
-import { withInstantRecovery } from "@/lib/instant-query";
+import { transactWithRetry, withInstantRecovery } from "@/lib/instant-query";
 import { migrateClientTranslations } from "@/lib/client-translation-payload";
 import {
   cloneClient,
@@ -44,15 +44,29 @@ export function entriesFromRows(
   return rows.map(rowToEntry);
 }
 
+/** Fewer versions synced to InstantDB to keep transacts under timeout. */
+const INSTANT_SYNC_MAX_VERSIONS = 12;
+
 function buildRowPayload(entry: ClientStoreEntry) {
   return {
     clientId: entry.config.id,
     slug: entry.config.slug,
     hidden: entry.config.hidden,
     config: entry.config,
-    versions: entry.versions,
+    versions: entry.versions.slice(-INSTANT_SYNC_MAX_VERSIONS),
     updatedAt: entry.config.updatedAt,
   };
+}
+
+export async function persistClientMenuEntry(
+  entry: ClientStoreEntry,
+): Promise<void> {
+  await transactWithRetry(
+    () => db.transact(tx.clientMenus[lookup("clientId", entry.config.id)].update(
+      buildRowPayload(entry),
+    )),
+    "save-client",
+  );
 }
 
 export function buildUpsertTransactions(entries: ClientStoreEntry[]) {

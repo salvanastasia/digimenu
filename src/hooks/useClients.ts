@@ -7,10 +7,10 @@ import { instantTransact } from "@/lib/instant-query";
 import {
   buildCreateTransaction,
   buildDeleteTransaction,
-  buildSaveTransaction,
   buildSeedUpsertTransactions,
   cloneClient,
   entriesFromRows,
+  persistClientMenuEntry,
   seedInstantFromLocalStorageIfEmpty,
   type InstantClientMenuRow,
 } from "@/lib/instant-client-sync";
@@ -123,13 +123,16 @@ export function useClients({ canWrite = false }: UseClientsOptions = {}) {
   );
 
   const saveClient = useCallback(
-    (id: string, draft: ClientConfig) => {
-      const transaction = buildSaveTransaction(entries, id, draft);
-      if (!transaction) return null;
-
+    async (id: string, draft: ClientConfig) => {
       const next = saveClientVersion(entries, id, draft);
-      instantTransact(db.transact(transaction), "save-client");
-      return next.find((entry) => entry.config.id === id) ?? null;
+      const saved = next.find((entry) => entry.config.id === id) ?? null;
+      if (!saved) return null;
+
+      if (isInstantConfigured) {
+        await persistClientMenuEntry(saved);
+      }
+
+      return saved;
     },
     [entries],
   );

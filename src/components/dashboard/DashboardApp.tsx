@@ -173,7 +173,7 @@ export function DashboardApp() {
 
     try {
       const nextDraft = await pendingAssets.flush(selectedId, draft);
-      const savedEntry = saveClient(selectedId, nextDraft);
+      const savedEntry = await saveClient(selectedId, nextDraft);
       if (!savedEntry) return;
 
       pendingAssets.reset();

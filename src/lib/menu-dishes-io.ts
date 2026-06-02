@@ -278,12 +278,22 @@ export function parseMenuDishesCsv(text: string): MenuImportPayload {
   return { dishes };
 }
 
+export type MenuImportMode = "replace" | "merge";
+
 export function applyMenuImport(
   client: ClientConfig,
   payload: MenuImportPayload,
+  mode: MenuImportMode = "replace",
 ): ClientConfig {
   const categoryIdByKey = new Map<string, string>();
-  const categories: ClientCategory[] = [];
+  const categories: ClientCategory[] =
+    mode === "merge" ? [...client.categories] : [];
+
+  if (mode === "merge") {
+    for (const category of client.categories) {
+      categoryIdByKey.set(normalizeCategoryKey(category.name), category.id);
+    }
+  }
 
   const registerCategory = (name: string, preferredId?: string) => {
     const trimmed = name.trim() || "Senza categoria";
@@ -291,7 +301,8 @@ export function applyMenuImport(
     const existingId = categoryIdByKey.get(key);
     if (existingId) return existingId;
 
-    const id = preferredId ?? createPrefixedId("cat");
+    const id =
+      mode === "replace" && preferredId ? preferredId : createPrefixedId("cat");
     categoryIdByKey.set(key, id);
     categories.push({ id, name: trimmed });
     return id;
@@ -301,7 +312,7 @@ export function applyMenuImport(
     registerCategory(category.name, category.id);
   }
 
-  const dishes: ClientDish[] = payload.dishes.map((row) => {
+  const importedDishes: ClientDish[] = payload.dishes.map((row) => {
     const categoryId = registerCategory(row.category);
     return {
       id: createPrefixedId("dish"),
@@ -312,6 +323,11 @@ export function applyMenuImport(
       allergenIds: row.allergenIds ?? [],
     };
   });
+
+  const dishes =
+    mode === "merge"
+      ? [...client.dishes, ...importedDishes]
+      : importedDishes;
 
   return {
     ...client,

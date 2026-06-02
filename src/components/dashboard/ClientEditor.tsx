@@ -50,6 +50,7 @@ import { TranslationProgressBar } from "@/components/dashboard/TranslationProgre
 import { useMenuTranslation } from "@/hooks/useMenuTranslation";
 import {
   applyMenuImport,
+  type MenuImportMode,
   downloadTextFile,
   exportMenuDishesCsv,
   exportMenuDishesJson,
@@ -605,17 +606,24 @@ export function ClientEditor({
     update({ dishes: [] });
   };
 
-  const requestDishesImport = (payload: MenuImportPayload, sourceLabel: string) => {
+  const requestDishesImport = (
+    payload: MenuImportPayload,
+    sourceLabel: string,
+    mode: MenuImportMode = "replace",
+  ) => {
     setDishesImportError(null);
+    const isMerge = mode === "merge";
+
     setConfirm({
-      title: "Importa piatti",
-      message:
-        client.dishes.length > 0
+      title: isMerge ? "Aggiungi piatti" : "Importa piatti",
+      message: isMerge
+        ? `Aggiungere ${payload.dishes.length} piatti da ${sourceLabel} al menu esistente (${client.dishes.length} piatti attuali)? Le categorie già presenti restano; se il nome coincide, i nuovi piatti finiscono nella stessa categoria.`
+        : client.dishes.length > 0
           ? `Sostituire i ${client.dishes.length} piatti attuali con ${payload.dishes.length} piatti importati (${sourceLabel})? Le categorie verranno allineate all'import.`
           : `Importare ${payload.dishes.length} piatti (${sourceLabel})?`,
-      confirmLabel: "Importa",
+      confirmLabel: isMerge ? "Aggiungi" : "Importa",
       onConfirm: () => {
-        onChange(applyMenuImport(client, payload));
+        onChange(applyMenuImport(client, payload, mode));
         setExpandedCategoryIds(new Set());
         setOrderingCategoryIds(new Set());
       },
@@ -678,7 +686,7 @@ export function ClientEditor({
         throw new Error(payload.error ?? "Importazione con Gemini non riuscita.");
       }
 
-      requestDishesImport(payload, "Gemini");
+      requestDishesImport(payload, "Gemini", "merge");
     } catch (error) {
       setDishesImportError(
         error instanceof Error

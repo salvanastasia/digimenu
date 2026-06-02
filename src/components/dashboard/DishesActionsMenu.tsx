@@ -178,7 +178,8 @@ export function DishesActionsMenu({
             </h2>
             <p className="mt-2 text-[0.88rem] leading-relaxed text-[#606060]">
               Incolla testo da PDF, sito o documento. L&apos;AI estrae categorie e
-              piatti in formato strutturato.
+              piatti e li aggiunge al menu esistente (non sostituisce quelli già
+              presenti).
             </p>
             <label htmlFor={textareaId} className="mt-4 flex flex-col gap-1.5">
               <span className="text-[0.78rem] font-semibold text-[#606060]">
