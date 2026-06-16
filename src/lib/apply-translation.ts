@@ -29,7 +29,11 @@ function applyBundleToBase(
 
   const translatedRestaurant: RestaurantConfig = {
     ...base.restaurant,
-    subtitle: bundle.restaurant.subtitle ?? base.restaurant.subtitle,
+    // Se lo slogan IT è vuoto, resta vuoto in tutte le lingue: non mostriamo
+    // eventuali traduzioni "stale" rimaste nel bundle da quando esisteva.
+    subtitle: base.restaurant.subtitle
+      ? (bundle.restaurant.subtitle ?? base.restaurant.subtitle)
+      : undefined,
     notes: bundle.restaurant.notes ?? base.restaurant.notes,
   };
 
