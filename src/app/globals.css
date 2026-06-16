@@ -19,7 +19,10 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -40,6 +43,11 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.landing-dot-grid {
+  background-image: radial-gradient(circle, rgba(20, 20, 21, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 button {

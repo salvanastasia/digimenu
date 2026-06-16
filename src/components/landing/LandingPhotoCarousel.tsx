@@ -54,7 +54,7 @@ export function LandingPhotoCarousel() {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <div className="group relative aspect-square w-full overflow-hidden rounded-[18px] border border-[#e4e4e4] bg-[#fafafa] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+      <div className="group relative aspect-[4/5] w-full overflow-hidden rounded-[24px] border border-[#ececec] bg-white shadow-[0_24px_64px_rgba(0,0,0,0.1)]">
         {SLIDES.map((slide, i) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img
