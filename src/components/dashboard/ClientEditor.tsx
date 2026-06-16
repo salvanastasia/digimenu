@@ -562,6 +562,16 @@ export function ClientEditor({
     });
   };
 
+  const toggleCategoryPublic = (categoryId: string) => {
+    update({
+      categories: client.categories.map((category) =>
+        category.id === categoryId
+          ? { ...category, hidden: !category.hidden }
+          : category,
+      ),
+    });
+  };
+
   const moveCategory = (categoryId: string, direction: -1 | 1) => {
     const index = client.categories.findIndex(
       (category) => category.id === categoryId,
@@ -1810,6 +1820,11 @@ export function ClientEditor({
                         Ordine
                       </span>
                     ) : null}
+                    {category.hidden ? (
+                      <span className="rounded-full bg-[#606060]/10 px-2.5 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[#606060]">
+                        Nascosta
+                      </span>
+                    ) : null}
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -1832,9 +1847,10 @@ export function ClientEditor({
                         "Modifica"
                       )}
                     </button>
-                    {isCategoryExpanded && canRemoveCategory ? (
+                    {isCategoryExpanded ? (
                       <CategoryMoreMenu
                         isOpen={openCategoryMenuId === category.id}
+                        isPublic={!category.hidden}
                         onToggle={() =>
                           setOpenCategoryMenuId((current) =>
                             current === category.id ? null : category.id,
@@ -1845,6 +1861,8 @@ export function ClientEditor({
                             current === category.id ? null : current,
                           )
                         }
+                        onTogglePublic={() => toggleCategoryPublic(category.id)}
+                        canRemove={canRemoveCategory}
                         onRemove={() => {
                           setOpenCategoryMenuId(null);
                           setConfirm({
@@ -2228,13 +2246,19 @@ export function ClientEditor({
 
 function CategoryMoreMenu({
   isOpen,
+  isPublic,
   onToggle,
   onClose,
+  onTogglePublic,
+  canRemove,
   onRemove,
 }: {
   isOpen: boolean;
+  isPublic: boolean;
   onToggle: () => void;
   onClose: () => void;
+  onTogglePublic: () => void;
+  canRemove: boolean;
   onRemove: () => void;
 }) {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -2274,16 +2298,40 @@ function CategoryMoreMenu({
       {isOpen ? (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+6px)] z-30 min-w-[11rem] overflow-hidden rounded-[12px] border border-[#e4e4e4] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+          className="absolute right-0 top-[calc(100%+6px)] z-30 min-w-[13rem] overflow-hidden rounded-[12px] border border-[#e4e4e4] bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
         >
           <button
             type="button"
             role="menuitem"
-            onClick={onRemove}
-            className="w-full px-3.5 py-2.5 text-left text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1]"
+            onClick={onTogglePublic}
+            className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left text-[0.82rem] font-semibold text-[#141415] transition-colors hover:bg-[#f5f5f5]"
           >
-            Rimuovi categoria
+            <span>Pubblica</span>
+            <span
+              className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${
+                isPublic ? "bg-[#560200]" : "bg-[#d8dadc]"
+              }`}
+            >
+              <span
+                className={`block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform ${
+                  isPublic ? "translate-x-[18px]" : "translate-x-[3px]"
+                }`}
+              />
+            </span>
           </button>
+          {canRemove ? (
+            <>
+              <div className="my-1 border-t border-[#ececec]" />
+              <button
+                type="button"
+                role="menuitem"
+                onClick={onRemove}
+                className="w-full px-3.5 py-2.5 text-left text-[0.82rem] font-semibold text-[#8a1f1f] transition-colors hover:bg-[#fff1f1]"
+              >
+                Rimuovi categoria
+              </button>
+            </>
+          ) : null}
         </div>
       ) : null}
     </div>

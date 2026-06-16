@@ -11,6 +11,7 @@ import type { MenuCategory } from "@/types/menu";
 
 export function clientToMenuContent(client: ClientConfig): TranslatedContent {
   const categories: MenuCategory[] = client.categories
+    .filter((category) => !category.hidden)
     .map((category) => ({
       id: category.id,
       name: category.name,

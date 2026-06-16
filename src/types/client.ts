@@ -29,6 +29,8 @@ export type ClientHeader = {
 export type ClientCategory = {
   id: string;
   name: string;
+  /** Se true la categoria non è visibile nel menu pubblico (default: pubblica). */
+  hidden?: boolean;
 };
 
 export type ClientDish = {
