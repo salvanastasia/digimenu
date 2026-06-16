@@ -230,8 +230,8 @@ export function LandingPage() {
 
           {/* Bento grid */}
           <div className="mt-12 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
-            {/* 1 — Multilingue (wide) */}
-            <article className="group relative overflow-hidden rounded-[22px] border border-[#ececec] bg-white p-7 transition-[box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#d8dadc] hover:shadow-[0_20px_60px_rgba(0,0,0,0.07)] lg:col-span-2">
+            {/* 1 — Multilingue */}
+            <article className="group relative overflow-hidden rounded-[22px] border border-[#ececec] bg-white p-7 transition-[box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#d8dadc] hover:shadow-[0_20px_60px_rgba(0,0,0,0.07)]">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#560200]/8 text-[#560200]">
@@ -379,37 +379,33 @@ export function LandingPage() {
               </div>
             </article>
 
-            {/* 6 — Gestito per te (full width) */}
-            <article className="group relative overflow-hidden rounded-[22px] border border-[#ececec] bg-white p-7 transition-[box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#d8dadc] hover:shadow-[0_20px_60px_rgba(0,0,0,0.07)] sm:col-span-2 lg:col-span-3">
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-12">
-                <div className="lg:w-72 lg:shrink-0">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#560200]/8 text-[#560200]">
-                    <svg viewBox="0 0 22 22" width="20" height="20" fill="none" aria-hidden="true">
-                      <path d="M11 3L4 7v5.5c0 3.8 3 7.2 7 8.5 4-1.3 7-4.7 7-8.5V7L11 3z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-                      <path d="M8 11.5l2.2 2.2L14.5 9" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                  <h3 className="mt-5 text-[1.1rem] font-bold">Gestito interamente da noi</h3>
-                  <p className="mt-2 text-[0.92rem] leading-relaxed text-[#606060]">
-                    Nessun gestionale da imparare. Inseriamo noi piatti, prezzi,
-                    allergeni e traduzioni — e aggiorniamo il menu ogni stagione.
-                  </p>
-                </div>
-                <div className="flex-1 space-y-2">
-                  {[
-                    { label: "Setup iniziale", value: "Piatti, categorie, allergeni, traduzioni in 5 lingue" },
-                    { label: "Aggiornamento primaverile", value: "Nuova carta inclusa nell'abbonamento" },
-                    { label: "Aggiornamento autunnale", value: "Nuova carta inclusa nell'abbonamento" },
-                  ].map((row) => (
-                    <div
-                      key={row.label}
-                      className="flex items-center justify-between gap-4 rounded-xl bg-[#fafafa] px-4 py-2.5 text-[0.86rem]"
-                    >
-                      <span className="font-semibold text-[#141415]">{row.label}</span>
-                      <span className="text-right text-[#888]">{row.value}</span>
-                    </div>
-                  ))}
-                </div>
+            {/* 6 — Gestito per te */}
+            <article className="group relative overflow-hidden rounded-[22px] border border-[#ececec] bg-white p-7 transition-[box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#d8dadc] hover:shadow-[0_20px_60px_rgba(0,0,0,0.07)]">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#560200]/8 text-[#560200]">
+                <svg viewBox="0 0 22 22" width="20" height="20" fill="none" aria-hidden="true">
+                  <path d="M11 3L4 7v5.5c0 3.8 3 7.2 7 8.5 4-1.3 7-4.7 7-8.5V7L11 3z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <path d="M8 11.5l2.2 2.2L14.5 9" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <h3 className="mt-5 text-[1.1rem] font-bold">Gestito da noi</h3>
+              <p className="mt-2 text-[0.92rem] leading-relaxed text-[#606060]">
+                Nessun gestionale da imparare. Carichiamo noi piatti, prezzi,
+                allergeni e traduzioni — e aggiorniamo il menu ogni stagione.
+              </p>
+              <div className="mt-5 space-y-2">
+                {[
+                  { label: "Setup", tag: "una tantum" },
+                  { label: "Aggiornamento primavera", tag: "incluso" },
+                  { label: "Aggiornamento autunno", tag: "incluso" },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex items-center justify-between rounded-xl bg-[#fafafa] px-3.5 py-2 text-[0.84rem]"
+                  >
+                    <span className="font-semibold text-[#141415]">{row.label}</span>
+                    <span className="rounded-full bg-[#560200]/8 px-2 py-0.5 text-[0.7rem] font-semibold text-[#560200]">{row.tag}</span>
+                  </div>
+                ))}
               </div>
             </article>
           </div>

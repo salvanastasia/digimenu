@@ -99,7 +99,7 @@ export function CheckoutSection() {
       )}
 
       <p className="mt-3 text-center text-[0.74rem] text-[#adadad]">
-        Pagamento sicuro via Stripe · Apple Pay &amp; Google Pay accettati ·{" "}
+        Pagamento sicuro via Stripe ·{" "}
         <a
           href="/termini-e-condizioni"
           className="underline hover:text-[#560200]"
@@ -111,6 +111,42 @@ export function CheckoutSection() {
           Privacy
         </a>
       </p>
+
+      {/* Payment brand icons */}
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        {[
+          // Full-color card badges (logo + brand background built in)
+          { file: "flat/visa.svg",        label: "Visa",       type: "card", border: false },
+          { file: "flat/mastercard.svg",  label: "Mastercard", type: "card", border: false },
+          { file: "flat/amex.svg",        label: "Amex",       type: "card", border: false },
+          { file: "flat/paypal.svg",      label: "PayPal",     type: "card", border: true },
+          // Logo on branded background
+          { file: "applepay-white.svg",   label: "Apple Pay",  type: "logo", bg: "bg-black",     border: false, imgClass: "h-[1.6rem]" },
+          { file: "googlepay.svg",        label: "Google Pay", type: "logo", bg: "bg-white",      border: true,  imgClass: "h-[1.55rem]" },
+          { file: "klarna.svg",           label: "Klarna",     type: "logo", bg: "bg-[#FFB3C7]",  border: false, imgClass: "h-5" },
+        ].map(({ file, label, type, bg, border, imgClass }) => (
+          <span
+            key={file}
+            className={`flex h-9 w-[3.6rem] items-center justify-center overflow-hidden rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.07)] ${
+              type === "card" ? "" : bg
+            } ${border ? "border border-[#e8e8e8]" : ""}`}
+            aria-label={label}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/payment-icons/${file}`}
+              alt={label}
+              width={58}
+              height={36}
+              className={
+                type === "card"
+                  ? "h-full w-full object-cover"
+                  : `${imgClass} w-auto object-contain`
+              }
+            />
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
