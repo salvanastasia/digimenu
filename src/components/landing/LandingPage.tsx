@@ -68,6 +68,12 @@ export function LandingPage() {
             >
               Esempio live
             </Link>
+            <Link
+              href="/attiva"
+              className="hidden rounded-full border border-[#d8dadc] px-4 py-2 text-[0.84rem] font-semibold text-[#141415] transition-colors hover:bg-[#f5f5f5] sm:inline-flex"
+            >
+              Prezzi
+            </Link>
             <JoinUsButton variant="primary" />
           </nav>
         </div>
@@ -241,16 +247,33 @@ export function LandingPage() {
       </main>
 
       <footer className="border-t border-[#e4e4e4] bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-[0.84rem] text-[#606060] sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>
-            <span className="font-semibold text-[#141415]">DigiMenu</span> — menu
-            digitale per ristoranti
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <JoinUsButton variant="ghost" />
-            <Link href="/aribri" className="font-semibold hover:text-[#560200]">
-              Menu demo
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+          <div className="flex flex-col gap-3 text-[0.84rem] text-[#606060] sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              <span className="font-semibold text-[#141415]">DigiMenu</span> — menu
+              digitale per ristoranti
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <JoinUsButton variant="ghost" />
+              <Link href="/aribri" className="font-semibold hover:text-[#560200]">
+                Menu demo
+              </Link>
+              <Link href="/attiva" className="font-semibold hover:text-[#560200]">
+                Attiva
+              </Link>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-4 border-t border-[#f0f0f0] pt-4 text-[0.78rem] text-[#adadad]">
+            <p>© {new Date().getFullYear()} Salvatore Anastasia · Via Capirro I, 76125 Trani (BT)</p>
+            <Link href="/termini-e-condizioni" className="hover:text-[#560200]">
+              Termini e Condizioni
             </Link>
+            <Link href="/privacy-policy" className="hover:text-[#560200]">
+              Privacy Policy
+            </Link>
+            <a href="mailto:info@digi-menu.it" className="hover:text-[#560200]">
+              info@digi-menu.it
+            </a>
           </div>
         </div>
       </footer>
