@@ -308,6 +308,12 @@ export type ParseMenuFromTextInput = {
   restaurantName?: string;
 };
 
+export type ParseMenuFromFileInput = {
+  fileBase64: string;
+  mimeType: "application/pdf" | "text/csv" | "text/plain";
+  restaurantName?: string;
+};
+
 type GeminiMenuImportResponse = {
   categories?: Array<{ name?: string }>;
   dishes?: Array<{
@@ -426,4 +432,128 @@ export async function parseMenuFromTextWithGemini(
     categories: [...categoryNames].map((name) => ({ name })),
     dishes,
   };
+}
+
+export async function parseMenuFromFileWithGemini(
+  input: ParseMenuFromFileInput,
+): Promise<{
+  categories: Array<{ name: string }>;
+  dishes: Array<{
+    category: string;
+    name: string;
+    description: string;
+    price: number | null;
+    allergenIds: number[];
+  }>;
+}> {
+  const genAI = getGeminiClient();
+  let lastError: Error | null = null;
+
+  const instruction = [
+    "Analizza il documento allegato (menu ristorante italiano) e restituisci JSON strutturato.",
+    input.restaurantName
+      ? `Ristorante: ${input.restaurantName.trim()}`
+      : null,
+    "",
+    "Schema JSON richiesto:",
+    '{ "categories": [{ "name": "Antipasti" }], "dishes": [{ "category": "Antipasti", "name": "Bruschetta", "description": "...", "price": 8, "allergenIds": [] }] }',
+    "",
+    "Regole:",
+    "- Estrai tutte le categorie e i piatti che trovi nel documento.",
+    "- `category` su ogni piatto deve corrispondere al nome categoria.",
+    "- `price` numerico in euro oppure null se assente.",
+    "- `description` breve; stringa vuota se assente.",
+    "- `allergenIds` sempre array vuoto [].",
+    "- Non inventare piatti non presenti nel documento.",
+    "- Restituisci SOLO il JSON, senza testo aggiuntivo.",
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+
+  const MULTIMODAL_MODELS = [
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-2.5-pro",
+  ] as const;
+
+  for (const modelName of MULTIMODAL_MODELS) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        generationConfig: { responseMimeType: "application/json", temperature: 0.15 },
+      });
+
+      const result = await model.generateContent([
+        instruction,
+        {
+          inlineData: {
+            data: input.fileBase64,
+            mimeType: input.mimeType,
+          },
+        },
+      ]);
+
+      const raw = result.response.text().trim();
+      let parsed: GeminiMenuImportResponse;
+      try {
+        parsed = JSON.parse(raw) as GeminiMenuImportResponse;
+      } catch {
+        throw new Error("Risposta AI non valida. Riprova.");
+      }
+
+      const dishes = (parsed.dishes ?? [])
+        .map((dish) => {
+          const category = (dish.category ?? dish.categoryName ?? "").trim();
+          const name = (dish.name ?? "").trim();
+          if (!category || !name) return null;
+          const priceRaw = dish.price;
+          const price =
+            priceRaw === null || priceRaw === undefined || priceRaw === ""
+              ? null
+              : Number(priceRaw);
+          return {
+            category,
+            name,
+            description: (dish.description ?? "").trim(),
+            price: Number.isFinite(price) ? price : null,
+            allergenIds: Array.isArray(dish.allergenIds)
+              ? dish.allergenIds
+                  .map((v) => Number(v))
+                  .filter((v) => Number.isInteger(v) && v > 0)
+              : [],
+          };
+        })
+        .filter(
+          (
+            dish,
+          ): dish is {
+            category: string;
+            name: string;
+            description: string;
+            price: number | null;
+            allergenIds: number[];
+          } => dish !== null,
+        );
+
+      if (dishes.length === 0) {
+        throw new Error("Nessun piatto riconosciuto nel file.");
+      }
+
+      const categoryNames = new Set<string>();
+      for (const category of parsed.categories ?? []) {
+        const name = category.name?.trim();
+        if (name) categoryNames.add(name);
+      }
+      for (const dish of dishes) categoryNames.add(dish.category);
+
+      return {
+        categories: [...categoryNames].map((name) => ({ name })),
+        dishes,
+      };
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+    }
+  }
+
+  throw lastError ?? new Error("Importazione file non riuscita.");
 }

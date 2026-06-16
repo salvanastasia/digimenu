@@ -661,6 +661,47 @@ export function ClientEditor({
     }
   };
 
+  const handleImportDishesWithGeminiFile = async (file: File) => {
+    if (!adminEmail) {
+      setDishesImportError("Accesso amministratore richiesto per l'import con Gemini.");
+      return;
+    }
+
+    setDishesImportError(null);
+    setIsImportingDishes(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("email", adminEmail);
+      formData.append("restaurantName", client.name);
+      formData.append("file", file);
+
+      const response = await fetch("/api/import-menu-file", {
+        method: "POST",
+        body: formData,
+      });
+
+      const payload = (await response.json()) as MenuImportPayload & {
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Importazione file non riuscita.");
+      }
+
+      requestDishesImport(payload, "Gemini", "merge");
+    } catch (error) {
+      setDishesImportError(
+        error instanceof Error
+          ? error.message
+          : "Importazione file non riuscita.",
+      );
+      throw error;
+    } finally {
+      setIsImportingDishes(false);
+    }
+  };
+
   const handleImportDishesWithGemini = async (menuText: string) => {
     if (!adminEmail) {
       setDishesImportError("Accesso amministratore richiesto per l'import con Gemini.");
@@ -1688,6 +1729,7 @@ export function ClientEditor({
                 onExportJson={handleExportDishesJson}
                 onImportCsvFile={(file) => void handleImportDishesCsvFile(file)}
                 onImportGemini={handleImportDishesWithGemini}
+                onImportGeminiFile={handleImportDishesWithGeminiFile}
                 onDeleteAll={() =>
                   setConfirm({
                     title: "Elimina tutti i piatti",
