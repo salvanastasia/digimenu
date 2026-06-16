@@ -21,9 +21,6 @@ const INCLUSO = [
 ];
 
 export default function AttivaPage() {
-  const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? null;
-  const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ?? null;
-
   return (
     <div className="min-h-screen bg-[#f7f7f7] text-[#141415]">
       {/* Header */}
@@ -117,10 +114,7 @@ export default function AttivaPage() {
 
           {/* Right: checkout */}
           <div className="lg:sticky lg:top-[80px]">
-            <CheckoutSection
-              stripeKey={stripeKey}
-              paypalClientId={paypalClientId}
-            />
+            <CheckoutSection />
           </div>
         </div>
       </main>
