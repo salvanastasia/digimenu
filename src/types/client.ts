@@ -56,6 +56,8 @@ export type ClientCustomizations = {
   /** Layout e stile del menu pubblico. */
   menuTheme: MenuTheme;
   favoritesView: FavoritesViewMode;
+  /** Colore logo usato nella vista preferiti scontrino (solo se logo SVG). */
+  receiptLogoColorSource: "primary" | "secondary";
   /** Traduce il nome piatto nelle lingue estere. */
   translateDishNames: boolean;
   /** Selettore quantità nel pannello preferiti. */

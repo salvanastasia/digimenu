@@ -1527,6 +1527,43 @@ export function ClientEditor({
             Scegli se aprire la lista preferiti come pannello con quantità
             modificabili o come scontrino riepilogativo.
           </p>
+
+          {client.customizations.favoritesView === "receipt" ? (
+            <div className="mt-4 rounded-[14px] border border-[#ececec] bg-[#fafafa] p-4">
+              <p className="text-[0.78rem] font-semibold text-[#606060]">
+                Colore logo scontrino (solo SVG)
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(
+                  [
+                    { value: "secondary", label: "Secondario" },
+                    { value: "primary", label: "Primario" },
+                  ] as const
+                ).map((option) => {
+                  const active =
+                    client.customizations.receiptLogoColorSource === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() =>
+                        updateCustomizations({
+                          receiptLogoColorSource: option.value,
+                        })
+                      }
+                      className={`rounded-full border px-4 py-2 text-[0.8rem] font-semibold transition-colors ${
+                        active
+                          ? "border-[#560200] bg-[#560200]/8 text-[#560200]"
+                          : "border-[#d8dadc] bg-white text-[#606060] hover:bg-[#f5f5f5]"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-5">

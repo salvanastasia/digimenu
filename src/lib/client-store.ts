@@ -101,6 +101,9 @@ function migrateClientRecord(client: ClientConfig): ClientConfig {
       favoritesView:
         migrated.customizations?.favoritesView ??
         DEFAULT_CUSTOMIZATIONS.favoritesView,
+      receiptLogoColorSource:
+        migrated.customizations?.receiptLogoColorSource ??
+        DEFAULT_CUSTOMIZATIONS.receiptLogoColorSource,
       translateDishNames:
         migrated.customizations?.translateDishNames ??
         DEFAULT_CUSTOMIZATIONS.translateDishNames,

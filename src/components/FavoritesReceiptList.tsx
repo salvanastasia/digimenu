@@ -61,7 +61,12 @@ export const FavoritesReceiptList = forwardRef<
     ? getEffectiveHeader(clientMenu.client)
     : null;
   const logoUrl = effectiveHeader?.logoUrl?.trim() ?? "";
-  const logoColor = effectiveHeader?.logoColor ?? "#F2E8D8";
+  const receiptLogoColorSource =
+    clientMenu?.client.customizations.receiptLogoColorSource ?? "secondary";
+  const logoColor =
+    receiptLogoColorSource === "primary"
+      ? (clientMenu?.client.brand.primaryColor ?? "#560200")
+      : (clientMenu?.client.brand.secondaryColor ?? "#F2E8D8");
   const hasLogo = logoUrl.length > 0;
   const showPrices =
     clientMenu?.client.customizations.showFavoritesPrices ?? true;
@@ -118,13 +123,15 @@ export const FavoritesReceiptList = forwardRef<
     >
       <div className="text-center">
         {hasLogo ? (
-          <ClientLogo
-            client={clientMenu?.client}
-            logoUrl={logoUrl}
-            logoColor={logoColor}
-            alt={restaurant.name}
-            className="mx-auto h-7 w-auto max-w-[160px] object-contain object-center"
-          />
+          <div className="flex justify-center">
+            <ClientLogo
+              forceTint
+              logoUrl={logoUrl}
+              logoColor={logoColor}
+              alt={restaurant.name}
+              className="h-7 max-h-7 w-auto max-w-[160px]"
+            />
+          </div>
         ) : (
           <p className="text-[0.82rem] font-bold uppercase tracking-[0.18em]">
             {restaurant.name}

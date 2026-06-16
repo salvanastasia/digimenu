@@ -27,6 +27,7 @@ export const DEFAULT_WIFI_ACCESS = {
 export const DEFAULT_CUSTOMIZATIONS: ClientCustomizations = {
   menuTheme: "classic",
   favoritesView: "panel",
+  receiptLogoColorSource: "secondary",
   translateDishNames: true,
   showFavoritesQuantity: true,
   showFavoritesPrices: true,
