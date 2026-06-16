@@ -47,7 +47,7 @@ export default function AttivaPage() {
             <span className="text-[#560200]">configurato da noi</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-[1.05rem] leading-relaxed text-[#606060]">
-            Setup iniziale €120 + abbonamento mensile o annuale. Pensiamo noi
+            Setup iniziale 120€ + abbonamento mensile o annuale. Pensiamo noi
             a tutto: piatti, traduzioni, allergeni e aggiornamenti stagionali.
           </p>
         </div>

@@ -145,7 +145,7 @@ export function LandingPage() {
               </div>
 
               <p className="mt-5 text-[0.8rem] text-[#c0c0c0]">
-                Setup €120 una tantum · 2 aggiornamenti stagionali inclusi · Cancelli quando vuoi
+                Setup 120€ una tantum · 2 aggiornamenti stagionali inclusi · Cancelli quando vuoi
               </p>
             </div>
 
@@ -158,7 +158,7 @@ export function LandingPage() {
           <div className="relative border-t border-[#ececec] bg-white/60 backdrop-blur-sm">
             <div className="mx-auto grid max-w-6xl divide-y divide-[#ececec] px-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-6">
               {[
-                { value: "€120", label: "setup iniziale una tantum" },
+                { value: "120€", label: "setup iniziale una tantum" },
                 { value: "5 lingue", label: "IT, EN, FR, DE, ES incluse" },
                 { value: "2×/anno", label: "aggiornamenti stagionali inclusi" },
               ].map((s) => (
@@ -505,7 +505,7 @@ export function LandingPage() {
               </div>
               <div className="shrink-0 sm:text-right">
                 <p className="text-[2.6rem] font-bold leading-none tracking-[-0.04em] text-[#141415]">
-                  €120
+                  120€
                 </p>
                 <p className="mt-1 text-[0.82rem] text-[#adadad]">IVA incl.</p>
               </div>
@@ -530,7 +530,7 @@ export function LandingPage() {
               </p>
               <div className="mt-3 flex items-baseline gap-1.5">
                 <span className="text-[2.8rem] font-bold leading-none tracking-[-0.04em]">
-                  €19
+                  19€
                 </span>
                 <span className="text-[0.9rem] text-[#888]">/mese</span>
               </div>
@@ -578,12 +578,12 @@ export function LandingPage() {
               </p>
               <div className="mt-3 flex items-baseline gap-1.5">
                 <span className="text-[2.8rem] font-bold leading-none tracking-[-0.04em]">
-                  €149
+                  149€
                 </span>
                 <span className="text-[0.9rem] text-[#f2e8d8]/70">/anno</span>
               </div>
               <p className="mt-1 text-[0.82rem] text-[#f2e8d8]/70">
-                IVA incl. · equiv. €12,4/mese
+                IVA incl. · equiv. 12,4€/mese
               </p>
 
               <hr className="my-6 border-white/15" />
@@ -609,7 +609,7 @@ export function LandingPage() {
           </div>
 
           <p className="mt-6 text-center text-[0.84rem] text-[#adadad]">
-            Il setup (€120) si paga una sola volta, separatamente
+            Il setup (120€) si paga una sola volta, separatamente
             dall&apos;abbonamento.
           </p>
         </section>
