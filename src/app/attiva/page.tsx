@@ -100,16 +100,6 @@ export default function AttivaPage() {
                 — rispondiamo entro 24 ore.
               </p>
             </div>
-
-            <div className="mt-4 rounded-[18px] border border-[#e4e4e4] bg-white p-5">
-              <p className="text-[0.84rem] leading-relaxed text-[#606060]">
-                <span className="font-semibold text-[#141415]">
-                  Garanzia 14 giorni.
-                </span>{" "}
-                Hai 14 giorni di tempo per richiedere il rimborso completo, senza
-                domande. Come previsto dal Codice del Consumo (D.Lgs. 206/2005).
-              </p>
-            </div>
           </div>
 
           {/* Right: checkout */}
