@@ -85,7 +85,20 @@ export function CheckoutSection() {
         Acquista {selectedPlan.label}
       </a>
 
-      <p className="mt-4 text-center text-[0.74rem] text-[#adadad]">
+      {selectedPlan.id === "annuale" && (
+        <p className="mt-3 text-center text-[0.76rem] leading-snug text-[#888]">
+          Continuando accetti i{" "}
+          <a
+            href="/termini-e-condizioni"
+            className="font-semibold text-[#560200] underline decoration-[#560200]/30 underline-offset-2 hover:decoration-[#560200]"
+          >
+            Termini e Condizioni
+          </a>
+          , incluso il contratto annuale.
+        </p>
+      )}
+
+      <p className="mt-3 text-center text-[0.74rem] text-[#adadad]">
         Pagamento sicuro via Stripe · Apple Pay &amp; Google Pay accettati ·{" "}
         <a
           href="/termini-e-condizioni"

@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 };
 
 const INCLUSO = [
-  "Menu digitale con URL dedicato",
-  "Dashboard di gestione piatti e categorie",
+  "Setup e configurazione completa a cura nostra",
+  "Menu digitale con URL e QR code dedicati",
   "Multilingue: IT, EN, FR, DE, ES",
   "Brand personalizzato: logo, colori, font",
-  "AI integrata: descrizioni, allergeni, prezzi",
+  "AI integrata: descrizioni e allergeni",
   "Lista preferiti per i tuoi clienti",
-  "Aggiornamenti illimitati in tempo reale",
+  "2 aggiornamenti stagionali all'anno inclusi",
   "Supporto via email",
 ];
 
@@ -44,11 +44,11 @@ export default function AttivaPage() {
           </p>
           <h1 className="text-[2.2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[3rem]">
             Il tuo menu digitale,{" "}
-            <span className="text-[#560200]">pronto in pochi minuti</span>
+            <span className="text-[#560200]">configurato da noi</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-[1.05rem] leading-relaxed text-[#606060]">
-            Scegli il piano, paga e ricevi le credenziali di accesso alla
-            dashboard. Nessun costo di setup, cancelli quando vuoi.
+            Setup iniziale €120 + abbonamento mensile o annuale. Pensiamo noi
+            a tutto: piatti, traduzioni, allergeni e aggiornamenti stagionali.
           </p>
         </div>
 

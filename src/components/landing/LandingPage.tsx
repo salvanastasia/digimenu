@@ -5,13 +5,13 @@ import { JoinUsButton } from "@/components/landing/JoinUsProvider";
 import { LandingPhotoCarousel } from "@/components/landing/LandingPhotoCarousel";
 
 const PLAN_FEATURES = [
-  "Menu digitale con URL dedicato",
-  "Dashboard di gestione completa",
+  "Setup e configurazione completa a cura nostra",
+  "Menu digitale con URL e QR code dedicati",
   "5 lingue (IT, EN, FR, DE, ES)",
   "Brand personalizzato: logo, colori, font",
   "AI per descrizioni e allergeni",
   "Lista preferiti per i clienti",
-  "Aggiornamenti illimitati in tempo reale",
+  "2 aggiornamenti stagionali all'anno inclusi",
   "Supporto via email",
 ] as const;
 
@@ -123,9 +123,9 @@ export function LandingPage() {
               </h1>
 
               <p className="mt-6 max-w-lg text-[1.08rem] leading-[1.7] text-[#606060]">
-                Sostituisci PDF e carte statiche con un menu mobile veloce,
-                multilingue e personalizzato. Aggiornamenti in tempo reale —
-                senza ristampe.
+                Configuriamo noi il tuo menu digitale: link dedicato, 5 lingue,
+                brand personalizzato, allergeni. Tu condividi il QR code —
+                noi aggiorniamo il menu ogni stagione.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -145,7 +145,7 @@ export function LandingPage() {
               </div>
 
               <p className="mt-5 text-[0.8rem] text-[#c0c0c0]">
-                Setup personalizzato · Supporto via email · Cancelli quando vuoi
+                Setup €120 una tantum · 2 aggiornamenti stagionali inclusi · Cancelli quando vuoi
               </p>
             </div>
 
@@ -158,9 +158,9 @@ export function LandingPage() {
           <div className="relative border-t border-[#ececec] bg-white/60 backdrop-blur-sm">
             <div className="mx-auto grid max-w-6xl divide-y divide-[#ececec] px-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-6">
               {[
+                { value: "€120", label: "setup iniziale una tantum" },
                 { value: "5 lingue", label: "IT, EN, FR, DE, ES incluse" },
-                { value: "< 2 ore", label: "dal pagamento al menu live" },
-                { value: "€0", label: "costi di setup e ristampa" },
+                { value: "2×/anno", label: "aggiornamenti stagionali inclusi" },
               ].map((s) => (
                 <div
                   key={s.label}
@@ -182,19 +182,19 @@ export function LandingPage() {
             <div className="grid gap-6 sm:grid-cols-3">
               {[
                 {
-                  icon: "⚡",
-                  title: "Aggiorna in secondi",
-                  body: "Cambia prezzi, aggiungi piatti o disabilita categorie direttamente dalla dashboard — i clienti vedono tutto in tempo reale.",
+                  icon: "✦",
+                  title: "Fatto per te, non da te",
+                  body: "Carichiamo noi piatti, prezzi, allergeni e traduzioni. Il cliente non ha bisogno di imparare nessun gestionale.",
                 },
                 {
                   icon: "🌍",
-                  title: "Multilingue senza sforzo",
-                  body: "Crea il menu una volta sola. L'AI traduce automaticamente in 5 lingue. Modifica solo ciò che vuoi cambiare.",
+                  title: "Multilingue in 5 lingue",
+                  body: "Il menu è disponibile in italiano, inglese, francese, tedesco e spagnolo — senza lavoro aggiuntivo.",
                 },
                 {
-                  icon: "✦",
-                  title: "Il tuo brand, non il nostro",
-                  body: "Logo, colori, font e header personalizzati. I tuoi clienti vedono il tuo locale, non DigiMenu.",
+                  icon: "🔄",
+                  title: "2 aggiornamenti stagionali",
+                  body: "Ogni sei mesi aggiorniamo il menu: nuovi piatti, prezzi, promozioni. Incluso nell'abbonamento.",
                 },
               ].map((item) => (
                 <div key={item.title} className="flex gap-4">
@@ -352,45 +352,7 @@ export function LandingPage() {
               </div>
             </article>
 
-            {/* 5 — Dashboard (wide) */}
-            <article className="group relative overflow-hidden rounded-[22px] border border-[#ececec] bg-white p-7 transition-[box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#d8dadc] hover:shadow-[0_20px_60px_rgba(0,0,0,0.07)] lg:col-span-2">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#560200]/8 text-[#560200]">
-                <svg viewBox="0 0 22 22" width="20" height="20" fill="none" aria-hidden="true">
-                  <rect x="2.5" y="2.5" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.6" />
-                  <rect x="12.5" y="2.5" width="7" height="4.5" rx="2" stroke="currentColor" strokeWidth="1.6" />
-                  <rect x="12.5" y="9.5" width="7" height="10" rx="2" stroke="currentColor" strokeWidth="1.6" />
-                  <rect x="2.5" y="12" width="7" height="7.5" rx="2" stroke="currentColor" strokeWidth="1.6" />
-                </svg>
-              </span>
-              <h3 className="mt-5 text-[1.1rem] font-bold">Dashboard centralizzata</h3>
-              <p className="mt-2 max-w-sm text-[0.92rem] leading-relaxed text-[#606060]">
-                Più clienti, versioni salvate, anteprima immediata. Modifica piatti
-                e categorie da un unico pannello.
-              </p>
-              <div className="mt-6 space-y-2">
-                {[
-                  { name: "aribrì", status: "Attivo", dishes: "34 piatti" },
-                  { name: "La Taverna", status: "Attivo", dishes: "28 piatti" },
-                  { name: "Osteria del Porto", status: "Attivo", dishes: "41 piatti" },
-                ].map((client) => (
-                  <div
-                    key={client.name}
-                    className="flex items-center justify-between rounded-xl bg-[#fafafa] px-4 py-2.5 text-[0.86rem]"
-                  >
-                    <span className="font-semibold text-[#141415]">
-                      {client.name}
-                    </span>
-                    <span className="text-[#888]">{client.dishes}</span>
-                    <span className="flex items-center gap-1.5 font-semibold text-[#2a9d5e]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#2a9d5e]" />
-                      {client.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            {/* 6 — Preferiti */}
+            {/* 5 — Preferiti */}
             <article className="group relative overflow-hidden rounded-[22px] border border-[#ececec] bg-white p-7 transition-[box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#d8dadc] hover:shadow-[0_20px_60px_rgba(0,0,0,0.07)]">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#560200]/8 text-[#560200]">
                 <svg viewBox="0 0 22 22" width="20" height="20" fill="none" aria-hidden="true">
@@ -414,6 +376,40 @@ export function LandingPage() {
                     {dish}
                   </div>
                 ))}
+              </div>
+            </article>
+
+            {/* 6 — Gestito per te (full width) */}
+            <article className="group relative overflow-hidden rounded-[22px] border border-[#ececec] bg-white p-7 transition-[box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#d8dadc] hover:shadow-[0_20px_60px_rgba(0,0,0,0.07)] sm:col-span-2 lg:col-span-3">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-12">
+                <div className="lg:w-72 lg:shrink-0">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#560200]/8 text-[#560200]">
+                    <svg viewBox="0 0 22 22" width="20" height="20" fill="none" aria-hidden="true">
+                      <path d="M11 3L4 7v5.5c0 3.8 3 7.2 7 8.5 4-1.3 7-4.7 7-8.5V7L11 3z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                      <path d="M8 11.5l2.2 2.2L14.5 9" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                  <h3 className="mt-5 text-[1.1rem] font-bold">Gestito interamente da noi</h3>
+                  <p className="mt-2 text-[0.92rem] leading-relaxed text-[#606060]">
+                    Nessun gestionale da imparare. Inseriamo noi piatti, prezzi,
+                    allergeni e traduzioni — e aggiorniamo il menu ogni stagione.
+                  </p>
+                </div>
+                <div className="flex-1 space-y-2">
+                  {[
+                    { label: "Setup iniziale", value: "Piatti, categorie, allergeni, traduzioni in 5 lingue" },
+                    { label: "Aggiornamento primaverile", value: "Nuova carta inclusa nell'abbonamento" },
+                    { label: "Aggiornamento autunnale", value: "Nuova carta inclusa nell'abbonamento" },
+                  ].map((row) => (
+                    <div
+                      key={row.label}
+                      className="flex items-center justify-between gap-4 rounded-xl bg-[#fafafa] px-4 py-2.5 text-[0.86rem]"
+                    >
+                      <span className="font-semibold text-[#141415]">{row.label}</span>
+                      <span className="text-right text-[#888]">{row.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </article>
           </div>
@@ -440,18 +436,18 @@ export function LandingPage() {
                   {[
                     {
                       step: "01",
-                      title: "Configura il locale",
-                      body: "Logo, colori, lingue attive e informazioni di contatto.",
+                      title: "Raccontaci del tuo locale",
+                      body: "Logo, colori, lingue, piatti e informazioni di contatto. Basta una email.",
                     },
                     {
                       step: "02",
-                      title: "Inserisci il menu",
-                      body: "Categorie, piatti, prezzi, allergeni e traduzioni.",
+                      title: "Costruiamo il menu per te",
+                      body: "Configuriamo tutto: categorie, piatti, prezzi, allergeni e traduzioni in 5 lingue.",
                     },
                     {
                       step: "03",
-                      title: "Condividi il link",
-                      body: "Un URL dedicato per QR code, sito e social del ristorante.",
+                      title: "Ricevi link e QR code",
+                      body: "Il tuo menu è online. Stampalo, condividilo, mettilo sul sito — aggiornato ogni stagione.",
                     },
                   ].map((item, i) => (
                     <li
@@ -495,18 +491,55 @@ export function LandingPage() {
             </p>
           </div>
 
-          <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
+          {/* Setup fee block */}
+          <div className="mx-auto mt-12 max-w-3xl rounded-[20px] border border-[#ececec] bg-[#fafafa] px-6 py-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#560200]">
+                  Setup iniziale · una tantum
+                </p>
+                <p className="mt-1.5 text-[1rem] font-bold text-[#141415]">
+                  Configurazione completa del menu
+                </p>
+                <p className="mt-1 text-[0.88rem] leading-relaxed text-[#888]">
+                  Carichiamo noi tutto: piatti, categorie, prezzi, allergeni e
+                  traduzioni in 5 lingue. Ricevi link e QR code, pronti alla
+                  scansione.
+                </p>
+              </div>
+              <div className="shrink-0 sm:text-right">
+                <p className="text-[2.6rem] font-bold leading-none tracking-[-0.04em] text-[#141415]">
+                  €120
+                </p>
+                <p className="mt-1 text-[0.82rem] text-[#adadad]">IVA incl.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="mx-auto mt-6 flex max-w-3xl items-center gap-4">
+            <span className="h-px flex-1 bg-[#ececec]" />
+            <span className="rounded-full border border-[#ececec] bg-white px-4 py-1 text-[0.78rem] font-semibold text-[#888]">
+              Poi
+            </span>
+            <span className="h-px flex-1 bg-[#ececec]" />
+          </div>
+
+          {/* Subscription plans */}
+          <div className="mx-auto mt-4 grid max-w-3xl gap-4 sm:grid-cols-2">
             {/* Mensile */}
             <div className="rounded-[24px] border border-[#ececec] bg-white p-7 transition-[box-shadow] duration-200 hover:shadow-[0_16px_48px_rgba(0,0,0,0.07)]">
-              <p className="text-[0.84rem] font-semibold text-[#606060]">Piano Mensile</p>
-              <div className="mt-4 flex items-baseline gap-1.5">
-                <span className="text-[3rem] font-bold leading-none tracking-[-0.04em]">
+              <p className="text-[0.78rem] font-semibold uppercase tracking-[0.1em] text-[#888]">
+                Abbonamento mensile
+              </p>
+              <div className="mt-3 flex items-baseline gap-1.5">
+                <span className="text-[2.8rem] font-bold leading-none tracking-[-0.04em]">
                   €19
                 </span>
                 <span className="text-[0.9rem] text-[#888]">/mese</span>
               </div>
               <p className="mt-1 text-[0.82rem] text-[#adadad]">
-                IVA incl. · Cancella quando vuoi
+                IVA incl.
               </p>
 
               <hr className="my-6 border-[#f0f0f0]" />
@@ -544,9 +577,11 @@ export function LandingPage() {
                 Più scelto · Risparmia 35%
               </span>
 
-              <p className="text-[0.84rem] font-semibold text-[#f2e8d8]/80">Piano Annuale</p>
-              <div className="mt-4 flex items-baseline gap-1.5">
-                <span className="text-[3rem] font-bold leading-none tracking-[-0.04em]">
+              <p className="text-[0.78rem] font-semibold uppercase tracking-[0.1em] text-[#f2e8d8]/70">
+                Abbonamento annuale
+              </p>
+              <div className="mt-3 flex items-baseline gap-1.5">
+                <span className="text-[2.8rem] font-bold leading-none tracking-[-0.04em]">
                   €149
                 </span>
                 <span className="text-[0.9rem] text-[#f2e8d8]/70">/anno</span>
@@ -576,6 +611,11 @@ export function LandingPage() {
               </Link>
             </div>
           </div>
+
+          <p className="mt-6 text-center text-[0.84rem] text-[#adadad]">
+            Il setup (€120) si paga una sola volta, separatamente
+            dall&apos;abbonamento.
+          </p>
         </section>
 
         {/* ─── Final CTA (dark) ────────────────────────────────────── */}
