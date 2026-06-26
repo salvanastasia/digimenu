@@ -6,6 +6,7 @@ import { ClientLogo } from "@/components/ClientLogo";
 import { useClientMenu } from "@/context/ClientMenuContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { getEffectiveHeader } from "@/lib/client-header";
+import { isPlaceholderLogoUrl } from "@/lib/instant-file-storage";
 import type { FavoriteEntry } from "@/hooks/useFavorites";
 import type { MenuCategory } from "@/types/menu";
 
@@ -67,7 +68,7 @@ export const FavoritesReceiptList = forwardRef<
     receiptLogoColorSource === "primary"
       ? (clientMenu?.client.brand.primaryColor ?? "#560200")
       : (clientMenu?.client.brand.secondaryColor ?? "#F2E8D8");
-  const hasLogo = logoUrl.length > 0;
+  const hasLogo = !isPlaceholderLogoUrl(logoUrl);
   const showPrices =
     clientMenu?.client.customizations.showFavoritesPrices ?? true;
 

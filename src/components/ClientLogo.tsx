@@ -70,6 +70,8 @@ export function ClientLogo({
   className = "",
   forceTint = false,
 }: ClientLogoProps) {
+  const hasLogo = Boolean(logoUrl?.trim());
+
   const useOriginalColors = forceTint
     ? false
     : client
@@ -125,6 +127,8 @@ export function ClientLogo({
       cancelled = true;
     };
   }, [logoColor, logoUrl, useOriginalColors, forceTint]);
+
+  if (!hasLogo) return null;
 
   if (useOriginalColors || isRaster) {
     return (

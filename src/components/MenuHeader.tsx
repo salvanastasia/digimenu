@@ -11,6 +11,7 @@ import {
   hasHeaderBackgroundImage,
 } from "@/lib/client-header";
 import { getMenuTheme, getFramedThemeConfig, isFramedMenuTheme } from "@/lib/menu-theme";
+import { isPlaceholderLogoUrl } from "@/lib/instant-file-storage";
 
 export const HEADER_BG = "#560200";
 export const BRAND_ACCENT = "#F2E8D8";
@@ -43,7 +44,8 @@ export function MenuHeader({
   const sloganColor =
     clientMenu?.client.brand.secondaryColor ?? BRAND_ACCENT;
   const badgeTextColor = effectiveHeader?.fabIconColor ?? HEADER_BG;
-  const logoUrl = effectiveHeader?.logoUrl ?? "/logo.svg";
+  const logoUrl = effectiveHeader?.logoUrl ?? "";
+  const showLogo = !isPlaceholderLogoUrl(logoUrl);
   const logoColor = effectiveHeader?.logoColor ?? BRAND_ACCENT;
   const logoAlt = clientMenu?.client.name ?? "aribrì";
   const showBackgroundOverlay = effectiveHeader
@@ -67,12 +69,14 @@ export function MenuHeader({
         />
         <div className="relative z-20 flex items-center justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <ClientLogo
-              client={clientMenu?.client}
-              logoUrl={logoUrl}
-              logoColor={logoColor}
-              alt={logoAlt}
-            />
+            {showLogo ? (
+              <ClientLogo
+                client={clientMenu?.client}
+                logoUrl={logoUrl}
+                logoColor={logoColor}
+                alt={logoAlt}
+              />
+            ) : null}
           </div>
 
           <div className="relative z-40 flex shrink-0 items-center gap-2">
@@ -136,12 +140,14 @@ export function MenuHeader({
       ) : null}
       <div className="relative z-20 flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <ClientLogo
-            client={clientMenu?.client}
-            logoUrl={logoUrl}
-            logoColor={logoColor}
-            alt={logoAlt}
-          />
+          {showLogo ? (
+            <ClientLogo
+              client={clientMenu?.client}
+              logoUrl={logoUrl}
+              logoColor={logoColor}
+              alt={logoAlt}
+            />
+          ) : null}
         </div>
 
         <div className="relative z-40 flex shrink-0 items-center gap-3">

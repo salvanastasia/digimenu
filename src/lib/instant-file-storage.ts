@@ -80,7 +80,14 @@ export function isPlaceholderLogoUrl(url: string) {
   return !url || url === DEFAULT_LOGO_URL;
 }
 
-/** Merge Instant Storage URLs into config when config still has placeholders. */
+/**
+ * Merge Instant Storage URLs into config.
+ *
+ * Lo storage è la fonte di verità: gli URL di `$files` sono firmati e a
+ * scadenza, quindi un URL congelato nella config diventa stale (immagine
+ * rotta). Quando un asset esiste in storage il suo URL fresco vince sempre
+ * su quello persistito.
+ */
 export function mergeConfigWithStoredAssets(
   config: ClientConfig,
   assets: StoredClientAssets,
@@ -88,12 +95,15 @@ export function mergeConfigWithStoredAssets(
   const header = { ...config.header };
   let changed = false;
 
-  if (assets.logoUrl && isPlaceholderLogoUrl(header.logoUrl)) {
+  if (assets.logoUrl && assets.logoUrl !== header.logoUrl) {
     header.logoUrl = assets.logoUrl;
     changed = true;
   }
 
-  if (assets.backgroundImageUrl && !header.backgroundImageUrl) {
+  if (
+    assets.backgroundImageUrl &&
+    assets.backgroundImageUrl !== header.backgroundImageUrl
+  ) {
     header.backgroundImageUrl = assets.backgroundImageUrl;
     header.backgroundMode = "image";
     changed = true;
