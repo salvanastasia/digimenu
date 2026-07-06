@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientLogo } from "@/components/ClientLogo";
+import { ClientBrandMark } from "@/components/ClientBrandMark";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { HeartIcon } from "@/components/HeartIcon";
 import { useClientMenu } from "@/context/ClientMenuContext";
@@ -11,7 +11,6 @@ import {
   hasHeaderBackgroundImage,
 } from "@/lib/client-header";
 import { getMenuTheme, getFramedThemeConfig, isFramedMenuTheme } from "@/lib/menu-theme";
-import { isPlaceholderLogoUrl } from "@/lib/instant-file-storage";
 
 export const HEADER_BG = "#560200";
 export const BRAND_ACCENT = "#F2E8D8";
@@ -45,27 +44,21 @@ export function MenuHeader({
     clientMenu?.client.brand.secondaryColor ?? BRAND_ACCENT;
   const badgeTextColor = effectiveHeader?.fabIconColor ?? HEADER_BG;
   const logoUrl = effectiveHeader?.logoUrl ?? "";
-  const showLogo = !isPlaceholderLogoUrl(logoUrl);
   const logoColor = effectiveHeader?.logoColor ?? BRAND_ACCENT;
-  const logoAlt = clientMenu?.client.name ?? restaurant.name;
+  const clientName = clientMenu?.client.name?.trim() || restaurant.name;
   const showBackgroundOverlay = effectiveHeader
     ? hasHeaderBackgroundImage(effectiveHeader)
     : false;
 
-  const brandMark = showLogo ? (
-    <ClientLogo
+  const brandMark = (
+    <ClientBrandMark
       client={clientMenu?.client}
       logoUrl={logoUrl}
       logoColor={logoColor}
-      alt={logoAlt}
+      name={clientName}
+      isFramed={isFramed}
+      primaryColor={primaryColor}
     />
-  ) : (
-    <p
-      className={`truncate font-bold leading-tight ${isFramed ? "text-lg sm:text-xl" : "text-xl"}`}
-      style={{ color: isFramed ? primaryColor : logoColor }}
-    >
-      {logoAlt}
-    </p>
   );
 
   if (isFramed && framedConfig) {

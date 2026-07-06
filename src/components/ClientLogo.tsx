@@ -18,6 +18,8 @@ type ClientLogoProps = {
    * esplicitamente primario/secondario. I loghi non-SVG restano invariati.
    */
   forceTint?: boolean;
+  /** Chiamato quando il logo non può essere mostrato (URL assente o errore di caricamento). */
+  onUnavailable?: () => void;
 };
 
 function tintSvgMarkup(svg: string, color: string): string {
@@ -69,8 +71,9 @@ export function ClientLogo({
   alt,
   className = "",
   forceTint = false,
+  onUnavailable,
 }: ClientLogoProps) {
-  const hasLogo = Boolean(logoUrl?.trim());
+  const hasLogo = Boolean(logoUrl?.trim()) && !logoUrl.trim().startsWith("blob:");
 
   const useOriginalColors = forceTint
     ? false
@@ -130,10 +133,19 @@ export function ClientLogo({
 
   if (!hasLogo) return null;
 
+  const handleImageError = () => {
+    onUnavailable?.();
+  };
+
   if (useOriginalColors || isRaster) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={logoUrl} alt={alt} className={mergedClass} />
+      <img
+        src={logoUrl}
+        alt={alt}
+        className={mergedClass}
+        onError={handleImageError}
+      />
     );
   }
 
@@ -164,7 +176,12 @@ export function ClientLogo({
   if (forceTint) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={logoUrl} alt={alt} className={mergedClass} />
+      <img
+        src={logoUrl}
+        alt={alt}
+        className={mergedClass}
+        onError={handleImageError}
+      />
     );
   }
 
