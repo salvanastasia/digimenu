@@ -47,10 +47,26 @@ export function MenuHeader({
   const logoUrl = effectiveHeader?.logoUrl ?? "";
   const showLogo = !isPlaceholderLogoUrl(logoUrl);
   const logoColor = effectiveHeader?.logoColor ?? BRAND_ACCENT;
-  const logoAlt = clientMenu?.client.name ?? "aribrì";
+  const logoAlt = clientMenu?.client.name ?? restaurant.name;
   const showBackgroundOverlay = effectiveHeader
     ? hasHeaderBackgroundImage(effectiveHeader)
     : false;
+
+  const brandMark = showLogo ? (
+    <ClientLogo
+      client={clientMenu?.client}
+      logoUrl={logoUrl}
+      logoColor={logoColor}
+      alt={logoAlt}
+    />
+  ) : (
+    <p
+      className={`truncate font-bold leading-tight ${isFramed ? "text-lg sm:text-xl" : "text-xl"}`}
+      style={{ color: isFramed ? primaryColor : logoColor }}
+    >
+      {logoAlt}
+    </p>
+  );
 
   if (isFramed && framedConfig) {
     return (
@@ -68,16 +84,7 @@ export function MenuHeader({
           aria-hidden="true"
         />
         <div className="relative z-20 flex items-center justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            {showLogo ? (
-              <ClientLogo
-                client={clientMenu?.client}
-                logoUrl={logoUrl}
-                logoColor={logoColor}
-                alt={logoAlt}
-              />
-            ) : null}
-          </div>
+          <div className="min-w-0 flex-1">{brandMark}</div>
 
           <div className="relative z-40 flex shrink-0 items-center gap-2">
             <button
@@ -139,16 +146,7 @@ export function MenuHeader({
         />
       ) : null}
       <div className="relative z-20 flex items-center justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          {showLogo ? (
-            <ClientLogo
-              client={clientMenu?.client}
-              logoUrl={logoUrl}
-              logoColor={logoColor}
-              alt={logoAlt}
-            />
-          ) : null}
-        </div>
+        <div className="min-w-0 flex-1">{brandMark}</div>
 
         <div className="relative z-40 flex shrink-0 items-center gap-3">
           <button
