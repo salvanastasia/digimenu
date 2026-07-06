@@ -74,10 +74,33 @@ export function storedAssetsFromFileRows(
   return assets;
 }
 
-const DEFAULT_LOGO_URL = "/logo.svg";
+export const DEFAULT_LOGO_URL = "/logo.svg";
+
+function logoPathname(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed) return "";
+
+  if (trimmed.startsWith("/")) {
+    return trimmed.split("?")[0] ?? trimmed;
+  }
+
+  try {
+    return new URL(trimmed).pathname;
+  } catch {
+    return trimmed.split("?")[0] ?? trimmed;
+  }
+}
 
 export function isPlaceholderLogoUrl(url: string) {
-  return !url || url === DEFAULT_LOGO_URL;
+  const trimmed = url?.trim();
+  if (!trimmed) return true;
+
+  const pathname = logoPathname(trimmed);
+  return (
+    pathname === DEFAULT_LOGO_URL ||
+    pathname.endsWith("/logo.svg") ||
+    pathname.endsWith("/digimenu-logo.svg")
+  );
 }
 
 /**

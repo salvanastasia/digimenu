@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientLogo } from "@/components/ClientLogo";
+import { ClientBrandMark } from "@/components/ClientBrandMark";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { HeartIcon } from "@/components/HeartIcon";
 import { useClientMenu } from "@/context/ClientMenuContext";
@@ -11,7 +11,6 @@ import {
   hasHeaderBackgroundImage,
 } from "@/lib/client-header";
 import { getMenuTheme, getFramedThemeConfig, isFramedMenuTheme } from "@/lib/menu-theme";
-import { isPlaceholderLogoUrl } from "@/lib/instant-file-storage";
 
 export const HEADER_BG = "#560200";
 export const BRAND_ACCENT = "#F2E8D8";
@@ -45,12 +44,22 @@ export function MenuHeader({
     clientMenu?.client.brand.secondaryColor ?? BRAND_ACCENT;
   const badgeTextColor = effectiveHeader?.fabIconColor ?? HEADER_BG;
   const logoUrl = effectiveHeader?.logoUrl ?? "";
-  const showLogo = !isPlaceholderLogoUrl(logoUrl);
   const logoColor = effectiveHeader?.logoColor ?? BRAND_ACCENT;
-  const logoAlt = clientMenu?.client.name ?? "aribrì";
+  const clientName = clientMenu?.client.name?.trim() || restaurant.name;
   const showBackgroundOverlay = effectiveHeader
     ? hasHeaderBackgroundImage(effectiveHeader)
     : false;
+
+  const brandMark = (
+    <ClientBrandMark
+      client={clientMenu?.client}
+      logoUrl={logoUrl}
+      logoColor={logoColor}
+      name={clientName}
+      isFramed={isFramed}
+      primaryColor={primaryColor}
+    />
+  );
 
   if (isFramed && framedConfig) {
     return (
@@ -68,16 +77,7 @@ export function MenuHeader({
           aria-hidden="true"
         />
         <div className="relative z-20 flex items-center justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            {showLogo ? (
-              <ClientLogo
-                client={clientMenu?.client}
-                logoUrl={logoUrl}
-                logoColor={logoColor}
-                alt={logoAlt}
-              />
-            ) : null}
-          </div>
+          <div className="min-w-0 flex-1">{brandMark}</div>
 
           <div className="relative z-40 flex shrink-0 items-center gap-2">
             <button
@@ -139,16 +139,7 @@ export function MenuHeader({
         />
       ) : null}
       <div className="relative z-20 flex items-center justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          {showLogo ? (
-            <ClientLogo
-              client={clientMenu?.client}
-              logoUrl={logoUrl}
-              logoColor={logoColor}
-              alt={logoAlt}
-            />
-          ) : null}
-        </div>
+        <div className="min-w-0 flex-1">{brandMark}</div>
 
         <div className="relative z-40 flex shrink-0 items-center gap-3">
           <button
